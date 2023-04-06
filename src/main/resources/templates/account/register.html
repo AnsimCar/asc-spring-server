@@ -10,31 +10,50 @@
         <h2>AnsimCar</h2>
     </div>
     <h4 class="mb-3">회원 가입</h4>
-    <form th:action="@{/register}" method="post" >
+    <form th:action="@{/register}" method="post" th:object="${account}">
+
+        <div th:if="${exception}">
+            <p class="field-error" th:text="${exception}">회원가입 실패(이메일 중복) 예외시 메시지</p>
+        </div>
 
         <div>
             <label for="username">이름</label>
-            <input type="text" id="username" name="username" class="form-control">
+            <input type="text" id="username" name="username" class="form-control" th:field="*{username}" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{username}">
+                이름 검증 오류
+            </div>
         </div>
 
         <div>
             <label for="email">이메일</label>
-            <input type="text" id="email" name="email" class="form-control" >
+            <input type="text" id="email" name="email" class="form-control" th:field="*{email}" th:errorclass="field-error" >
+            <div class="field-error" th:errors="*{email}">
+                이메일 검증 오류
+            </div>
         </div>
 
         <div>
             <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" class="form-control" >
+            <input type="password" id="password" name="password" class="form-control" th:field="*{password}" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{password}">
+                비밀번호 검증 오류
+            </div>
         </div>
 
         <div>
             <label for="phoneNumber">핸드폰 번호</label>
-            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" >
+            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" th:field="*{phoneNumber}" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{phoneNumber}">
+                핸드폰 번호 검증 오류
+            </div>
         </div>
 
         <div>
             <label for="age">나이</label>
-            <input type="text" id="age" name="age" class="form-control" >
+            <input type="text" id="age" name="age" class="form-control" th:field="*{age}" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{age}">
+                나이 오류
+            </div>
         </div>
 
 

@@ -8,6 +8,7 @@ import project.asc.AnsimCar.common.annotation.ServiceTest;
 import project.asc.AnsimCar.common.fixture.AccountFixture;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.dto.account.AccountRequest;
+import project.asc.AnsimCar.exception.EmailExistException;
 import project.asc.AnsimCar.repository.AccountRepository;
 
 import java.util.Optional;
@@ -48,9 +49,9 @@ class AccountServiceTest extends ServiceTest {
         AccountRequest accountRequest = createAccountRequest();
         accountService.register(accountRequest);
 
+        AccountRequest emailDuplicateAccount = AccountRequest.of("Woo", "account@gmail.com", "5678", "070", 20);
+
         //when & then
-        assertThatThrownBy(
-                () -> accountService.register(accountRequest))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> accountService.register(emailDuplicateAccount)).isInstanceOf(EmailExistException.class);
     }
 }
