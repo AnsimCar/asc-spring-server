@@ -11,7 +11,7 @@ public class ExceptionController {
 
     @ExceptionHandler(EmailExistException.class)
     public String EmailExistExHandler(EmailExistException e, Model model) {
-        model.addAttribute("account", new AccountDto());
+        model.addAttribute("account", AccountDto.builder().build());
         model.addAttribute("exception", e.getMessage());
 
         return "account/register";

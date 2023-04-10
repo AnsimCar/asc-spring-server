@@ -20,10 +20,10 @@ public class UserCar extends BaseEntity {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    private String carModel;    //차종
+    private String carModel;    //모델명
 
     @Enumerated(EnumType.STRING)
-    private CarCategory carCategory;    //분류
+    private CarCategory carCategory;    //차종
 
     private String manufacturer;        //제조사
 
@@ -32,4 +32,33 @@ public class UserCar extends BaseEntity {
 
     private String carNumber;           //차량 번호
 
+    protected UserCar() {
+    }
+
+    private UserCar(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
+        this.account = account;
+        this.carModel = carModel;
+        this.carCategory = carCategory;
+        this.manufacturer = manufacturer;
+        this.fuel = fuel;
+        this.carNumber = carNumber;
+    }
+
+    public UserCar setUserCar(UserCar userCar) {
+        this.account = userCar.getAccount();
+        this.carModel = userCar.getCarModel();
+        this.carCategory = userCar.getCarCategory();
+        this.manufacturer = userCar.getManufacturer();
+        this.fuel = userCar.getFuel();
+        this.carNumber = userCar.getCarNumber();
+
+        return this;
+    }
+
+    /**
+     * 팩토리 복원
+     */
+    public static UserCar of(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
+        return new UserCar(account, carModel, carCategory, manufacturer, fuel, carNumber);
+    }
 }
