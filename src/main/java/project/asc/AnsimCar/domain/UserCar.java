@@ -1,6 +1,7 @@
 package project.asc.AnsimCar.domain;
 
 import lombok.Getter;
+import project.asc.AnsimCar.domain.common.BaseEntity;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 
@@ -8,7 +9,7 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-public class UserCar {
+public class UserCar extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
