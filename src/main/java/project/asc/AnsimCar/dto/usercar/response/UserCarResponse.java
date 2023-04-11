@@ -1,4 +1,4 @@
-package project.asc.AnsimCar.dto.usercar;
+package project.asc.AnsimCar.dto.usercar.response;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,7 @@ import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.dto.account.AccountDto;
 
 @Data
-public class UserCarDto {
+public class UserCarResponse {
     private Long id;
 
     private AccountDto accountDto;
@@ -24,7 +24,7 @@ public class UserCarDto {
     private String carNumber;
 
     @Builder
-    public UserCarDto(Long id, AccountDto accountDto, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
+    public UserCarResponse(Long id, AccountDto accountDto, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
         this.id = id;
         this.accountDto = accountDto;
         this.carModel = carModel;
@@ -37,8 +37,8 @@ public class UserCarDto {
     /**
      * 엔티티 -> RequestDto
      */
-    public static UserCarDto from(UserCar entity) {
-        return new UserCarDto(
+    public static UserCarResponse from(UserCar entity) {
+        return new UserCarResponse(
                 entity.getId(),
                 AccountDto.from(entity.getAccount()),
                 entity.getCarModel(),

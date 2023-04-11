@@ -4,6 +4,8 @@ import lombok.Getter;
 import project.asc.AnsimCar.domain.common.BaseEntity;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
+import project.asc.AnsimCar.dto.usercar.request.UserCarCreateRequest;
+import project.asc.AnsimCar.dto.usercar.request.UserCarUpdateRequest;
 
 import javax.persistence.*;
 
@@ -44,15 +46,11 @@ public class UserCar extends BaseEntity {
         this.carNumber = carNumber;
     }
 
-    public UserCar setUserCar(UserCar userCar) {
-        this.account = userCar.getAccount();
-        this.carModel = userCar.getCarModel();
-        this.carCategory = userCar.getCarCategory();
-        this.manufacturer = userCar.getManufacturer();
-        this.fuel = userCar.getFuel();
-        this.carNumber = userCar.getCarNumber();
-
-        return this;
+    public void updateUserCar(UserCarUpdateRequest userCarUpdateRequest) {
+        this.carModel = userCarUpdateRequest.getCarModel();
+        this.carCategory = userCarUpdateRequest.getCarCategory();
+        this.manufacturer = userCarUpdateRequest.getManufacturer();
+        this.fuel = userCarUpdateRequest.getFuel();
     }
 
     /**
@@ -60,5 +58,17 @@ public class UserCar extends BaseEntity {
      */
     public static UserCar of(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
         return new UserCar(account, carModel, carCategory, manufacturer, fuel, carNumber);
+    }
+
+    public static UserCar of(Account account, UserCarCreateRequest userCarCreateRequest) {
+        return new UserCar(account, userCarCreateRequest.getCarModel(), userCarCreateRequest.getCarCategory(), userCarCreateRequest.getManufacturer(), userCarCreateRequest.getFuel(), userCarCreateRequest.getCarNumber());
+    }
+
+    //차량 Owner 검증
+    public boolean isOwner(Long accountId) {
+        if (accountId == null) {
+            return false;
+        }
+        return account.getId().equals(accountId);
     }
 }
