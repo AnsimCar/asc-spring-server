@@ -13,6 +13,10 @@ public class AfterImage {
     @Column(name = "after_image_id")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "rent_id")
+    private Rent rent;
+
     private String imageUrl;
 
     protected AfterImage() {

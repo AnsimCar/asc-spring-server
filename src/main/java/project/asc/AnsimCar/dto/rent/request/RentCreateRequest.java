@@ -24,7 +24,7 @@ public class RentCreateRequest {
         this.status = status;
     }
 
-    public Rent toEntity(final UserCar userCar, final Address address, final List<BeforeImage> beforeImages, final List<AfterImage> afterImages) {
-        return new Rent(userCar, address, beforeImages, afterImages, registrationDate, status, null, null);
+    public Rent toEntity(final UserCar userCar, final Address address) {
+        return new Rent(userCar, address, registrationDate, status, null, null);
     }
 }

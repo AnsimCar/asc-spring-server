@@ -13,6 +13,10 @@ public class BeforeImage {
     @Column(name = "before_image_id")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "rent_id")
+    private Rent rent;
+
     private String imageUrl;
 
     protected BeforeImage() {
