@@ -99,8 +99,8 @@ public class UserCarService {
     /**
      * 차량 삭제
      */
-    public Boolean deleteById(UserCarRequest userCarRequest) {
-        UserCar userCar = userCarRepository.findById(userCarRequest.toEntity().getId()).orElseThrow(() -> new UserCarNotFoundException());
+    public Boolean deleteById(Long id) {
+        UserCar userCar = userCarRepository.findById(id).orElseThrow(() -> new UserCarNotFoundException());
         userCarRepository.delete(userCar);
 
         return true;
