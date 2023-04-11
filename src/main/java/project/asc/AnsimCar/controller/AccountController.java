@@ -10,8 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import project.asc.AnsimCar.dto.account.AccountRequest;
-import project.asc.AnsimCar.dto.account.AccountDto;
+import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
+import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.service.AccountService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +54,7 @@ public class AccountController {
     @GetMapping("/register")
     public String register(Model model) {
 
-        model.addAttribute("account", AccountDto.builder().build());
+        model.addAttribute("account", AccountResponse.builder().build());
 
         return "account/register";
     }
@@ -66,12 +66,12 @@ public class AccountController {
      * 그래서 기존에는 사용하지 않던 @ModelAttribute("account")를 추가하고 뷰에서 검증 통과 데이터를 유지할 수 있게 추가 개발하였다.
      */
     @PostMapping("/register")
-    public String register(@Validated @ModelAttribute("account") AccountRequest accountRequest, BindingResult bindingResult) {
+    public String register(@Validated @ModelAttribute("account") AccountCreateRequest accountCreateRequest, BindingResult bindingResult) {
 
         //입력 데이터 검증에 실패하면 다시 입력 폼으로
         if (bindingResult.hasErrors()) return "account/register";
 
-        accountService.register(accountRequest);
+        accountService.register(accountCreateRequest);
 
         return "redirect:/";
     }
