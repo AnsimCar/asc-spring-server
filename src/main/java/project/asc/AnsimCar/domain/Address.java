@@ -19,6 +19,9 @@ public class Address {
 
     private String eupmyeondong;
 
+    @OneToOne(mappedBy = "address")
+    private Rent rent;
+
     protected Address() {
     }
 

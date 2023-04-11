@@ -6,6 +6,7 @@ import project.asc.AnsimCar.domain.*;
 import project.asc.AnsimCar.domain.type.Status;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,10 +17,6 @@ public class RentResponse {
 
     private Address address;
 
-    private List<BeforeImage> beforeImages;
-
-    private List<AfterImage> afterImages;
-
     private LocalDateTime registrationDate;
 
     private Status status;
@@ -29,12 +26,10 @@ public class RentResponse {
     private LocalDateTime returnDate;
 
     @Builder
-    public RentResponse(Long id, UserCar userCar, Address address, List<BeforeImage> beforeImages, List<AfterImage> afterImages, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public RentResponse(Long id, UserCar userCar, Address address, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.id = id;
         this.userCar = userCar;
         this.address = address;
-        this.beforeImages = beforeImages;
-        this.afterImages = afterImages;
         this.registrationDate = registrationDate;
         this.status = status;
         this.rentalDate = rentalDate;
@@ -49,8 +44,6 @@ public class RentResponse {
                 entity.getId(),
                 entity.getUserCar(),
                 entity.getAddress(),
-                entity.getBeforeImages(),
-                entity.getAfterImages(),
                 entity.getRegistrationDate(),
                 entity.getStatus(),
                 entity.getRentalDate(),
@@ -65,8 +58,6 @@ public class RentResponse {
         return Rent.builder()
                 .userCar(userCar)
                 .address(address)
-                .beforeImages(beforeImages)
-                .afterImages(afterImages)
                 .registrationDate(registrationDate)
                 .status(status)
                 .rentalDate(rentalDate)

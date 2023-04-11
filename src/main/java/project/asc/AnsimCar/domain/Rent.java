@@ -8,6 +8,7 @@ import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,14 +27,6 @@ public class Rent {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToMany
-    @JoinColumn(name = "before_image_id")
-    private List<BeforeImage> beforeImages;
-
-    @OneToMany
-    @JoinColumn(name = "after_image_id")
-    private List<AfterImage> afterImages;
-
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime registrationDate;
 
@@ -46,15 +39,19 @@ public class Rent {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime returnDate;
 
+    @OneToMany(mappedBy = "rent")
+    private List<BeforeImage> beforeImages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "rent")
+    private List<AfterImage> afterImages = new ArrayList<>();
+
     protected Rent() {
     }
 
     @Builder
-    public Rent(UserCar userCar, Address address, List<BeforeImage> beforeImages, List<AfterImage> afterImages, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public Rent(UserCar userCar, Address address, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.userCar = userCar;
         this.address = address;
-        this.beforeImages = beforeImages;
-        this.afterImages = afterImages;
         this.registrationDate = registrationDate;
         this.status = status;
         this.rentalDate = rentalDate;

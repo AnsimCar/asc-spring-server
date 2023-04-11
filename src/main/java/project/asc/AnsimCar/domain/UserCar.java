@@ -55,18 +55,6 @@ public class UserCar extends BaseEntity {
         this.fuel = userCarUpdateRequest.getFuel();
     }
 
-    /**
-     * 팩토리 복원
-     */
-    public static UserCar of(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
-        return new UserCar(account, carModel, carCategory, manufacturer, fuel, carNumber);
-    }
-
-
-    public static UserCar of(Account account, UserCarCreateRequest userCarCreateRequest) {
-        return new UserCar(account, userCarCreateRequest.getCarModel(), userCarCreateRequest.getCarCategory(), userCarCreateRequest.getManufacturer(), userCarCreateRequest.getFuel(), userCarCreateRequest.getCarNumber());
-    }
-
     //차량 Owner 검증
     public boolean isOwner(Long accountId) {
         if (accountId == null) {
