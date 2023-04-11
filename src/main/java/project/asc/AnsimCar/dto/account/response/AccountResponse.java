@@ -1,11 +1,11 @@
-package project.asc.AnsimCar.dto.account;
+package project.asc.AnsimCar.dto.account.response;
 
 import lombok.Builder;
 import lombok.Data;
 import project.asc.AnsimCar.domain.Account;
 
 @Data
-public class AccountDto {
+public class AccountResponse {
 
     private Long id;
 
@@ -20,7 +20,7 @@ public class AccountDto {
     private Integer age;
 
     @Builder
-    public AccountDto(Long id, String username, String email, String password, String phoneNumber, Integer age) {
+    public AccountResponse(Long id, String username, String email, String password, String phoneNumber, Integer age) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -30,10 +30,10 @@ public class AccountDto {
     }
 
     /**
-     * 엔티티 -> RequestDto
+     * 엔티티 -> ResponseDto
      */
-    public static AccountDto from(Account entity) {
-        return new AccountDto(
+    public static AccountResponse from(Account entity) {
+        return new AccountResponse(
                 entity.getId(),
                 entity.getUsername(),
                 entity.getEmail(),
@@ -44,15 +44,15 @@ public class AccountDto {
     }
 
     /**
-     * RequestDto -> 엔티티
+     * ResponseDto -> 엔티티
      */
     public Account toEntity() {
-        return Account.of(
-                username,
-                email,
-                password,
-                phoneNumber,
-                age
-        );
+        return Account.builder()
+                .username(username)
+                .email(email)
+                .password(password)
+                .phoneNumber(phoneNumber)
+                .age(age)
+                .build();
     }
 }
