@@ -1,4 +1,4 @@
-package project.asc.AnsimCar.dto.before.response;
+package project.asc.AnsimCar.dto.image.before.response;
 
 import lombok.Builder;
 import lombok.Data;

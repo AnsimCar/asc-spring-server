@@ -1,4 +1,4 @@
-package project.asc.AnsimCar.dto.before.request;
+package project.asc.AnsimCar.dto.image.before.request;
 
 import lombok.Data;
 import project.asc.AnsimCar.domain.BeforeImage;
