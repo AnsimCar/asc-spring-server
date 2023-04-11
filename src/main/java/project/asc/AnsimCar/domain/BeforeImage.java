@@ -13,7 +13,7 @@ public class BeforeImage {
     @Column(name = "before_image_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rent_id")
     private Rent rent;
 

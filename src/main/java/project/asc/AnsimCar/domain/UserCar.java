@@ -19,7 +19,7 @@ public class UserCar extends BaseEntity {
     @Column(name = "user_car_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 

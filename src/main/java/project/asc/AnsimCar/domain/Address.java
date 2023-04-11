@@ -19,7 +19,7 @@ public class Address {
 
     private String eupmyeondong;
 
-    @OneToOne(mappedBy = "address")
+    @OneToOne(mappedBy = "address", fetch = FetchType.LAZY)
     private Rent rent;
 
     protected Address() {
