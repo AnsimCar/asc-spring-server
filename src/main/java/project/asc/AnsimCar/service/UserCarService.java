@@ -48,14 +48,14 @@ public class UserCarService {
     }
 
     private Account findAccount(Long accountId) {
-        return accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException());
+        return accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
     }
 
     /**
      * ID 검색
      */
     public UserCarResponse findById(Long id) {
-        UserCar userCar = userCarRepository.findById(id).orElseThrow(() -> new UserCarNotFoundException());
+        UserCar userCar = userCarRepository.findById(id).orElseThrow(UserCarNotFoundException::new);
         return UserCarResponse.from(userCar);
     }
 
@@ -122,7 +122,7 @@ public class UserCarService {
     }
 
     private UserCar findUserCar(Long userCarId) {
-        return userCarRepository.findById(userCarId).orElseThrow(() -> new UserCarNotFoundException());
+        return userCarRepository.findById(userCarId).orElseThrow(UserCarNotFoundException::new);
     }
 
     /**
