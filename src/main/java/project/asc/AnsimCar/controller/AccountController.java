@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import project.asc.AnsimCar.dto.account.AccountRequest;
 import project.asc.AnsimCar.dto.account.AccountDto;
 import project.asc.AnsimCar.service.AccountService;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,7 +38,7 @@ public class AccountController {
     public String logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
         //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();     //인증객체 조회
 
-        if(authentication != null) {
+        if (authentication != null) {
             new SecurityContextLogoutHandler().logout(request, response, authentication);       //로그아웃 처리
         }
 
@@ -53,7 +54,7 @@ public class AccountController {
     @GetMapping("/register")
     public String register(Model model) {
 
-        model.addAttribute("account", new AccountDto());
+        model.addAttribute("account", AccountDto.builder().build());
 
         return "account/register";
     }
@@ -68,7 +69,7 @@ public class AccountController {
     public String register(@Validated @ModelAttribute("account") AccountRequest accountRequest, BindingResult bindingResult) {
 
         //입력 데이터 검증에 실패하면 다시 입력 폼으로
-        if(bindingResult.hasErrors()) return "account/register";
+        if (bindingResult.hasErrors()) return "account/register";
 
         accountService.register(accountRequest);
 
