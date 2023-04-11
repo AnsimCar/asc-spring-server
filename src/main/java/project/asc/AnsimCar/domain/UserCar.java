@@ -1,5 +1,6 @@
 package project.asc.AnsimCar.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import project.asc.AnsimCar.domain.common.BaseEntity;
 import project.asc.AnsimCar.domain.type.CarCategory;
@@ -37,7 +38,8 @@ public class UserCar extends BaseEntity {
     protected UserCar() {
     }
 
-    private UserCar(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
+    @Builder
+    public UserCar(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
         this.account = account;
         this.carModel = carModel;
         this.carCategory = carCategory;
@@ -59,6 +61,7 @@ public class UserCar extends BaseEntity {
     public static UserCar of(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
         return new UserCar(account, carModel, carCategory, manufacturer, fuel, carNumber);
     }
+
 
     public static UserCar of(Account account, UserCarCreateRequest userCarCreateRequest) {
         return new UserCar(account, userCarCreateRequest.getCarModel(), userCarCreateRequest.getCarCategory(), userCarCreateRequest.getManufacturer(), userCarCreateRequest.getFuel(), userCarCreateRequest.getCarNumber());

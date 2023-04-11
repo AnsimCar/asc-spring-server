@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.asc.AnsimCar.domain.Account;
-import project.asc.AnsimCar.dto.account.AccountRequest;
+import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
 import project.asc.AnsimCar.exception.Account.EmailExistException;
 import project.asc.AnsimCar.repository.AccountRepository;
 
@@ -20,9 +20,9 @@ public class AccountService {
     /**
      * 회원가입
      */
-    public void register(AccountRequest accountRequest) {
+    public void register(AccountCreateRequest accountCreateRequest) {
         //Account로 변환
-        Account account = accountRequest.toEntity();
+        Account account = accountCreateRequest.toEntity();
 
         //email 중복 체크 (DB에 이미 존재하는 이메일이면 회원가입 불가)
         if (accountRepository.findByEmail(account.getEmail()).isPresent()) throw new EmailExistException();

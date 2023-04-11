@@ -25,8 +25,8 @@ class UserCarRepositoryTest extends RepositoryTest {
     @BeforeEach
     void beforeEach() {
         //더미 데이터
-        Account saveAccount = accountRepository.save(Account.of("Woo", "jun@naver.com", "ppp", "0102222", 25));
-        userCarRepository.save(UserCar.of(saveAccount, "고스트", CarCategory.SEMI_FORMAL, "롤스로이스", Fuel.DIESEL, "111우 2222"));
+        Account saveAccount = accountRepository.save(Account.builder().username("Woo").email("jun@naver.com").password("ppp").phoneNumber("0102222").age(25).build());
+        userCarRepository.save(UserCar.builder().account(saveAccount).carModel("고스트").carCategory(CarCategory.SEMI_FORMAL).manufacturer("롤스로이스").fuel(Fuel.DIESEL).carNumber("111우 2222").build());
     }
 
     @Test

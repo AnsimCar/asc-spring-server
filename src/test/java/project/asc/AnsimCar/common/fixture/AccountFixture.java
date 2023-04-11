@@ -3,7 +3,7 @@ package project.asc.AnsimCar.common.fixture;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import project.asc.AnsimCar.domain.Account;
-import project.asc.AnsimCar.dto.account.AccountRequest;
+import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
 
 public class AccountFixture {
 
@@ -14,23 +14,23 @@ public class AccountFixture {
     public static final Integer 나이 = 25;
 
     public static Account createAccount() {
-        return Account.of(
-                이름,
-                이메일,
-                비밀번호,
-                핸드폰번호,
-                나이
-        );
+        return Account.builder()
+                .username(이름)
+                .email(이메일)
+                .password(비밀번호)
+                .phoneNumber(핸드폰번호)
+                .age(나이)
+                .build();
     }
 
-    public static AccountRequest createAccountRequest() {
-        return AccountRequest.of(
-                이름,
-                이메일,
-                비밀번호,
-                핸드폰번호,
-                나이
-        );
+    public static AccountCreateRequest createAccountRequest() {
+        return AccountCreateRequest.builder()
+                .username(이름)
+                .email(이메일)
+                .password(비밀번호)
+                .phoneNumber(핸드폰번호)
+                .age(나이)
+                .build();
     }
 
 

@@ -1,5 +1,6 @@
 package project.asc.AnsimCar.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import project.asc.AnsimCar.domain.common.BaseEntity;
 import project.asc.AnsimCar.domain.type.Role;
@@ -32,7 +33,8 @@ public class Account extends BaseEntity {
 
     protected Account() {}
 
-    private Account(String username, String email, String password, String phoneNumber, Integer age, Role role) {
+    @Builder
+    public Account(String username, String email, String password, String phoneNumber, Integer age, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -41,12 +43,7 @@ public class Account extends BaseEntity {
         this.role = role;
     }
 
-    /**
-     * 팩토리 패턴
-     */
-    public static Account of(String username, String email, String password, String phoneNumber, Integer age) {
-        return new Account(username, email, password, phoneNumber, age, Role.ROLE_USER);
-    }
+
 
     /**
      * DB에 저장하기전 password 암호화를 위한 setter

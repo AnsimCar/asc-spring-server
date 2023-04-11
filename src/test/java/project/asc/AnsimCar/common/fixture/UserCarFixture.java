@@ -19,14 +19,14 @@ public class UserCarFixture {
 
     public static UserCar createUserCar(Account 유저) {
         UserCarFixture.유저 = 유저;
-        return UserCar.of(
-                유저,
-                모델명,
-                차종,
-                제조사,
-                연료종류,
-                차량번호
-        );
+        return UserCar.builder()
+                .account(유저)
+                .carModel(모델명)
+                .carCategory(차종)
+                .manufacturer(제조사)
+                .fuel(연료종류)
+                .carNumber(차량번호)
+                .build();
     }
 
     public static UserCarCreateRequest createUserCarRequest() {

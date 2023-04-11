@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.UserCar;
 import project.asc.AnsimCar.domain.type.CarCategory;
-import project.asc.AnsimCar.dto.account.AccountDto;
 import project.asc.AnsimCar.dto.usercar.request.UserCarUpdateRequest;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.dto.usercar.request.UserCarCreateRequest;
@@ -30,22 +29,26 @@ public class UserCarService {
      * 차량 등록
      */
     @Transactional
-    public UserCarResponse addUserCar(final AccountDto accountDto, final UserCarCreateRequest userCarCreateRequest) {
-        Account findAccount = findAccount(accountDto);
+    public UserCarResponse addUserCar(Long accountId, final UserCarCreateRequest userCarCreateRequest) {
+        Account findAccount = findAccount(accountId);
         UserCar userCar = createUserCar(findAccount, userCarCreateRequest);
 
         return UserCarResponse.from(userCarRepository.save(userCar));
     }
 
-    private UserCar createUserCar(Account findAccount, UserCarCreateRequest userCarCreateRequest) {
-        return UserCar.of(
-                findAccount,
-                userCarCreateRequest
-        );
+    private UserCar createUserCar(Account account, UserCarCreateRequest userCarCreateRequest) {
+        return UserCar.builder()
+                .account(account)
+                .carModel(userCarCreateRequest.getCarModel())
+                .carCategory(userCarCreateRequest.getCarCategory())
+                .manufacturer(userCarCreateRequest.getManufacturer())
+                .fuel(userCarCreateRequest.getFuel())
+                .carNumber(userCarCreateRequest.getCarNumber()).build();
+
     }
 
-    private Account findAccount(AccountDto accountDto) {
-        return accountRepository.findById(accountDto.getId()).orElseThrow(() -> new AccountNotFoundException());
+    private Account findAccount(Long accountId) {
+        return accountRepository.findById(accountId).orElseThrow(() -> new AccountNotFoundException());
     }
 
     /**
@@ -62,7 +65,7 @@ public class UserCarService {
     public List<UserCarResponse> findByCarModel(String carModel) {
         List<UserCar> userCars = userCarRepository.findByCarModel(carModel);
         if (userCars.isEmpty())
-            new UserCarNotFoundException();
+            throw new UserCarNotFoundException();
 
         List<UserCarResponse> userCarResponseList = new ArrayList<>();
 
@@ -79,7 +82,7 @@ public class UserCarService {
     public List<UserCarResponse> findByCarCategory(CarCategory carCategory) {
         List<UserCar> userCars = userCarRepository.findByCarCategory(carCategory);
         if (userCars.isEmpty())
-            new UserCarNotFoundException();
+            throw new UserCarNotFoundException();
 
         List<UserCarResponse> userCarResponseList = new ArrayList<>();
 
@@ -96,7 +99,7 @@ public class UserCarService {
     public List<UserCarResponse> findByCarCategory(String manufacturer) {
         List<UserCar> userCars = userCarRepository.findByManufacturer(manufacturer);
         if (userCars.isEmpty())
-            new UserCarNotFoundException();
+            throw new UserCarNotFoundException();
 
         List<UserCarResponse> userCarResponseList = new ArrayList<>();
 
@@ -111,9 +114,9 @@ public class UserCarService {
      * 차량 업데이트
      */
     @Transactional
-    public void updateUserCar(AccountDto accountDto, Long userCarId, UserCarUpdateRequest userCarUpdateRequest) {
+    public void updateUserCar(Long accountId, Long userCarId, UserCarUpdateRequest userCarUpdateRequest) {
         UserCar userCar = findUserCar(userCarId);
-        validateOwner(accountDto, userCar);
+        validateOwner(accountId, userCar);
 
         userCar.updateUserCar(userCarUpdateRequest);
     }
@@ -126,15 +129,15 @@ public class UserCarService {
      * 차량 삭제
      */
     @Transactional
-    public void deleteUserCar(AccountDto accountDto, Long userCarId) {
+    public void deleteUserCar(Long accountId, Long userCarId) {
         UserCar userCar = findUserCar(userCarId);
-        validateOwner(accountDto, userCar);
+        validateOwner(accountId, userCar);
 
         userCarRepository.delete(userCar);
     }
 
-    private void validateOwner(AccountDto account, UserCar userCar) {
-        if (!userCar.isOwner(account.getId())) {
+    private void validateOwner(Long accountId, UserCar userCar) {
+        if (!userCar.isOwner(accountId)) {
             throw new UserCarOwnerException();
         }
     }
