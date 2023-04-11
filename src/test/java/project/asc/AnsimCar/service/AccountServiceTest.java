@@ -1,21 +1,16 @@
 package project.asc.AnsimCar.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.asc.AnsimCar.common.annotation.ServiceTest;
-import project.asc.AnsimCar.common.fixture.AccountFixture;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.dto.account.AccountRequest;
-import project.asc.AnsimCar.exception.EmailExistException;
+import project.asc.AnsimCar.exception.Account.EmailExistException;
 import project.asc.AnsimCar.repository.AccountRepository;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static project.asc.AnsimCar.common.fixture.AccountFixture.createAccount;
 import static project.asc.AnsimCar.common.fixture.AccountFixture.createAccountRequest;
 
 
