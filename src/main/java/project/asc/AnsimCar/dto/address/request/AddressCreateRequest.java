@@ -7,8 +7,6 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class AddressCreateRequest {
-    @NotBlank(message = "이미지 주소를 입력하세요.")
-    String imageUrl;
 
     @NotBlank(message = "시도를 입력하세요.")
     String sido;

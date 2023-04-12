@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import project.asc.AnsimCar.domain.*;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.address.response.AddressResponse;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class RentResponse {
 
     private UserCar userCar;
 
-    private Address address;
+    private AddressResponse addressResponse;
 
     private LocalDateTime registrationDate;
 
@@ -26,10 +27,10 @@ public class RentResponse {
     private LocalDateTime returnDate;
 
     @Builder
-    public RentResponse(Long id, UserCar userCar, Address address, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public RentResponse(Long id, UserCar userCar, AddressResponse addressResponse, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.id = id;
         this.userCar = userCar;
-        this.address = address;
+        this.addressResponse = addressResponse;
         this.registrationDate = registrationDate;
         this.status = status;
         this.rentalDate = rentalDate;
@@ -37,13 +38,13 @@ public class RentResponse {
     }
 
     /**
-     * 엔티티 -> RequestDto
+     * 엔티티 -> ResponseDto
      */
     public static RentResponse from(Rent entity) {
         return new RentResponse(
                 entity.getId(),
                 entity.getUserCar(),
-                entity.getAddress(),
+                AddressResponse.from(entity.getAddress()),
                 entity.getRegistrationDate(),
                 entity.getStatus(),
                 entity.getRentalDate(),
@@ -52,12 +53,12 @@ public class RentResponse {
     }
 
     /**
-     * RequestDto -> 엔티티
+     * ResponseDto -> 엔티티
      */
     public Rent toEntity() {
         return Rent.builder()
                 .userCar(userCar)
-                .address(address)
+                .address(addressResponse.toEntity())
                 .registrationDate(registrationDate)
                 .status(status)
                 .rentalDate(rentalDate)
