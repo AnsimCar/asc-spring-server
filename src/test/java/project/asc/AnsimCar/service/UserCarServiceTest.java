@@ -12,7 +12,6 @@ import project.asc.AnsimCar.domain.UserCar;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
-import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.dto.usercar.request.UserCarCreateRequest;
 import project.asc.AnsimCar.dto.usercar.request.UserCarUpdateRequest;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
@@ -20,8 +19,12 @@ import project.asc.AnsimCar.exception.UserCar.UserCarNotFoundException;
 import project.asc.AnsimCar.repository.AccountRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 import static project.asc.AnsimCar.common.fixture.AccountFixture.*;
+import static project.asc.AnsimCar.common.fixture.UserCarFixture.createUserCar1;
+import static project.asc.AnsimCar.common.fixture.UserCarFixture.createUserCar2;
 
 class UserCarServiceTest extends ServiceTest {
 
@@ -52,7 +55,7 @@ class UserCarServiceTest extends ServiceTest {
         accountService.register(accountRequest);
         Account account = accountRepository.findByEmail(accountRequest.getEmail()).get();
 
-        UserCarCreateRequest userCarCreateRequest = UserCarFixture.createUserCarRequest();
+        UserCarCreateRequest userCarCreateRequest = UserCarFixture.createUserCarRequest1();
 
         //when
         UserCarResponse userCarResponse = userCarService.addUserCar(account.getId(), userCarCreateRequest);
@@ -69,7 +72,7 @@ class UserCarServiceTest extends ServiceTest {
         accountService.register(accountCreateRequest);
         Account account = accountRepository.findByEmail(accountCreateRequest.getEmail()).get();
 
-        UserCarCreateRequest userCarCreateRequest = UserCarFixture.createUserCarRequest();
+        UserCarCreateRequest userCarCreateRequest = UserCarFixture.createUserCarRequest1();
         userCarService.addUserCar(account.getId(), userCarCreateRequest);
 
         UserCarResponse userCarResponse = userCarService.addUserCar(account.getId(), userCarCreateRequest);
@@ -79,6 +82,36 @@ class UserCarServiceTest extends ServiceTest {
 
         //then
         assertThat(userCar.getId()).isEqualTo(userCarResponse.getId());
+    }
+
+
+    @Test
+    @DisplayName("유저Id로_차량_목록_조회")
+    void 유저Id로_차량_목록_조회() {
+        //given
+        Account account = createAccount();
+        accountRepository.save(account);
+
+        UserCar userCar1 = userCarRepository.save(createUserCar1(account));
+        UserCar userCar2 = userCarRepository.save(createUserCar2(account));
+
+        //when
+        List<UserCarResponse> userCarResponses = userCarService.findByAccountId(account.getId());
+
+        //then
+        assertThat(userCarResponses.size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("유저Id로_차량_목록_조회시_차량이_없으면_빈_리스트를_반환한다")
+    void 유저Id로_차량_목록_조회시_차량이_없으면_빈_리스트를_반환한다() {
+        //given
+        Account account = createAccount();
+        accountRepository.save(account);
+
+        //when & then
+        List<UserCarResponse> userCarResponses = userCarService.findByAccountId(account.getId());
+        assertThat(userCarResponses).isEmpty();
     }
 
     @Test
@@ -101,12 +134,12 @@ class UserCarServiceTest extends ServiceTest {
         accountService.register(accountCreateRequest);
         Account account = accountRepository.findByEmail(accountCreateRequest.getEmail()).get();
 
-        UserCarCreateRequest userCarCreateRequest = UserCarFixture.createUserCarRequest();
+        UserCarCreateRequest userCarCreateRequest = UserCarFixture.createUserCarRequest1();
 
         UserCarResponse userCarResponse = userCarService.addUserCar(account.getId(), userCarCreateRequest);
 
         //when
-        UserCarUpdateRequest updateUserCar = UserCarFixture.updateUserCarRequest();
+        UserCarUpdateRequest updateUserCar = UserCarFixture.updateUserCarRequest1();
         userCarService.updateUserCar(account.getId(), userCarResponse.getId(), updateUserCar);
 
         //then
@@ -122,7 +155,7 @@ class UserCarServiceTest extends ServiceTest {
         accountService.register(accountCreateRequest);
         Account account = accountRepository.findByEmail(accountCreateRequest.getEmail()).get();
 
-        UserCarCreateRequest userCarCreateRequest = UserCarFixture.createUserCarRequest();
+        UserCarCreateRequest userCarCreateRequest = UserCarFixture.createUserCarRequest1();
 
         UserCarResponse userCarResponse = userCarService.addUserCar(account.getId(), userCarCreateRequest);
 

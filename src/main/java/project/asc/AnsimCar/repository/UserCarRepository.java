@@ -8,6 +8,9 @@ import project.asc.AnsimCar.domain.type.Fuel;
 import java.util.List;
 
 public interface UserCarRepository extends JpaRepository<UserCar, Long> {
+
+    List<UserCar> findByAccount_Id(Long accountId);
+
     List<UserCar> findByCarModel(String carModel);
 
     List<UserCar> findByCarCategory(CarCategory carCategory);

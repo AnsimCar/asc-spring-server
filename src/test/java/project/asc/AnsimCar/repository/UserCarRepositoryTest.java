@@ -14,7 +14,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static project.asc.AnsimCar.common.fixture.AccountFixture.createAccount;
-import static project.asc.AnsimCar.common.fixture.UserCarFixture.createUserCar;
+import static project.asc.AnsimCar.common.fixture.UserCarFixture.createUserCar1;
+import static project.asc.AnsimCar.common.fixture.UserCarFixture.createUserCar2;
 
 class UserCarRepositoryTest extends RepositoryTest {
     @Autowired
@@ -30,12 +31,27 @@ class UserCarRepositoryTest extends RepositoryTest {
     }
 
     @Test
+    @DisplayName("계정Id로_차량_목록_조회")
+    void 계정Id로_차량_목록_조회() {
+        //given
+        Account saveAccount = accountRepository.save(createAccount());
+        userCarRepository.save(createUserCar1(saveAccount));
+        userCarRepository.save(createUserCar2(saveAccount));
+
+        //when
+        List<UserCar> findCar = userCarRepository.findByAccount_Id(saveAccount.getId());
+
+        //then
+        assertThat(findCar.size()).isEqualTo(2);
+    }
+
+    @Test
     @DisplayName("차모델로_조회")
     void findByCarModel() {
         //given
         Account saveAccount = accountRepository.save(createAccount());
-        UserCar userCar1 = userCarRepository.save(createUserCar(saveAccount));
-        userCarRepository.save(createUserCar(saveAccount));
+        UserCar userCar1 = userCarRepository.save(createUserCar1(saveAccount));
+        userCarRepository.save(createUserCar1(saveAccount));
 
         //when
         List<UserCar> findCar = userCarRepository.findByCarModel(userCar1.getCarModel());
@@ -49,8 +65,8 @@ class UserCarRepositoryTest extends RepositoryTest {
     void findByCarCategory() {
         //given
         Account saveAccount = accountRepository.save(createAccount());
-        UserCar userCar1 = userCarRepository.save(createUserCar(saveAccount));
-        UserCar userCar2 =  userCarRepository.save(createUserCar(saveAccount));
+        UserCar userCar1 = userCarRepository.save(createUserCar1(saveAccount));
+        UserCar userCar2 =  userCarRepository.save(createUserCar1(saveAccount));
 
         //when
         List<UserCar> findCar = userCarRepository.findByCarCategory(userCar1.getCarCategory());
@@ -64,8 +80,8 @@ class UserCarRepositoryTest extends RepositoryTest {
     void findByManufacturer() {
         //given
         Account saveAccount = accountRepository.save(createAccount());
-        UserCar userCar1 = userCarRepository.save(createUserCar(saveAccount));
-        userCarRepository.save(createUserCar(saveAccount));
+        UserCar userCar1 = userCarRepository.save(createUserCar1(saveAccount));
+        userCarRepository.save(createUserCar1(saveAccount));
 
         //when
         List<UserCar> findCar = userCarRepository.findByManufacturer(userCar1.getManufacturer());
@@ -79,8 +95,8 @@ class UserCarRepositoryTest extends RepositoryTest {
     void findByFuel() {
         //given
         Account saveAccount = accountRepository.save(createAccount());
-        UserCar userCar1 = userCarRepository.save(createUserCar(saveAccount));
-        userCarRepository.save(createUserCar(saveAccount));
+        UserCar userCar1 = userCarRepository.save(createUserCar1(saveAccount));
+        userCarRepository.save(createUserCar1(saveAccount));
 
         //when
         List<UserCar> findCar = userCarRepository.findByFuel(userCar1.getFuel());
