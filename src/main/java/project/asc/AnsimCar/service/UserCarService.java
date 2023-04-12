@@ -17,6 +17,8 @@ import project.asc.AnsimCar.repository.UserCarRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -57,6 +59,15 @@ public class UserCarService {
     public UserCarResponse findById(Long id) {
         UserCar userCar = userCarRepository.findById(id).orElseThrow(UserCarNotFoundException::new);
         return UserCarResponse.from(userCar);
+    }
+
+    /**
+     * 계정Id로 검색
+     */
+    public List<UserCarResponse> findByAccountId(Long accountId) {
+        List<UserCar> userCars = userCarRepository.findByAccount_Id(accountId);
+
+        return userCars.stream().map(UserCarResponse::from).toList();
     }
 
     /**
