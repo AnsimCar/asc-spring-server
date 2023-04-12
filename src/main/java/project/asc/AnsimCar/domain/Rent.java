@@ -23,6 +23,10 @@ public class Rent {
     @JoinColumn(name = "user_car_id")
     private UserCar userCar;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private Account account;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     private Address address;
@@ -49,8 +53,9 @@ public class Rent {
     }
 
     @Builder
-    public Rent(UserCar userCar, Address address, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public Rent(UserCar userCar, Account account, Address address, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.userCar = userCar;
+        this.account = account;
         this.address = address;
         this.registrationDate = registrationDate;
         this.status = status;
@@ -62,11 +67,17 @@ public class Rent {
         this.status = rentUpdateRequest.getStatus();
     }
 
-    public void updateRentalDate(RentUpdateRequest rentUpdateRequest) {
+    public void updateRentalReturnDate(RentUpdateRequest rentUpdateRequest) {
         this.rentalDate = rentUpdateRequest.getRentalDate();
+        this.returnDate = rentUpdateRequest.getReturnDate();
     }
 
-    public void updateReturnDate(RentUpdateRequest rentUpdateRequest) {
-        this.returnDate = rentUpdateRequest.getReturnDate();
+
+
+    public boolean isOwner(Long accountId) {
+        if (accountId == null) {
+            return false;
+        }
+        return account.getId().equals(accountId);
     }
 }
