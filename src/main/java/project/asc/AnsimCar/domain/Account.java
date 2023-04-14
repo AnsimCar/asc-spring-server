@@ -5,6 +5,8 @@ import lombok.Getter;
 import project.asc.AnsimCar.domain.common.BaseEntity;
 import project.asc.AnsimCar.domain.type.Role;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(indexes = {
         @Index(columnList = "email")
@@ -30,6 +32,8 @@ public class Account extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "account")
+    private List<Review> reviews = new ArrayList<>();
 
     protected Account() {}
 
