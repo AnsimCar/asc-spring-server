@@ -1,5 +1,6 @@
 package project.asc.AnsimCar.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -34,6 +35,7 @@ public class Review {
     protected Review() {
     }
 
+    @Builder
     public Review(UserCar userCar, Rent rent, Account account, int rate, String description, LocalDateTime reviewDate) {
         this.userCar = userCar;
         this.rent = rent;
