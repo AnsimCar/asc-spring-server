@@ -5,10 +5,11 @@ import lombok.Getter;
 import project.asc.AnsimCar.domain.common.BaseEntity;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
-import project.asc.AnsimCar.dto.usercar.request.UserCarCreateRequest;
 import project.asc.AnsimCar.dto.usercar.request.UserCarUpdateRequest;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -34,6 +35,9 @@ public class UserCar extends BaseEntity {
     private Fuel fuel;                  //연료 종류
 
     private String carNumber;           //차량 번호
+
+    @OneToMany(mappedBy = "userCar")
+    private List<Review> reviews = new ArrayList<>();
 
     protected UserCar() {
     }
