@@ -2,6 +2,7 @@ package project.asc.AnsimCar.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import project.asc.AnsimCar.dto.review.request.ReviewUpdateRequest;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -43,5 +44,17 @@ public class Review {
         this.rate = rate;
         this.description = description;
         this.reviewDate = reviewDate;
+    }
+
+    public boolean isOwner(Long accountId) {
+        if (accountId == null) {
+            return false;
+        }
+        return account.getId().equals(accountId);
+    }
+
+    public void updateReview(ReviewUpdateRequest reviewUpdateRequest) {
+        this.rate = reviewUpdateRequest.getRate();
+        this.description = reviewUpdateRequest.getDescription();
     }
 }

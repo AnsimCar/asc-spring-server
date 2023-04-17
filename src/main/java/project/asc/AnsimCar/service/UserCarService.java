@@ -9,16 +9,14 @@ import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.dto.usercar.request.UserCarUpdateRequest;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.dto.usercar.request.UserCarCreateRequest;
-import project.asc.AnsimCar.exception.Account.AccountNotFoundException;
-import project.asc.AnsimCar.exception.UserCar.UserCarNotFoundException;
-import project.asc.AnsimCar.exception.UserCar.UserCarOwnerException;
+import project.asc.AnsimCar.exception.account.AccountNotFoundException;
+import project.asc.AnsimCar.exception.usercar.UserCarNotFoundException;
+import project.asc.AnsimCar.exception.usercar.UserCarOwnerException;
 import project.asc.AnsimCar.repository.AccountRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -30,7 +28,6 @@ public class UserCarService {
     /**
      * 차량 등록
      */
-    @Transactional
     public UserCarResponse addUserCar(Long accountId, final UserCarCreateRequest userCarCreateRequest) {
         Account findAccount = findAccount(accountId);
         UserCar userCar = createUserCar(findAccount, userCarCreateRequest);
@@ -124,7 +121,6 @@ public class UserCarService {
     /**
      * 차량 업데이트
      */
-    @Transactional
     public void updateUserCar(Long accountId, Long userCarId, UserCarUpdateRequest userCarUpdateRequest) {
         UserCar userCar = findUserCar(userCarId);
         validateOwner(accountId, userCar);
@@ -139,7 +135,6 @@ public class UserCarService {
     /**
      * 차량 삭제
      */
-    @Transactional
     public void deleteUserCar(Long accountId, Long userCarId) {
         UserCar userCar = findUserCar(userCarId);
         validateOwner(accountId, userCar);

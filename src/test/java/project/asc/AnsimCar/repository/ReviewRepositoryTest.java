@@ -100,10 +100,10 @@ class ReviewRepositoryTest extends RepositoryTest {
         Rent rent = rentRepository.findById(rent1.getId()).orElseThrow();
 
         //when
-        List<Review> result = reviewRepository.findByRent_Id(rent.getId());
+        Review result = reviewRepository.findByRent_Id(rent.getId()).get();
 
         //then
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.getAccount().getEmail()).isEqualTo(rentAccount1.getEmail());
     }
 
     @Test
