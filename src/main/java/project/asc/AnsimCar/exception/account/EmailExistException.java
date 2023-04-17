@@ -1,4 +1,4 @@
-package project.asc.AnsimCar.exception.Account;
+package project.asc.AnsimCar.exception.account;
 
 public class EmailExistException extends RuntimeException{
 

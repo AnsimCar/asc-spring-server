@@ -1,4 +1,4 @@
-package project.asc.AnsimCar.exception.UserCar;
+package project.asc.AnsimCar.exception.usercar;
 
 public abstract class UserCarException extends RuntimeException {
 

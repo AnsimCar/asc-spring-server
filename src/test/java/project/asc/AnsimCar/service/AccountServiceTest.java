@@ -7,7 +7,7 @@ import project.asc.AnsimCar.common.annotation.ServiceTest;
 import project.asc.AnsimCar.domain.Account;
 
 import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
-import project.asc.AnsimCar.exception.Account.EmailExistException;
+import project.asc.AnsimCar.exception.account.EmailExistException;
 import project.asc.AnsimCar.repository.AccountRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;

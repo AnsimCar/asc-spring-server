@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 
 import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
-import project.asc.AnsimCar.exception.Account.EmailExistException;
+import project.asc.AnsimCar.exception.account.EmailExistException;
 
 
 @ControllerAdvice

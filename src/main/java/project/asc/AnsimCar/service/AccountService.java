@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
-import project.asc.AnsimCar.exception.Account.EmailExistException;
+import project.asc.AnsimCar.exception.account.EmailExistException;
 import project.asc.AnsimCar.repository.AccountRepository;
 
 @Service
