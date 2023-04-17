@@ -12,6 +12,7 @@ import project.asc.AnsimCar.dto.review.request.ReviewUpdateRequest;
 import project.asc.AnsimCar.dto.review.response.ReviewResponse;
 import project.asc.AnsimCar.exception.account.AccountNotFoundException;
 import project.asc.AnsimCar.exception.rent.RentNotFoundException;
+import project.asc.AnsimCar.exception.rent.RentOwnerException;
 import project.asc.AnsimCar.exception.review.ReviewNotFoundException;
 import project.asc.AnsimCar.exception.review.ReviewOwnerException;
 import project.asc.AnsimCar.exception.usercar.UserCarNotFoundException;
@@ -38,6 +39,7 @@ public class ReviewService {
     public ReviewResponse addReview(final Long userCarId, final Long rentId, final Long accountId, final ReviewCreateRequest reviewCreateRequest) {
         UserCar userCar = findUserCarById(userCarId);
         Rent rent = findRentById(rentId);
+        validateOwner(accountId, rent);
         Account account = findAccountById(accountId);
 
         Review review = createReview(userCar, rent, account, reviewCreateRequest);
@@ -45,6 +47,12 @@ public class ReviewService {
         reviewRepository.save(review);
 
         return ReviewResponse.from(review);
+    }
+
+    private void validateOwner(Long accountId, Rent rent) {
+        if (!rent.isOwner(accountId)) {
+            throw new RentOwnerException();
+        }
     }
 
     private Review createReview(UserCar userCar, Rent rent, Account account, ReviewCreateRequest reviewCreateRequest) {
