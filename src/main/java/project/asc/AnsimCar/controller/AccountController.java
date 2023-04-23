@@ -10,7 +10,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import project.asc.AnsimCar.authentication.AccountContext;
+import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
+import project.asc.AnsimCar.dto.account.request.AccountUpdateRequest;
 import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.service.AccountService;
 
@@ -74,6 +78,34 @@ public class AccountController {
         accountService.register(accountCreateRequest);
 
         return "redirect:/";
+    }
+
+
+    @GetMapping("/mypage/account/info")
+    public String myPageInfo(Authentication authentication, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        model.addAttribute(accountContext.getAccount());
+
+        return "account/info";
+    }
+
+    @GetMapping("/mypage/account/update")
+    public String myPageUpdateForm(Authentication authentication, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        model.addAttribute(accountContext.getAccount());
+
+        return "account/update";
+    }
+
+    @PostMapping("/mypage/account/update")
+    public String myPageUpdate(Authentication authentication, @Validated @ModelAttribute("account") AccountUpdateRequest accountUpdateRequest, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+        model.addAttribute(account);
+
+        accountService.update(account, accountUpdateRequest);
+
+        return "redirect:/logout";
     }
 
 }

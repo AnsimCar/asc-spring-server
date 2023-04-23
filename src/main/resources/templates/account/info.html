@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::header"></head>
+<body>
+<div th:replace="layout/mypageTop::top"></div>
+
+<div class="container">
+    <div class="row align-items-start">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                            <a th:href="@{/mypage/account/info}" style="margin:5px;" class="nav-link text-bg-secondary">내 정보</a>
+                            <a th:href="@{/mypage/account/update}" style="margin:5px;" class="nav-link text-dark">내 정보 업데이트</a>
+                            <a th:href="@{/#}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
+                            <a th:href="@{/#}" style="margin:5px;" class="nav-link text-dark">차량 업데이트</a>
+                            <a th:href="@{/#}" style="margin:5px;" class="nav-link text-dark">차량 목록</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div style="padding-top:50px;"  class="col">
+            <div class=" text-center">
+                <h2>내 정보</h2>
+            </div>
+
+            <form action="teams.html" th:action th:object="${account}" method="post">
+                <div class="px-5 m-3">
+                    <label for="username">이름</label>
+                    <input type="text" id="username" th:field="*{username}" class="form-control" readonly>
+                </div>
+                <div class="px-5 m-3">
+                    <label for="email">이메일</label>
+                    <input type="text" id="email" th:field="*{email}" class="form-control" readonly>
+                </div>
+                <div class="px-5 m-3">
+                    <label for="phoneNumber">핸드폰 번호</label>
+                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control" readonly>
+                </div>
+                <div class="px-5 m-3">
+                    <label for="age">나이</label>
+                    <input type="text" id="age" th:field="*{age}" class="form-control" readonly>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="layout/footer::footer"></div>
+</body>
+
+</html>
