@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import project.asc.AnsimCar.domain.common.BaseEntity;
 import project.asc.AnsimCar.domain.type.Role;
+import project.asc.AnsimCar.dto.account.request.AccountUpdateRequest;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,14 @@ public class Account extends BaseEntity {
         this.role = role;
     }
 
+
+    public void updateAccount(AccountUpdateRequest accountUpdateRequest) {
+        this.username = accountUpdateRequest.getUsername();
+        this.email = accountUpdateRequest.getEmail();
+        this.phoneNumber = accountUpdateRequest.getPhoneNumber();
+        this.age = accountUpdateRequest.getAge();
+        this.role = Role.ROLE_USER;
+    }
 
 
     /**

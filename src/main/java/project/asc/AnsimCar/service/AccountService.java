@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
+import project.asc.AnsimCar.dto.account.request.AccountUpdateRequest;
+import project.asc.AnsimCar.exception.account.AccountNotFoundException;
 import project.asc.AnsimCar.exception.account.EmailExistException;
 import project.asc.AnsimCar.repository.AccountRepository;
 
@@ -32,5 +34,14 @@ public class AccountService {
 
         //저장
         accountRepository.save(account);
+    }
+
+    /**
+     * 계정 정보 업데이트
+     */
+    public void update(Account account, AccountUpdateRequest accountUpdateRequest) {
+        Account findAccount = accountRepository.findById(account.getId()).orElseThrow(AccountNotFoundException::new);
+
+        findAccount.updateAccount(accountUpdateRequest);
     }
 }

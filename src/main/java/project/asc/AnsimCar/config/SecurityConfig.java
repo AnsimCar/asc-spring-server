@@ -53,7 +53,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/register").permitAll()
-                .antMatchers("/detail").hasRole("USER")
+                .antMatchers("/mypage/**").hasRole("USER")
                 .anyRequest().authenticated()
 
                 .and()
