@@ -11,7 +11,8 @@ public enum CarCategory {
     SEMI_FORMAL("준대형"),
     LARGE("대형");
 
-    @Getter private final String description;
+    @Getter
+    private final String description;
 
     CarCategory(String description) {
         this.description = description;

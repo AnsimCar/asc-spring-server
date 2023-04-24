@@ -98,7 +98,10 @@ public class AccountController {
     }
 
     @PostMapping("/mypage/account/update")
-    public String myPageUpdate(Authentication authentication, @Validated @ModelAttribute("account") AccountUpdateRequest accountUpdateRequest, Model model) {
+    public String myPageUpdate(Authentication authentication, @Validated @ModelAttribute("account") AccountUpdateRequest accountUpdateRequest, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) return "account/update";
+
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
         Account account = accountContext.getAccount();
         model.addAttribute(account);

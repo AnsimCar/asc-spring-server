@@ -88,13 +88,13 @@ public class UserCarFixture {
     }
 
 
-    public static MultiValueMap<String, Object> createUserCarParam() {
-        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-        params.add("account", 유저);
+    public static MultiValueMap<String, String> createUserCarParam(Account account) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("account", account.toString());
         params.add("carModel", 모델명1);
-        params.add("carCategory", 차종1);
+        params.add("carCategory", 차종1.toString());
         params.add("manufacturer", 제조사1);
-        params.add("fuel", 연료종류1);
+        params.add("fuel", 연료종류1.toString());
         params.add("carNumber", 차량번호1);
         return params;
     }
