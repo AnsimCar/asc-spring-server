@@ -15,7 +15,6 @@
               <a th:href="@{/mypage/account/update}" style="margin:5px;" class="nav-link text-bg-secondary">내 정보 업데이트</a>
               <a th:href="@{/usercar/list}" style="margin:5px;" class="nav-link text-dark">차량 목록</a>
               <a th:href="@{/usercar/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
-              <a th:href="@{/usercar/update}" style="margin:5px;" class="nav-link text-dark">차량 업데이트</a>
             </div>
           </li>
         </ul>
@@ -29,19 +28,31 @@
       <form action="update.html" th:action th:object="${account}" method="post">
         <div class="px-5 m-3">
           <label for="username">이름</label>
-          <input type="text" id="username" th:field="*{username}" class="form-control">
+          <input type="text" id="username" th:field="*{username}" class="form-control" th:errorclass="field-error">
+          <div class="field-error" th:errors="*{username}">
+            이름 검증 오류
+          </div>
         </div>
         <div class="px-5 m-3">
           <label for="email">이메일</label>
-          <input type="text" id="email" th:field="*{email}" class="form-control">
+          <input type="text" id="email" th:field="*{email}" class="form-control" th:errorclass="field-error">
+          <div class="field-error" th:errors="*{email}">
+            이메일 검증 오류
+          </div>
         </div>
         <div class="px-5 m-3">
           <label for="phoneNumber">핸드폰 번호</label>
-          <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control">
+          <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control" th:errorclass="field-error">
+          <div class="field-error" th:errors="*{phoneNumber}">
+            핸드폰 번호 검증 오류
+          </div>
         </div>
         <div class="px-5 m-3">
           <label for="age">나이</label>
-          <input type="text" id="age" th:field="*{age}" class="form-control">
+          <input type="text" id="age" th:field="*{age}" class="form-control" th:errorclass="field-error">
+          <div class="field-error" th:errors="*{age}">
+            나이 오류
+          </div>
         </div>
 
         <div class="px-5 m-3">

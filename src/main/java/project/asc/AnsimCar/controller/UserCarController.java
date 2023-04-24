@@ -55,8 +55,9 @@ public class UserCarController {
      */
     @PostMapping("/add")
     public String addCar(@Validated @ModelAttribute("userCar") UserCarCreateRequest userCarCreateRequest,
-                         Authentication authentication,
-                         BindingResult bindingResult) {
+                         BindingResult bindingResult,
+                         Authentication authentication
+                         ) {
 
         if (bindingResult.hasErrors()) return "usercar/addUserCar";
 
