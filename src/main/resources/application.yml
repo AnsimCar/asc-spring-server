@@ -14,3 +14,16 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}       # AWS IAM AccessKey 적기
+      secretKey: ${AWS_SECRET_ACCESS_KEY}   # AWS IAM SecretKey 적기
+    s3:
+      bucket: 버킷 이름    # ex) marryting-gyunny
+      dir: S3 디렉토리 이름 # ex) /gyunny
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
