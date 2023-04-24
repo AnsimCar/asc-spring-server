@@ -1,8 +1,5 @@
 
 spring:
-  config:
-    import: application-aws.yml
-
   datasource:
     url: jdbc:mysql://localhost:3306/ansimcar
     username: root
@@ -18,3 +15,15 @@ spring:
         show_sql: true
         format_sql: true
 
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: 버킷 이름
+      dir: S3 디렉토리 이름
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
