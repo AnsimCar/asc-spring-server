@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::header"></head>
+<body>
+<div th:replace="layout/mypageTop::top"></div>
+
+<div class="container">
+    <div class="row align-items-start">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                            <a th:href="@{/mypage/account/info}" style="margin:5px;" class="nav-link text-dark">내 정보</a>
+                            <a th:href="@{/mypage/account/update}" style="margin:5px;" class="nav-link text-dark">내 정보
+                                업데이트</a>
+                            <a th:href="@{/usercar/list}" style="margin:5px;" class="nav-link text-bg-secondary">차량
+                                목록</a>
+                            <a th:href="@{/usercar/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
+                            <a th:href="@{/usercar/update}" style="margin:5px;" class="nav-link text-dark">차량 업데이트</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div style="padding-top:50px;" class="col">
+            <div class=" text-center">
+                <h2>차량 정보</h2>
+            </div>
+
+            <form th:action="@{/usercar/list/(id = ${userCar.getId()})}" th:object="${userCar}" method="get">
+
+                <div>
+                    <table id="table" class="table" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th style="width: 30%">목록</th>
+                            <th>내용</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="모델명"/>
+                            <td th:text="${userCar.getCarModel()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="차종"/>
+                            <td th:text="${userCar.getCarCategory().getDescription()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="제조사"/>
+                            <td th:text="${userCar.getManufacturer()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="연료"/>
+                            <td th:text="${userCar.getFuel().getDescription()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="번호"/>
+                            <td th:text="${userCar.getCarNumber()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <a class="w-100 btn btn-danger btn-lg" th:href="@{/usercar/delete(id=${userCar.getId()})}">
+                            삭제
+                        </a>
+                    </div>
+
+                    <div class="col">
+                        <a class="w-100 btn btn-primary btn-lg" th:href="@{/usercar/update(id=${userCar.getId()})}">
+                            수정
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div th:replace="layout/footer::footer"></div>
+</body>
+
+</html>
