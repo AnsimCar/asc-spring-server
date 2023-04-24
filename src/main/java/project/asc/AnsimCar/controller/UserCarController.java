@@ -57,7 +57,7 @@ public class UserCarController {
     public String addCar(@Validated @ModelAttribute("userCar") UserCarCreateRequest userCarCreateRequest,
                          BindingResult bindingResult,
                          Authentication authentication
-                         ) {
+    ) {
 
         if (bindingResult.hasErrors()) return "usercar/addUserCar";
 
@@ -116,7 +116,7 @@ public class UserCarController {
 
         userCarService.updateUserCar(account.getId(), id, userCarUpdateRequest);
 
-        return "usercar/update";
+        return "redirect:/usercar/update?id=" + id;
     }
 
     /**
