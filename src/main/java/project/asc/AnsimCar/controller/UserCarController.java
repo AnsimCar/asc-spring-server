@@ -116,7 +116,7 @@ public class UserCarController {
 
         userCarService.updateUserCar(account.getId(), id, userCarUpdateRequest);
 
-        return "redirect:/usercar/update?id=" + id;
+        return "redirect:/usercar/list/?id=" + id;
     }
 
     /**

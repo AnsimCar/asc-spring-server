@@ -14,7 +14,8 @@
                             <a th:href="@{/mypage/account/info}" style="margin:5px;" class="nav-link text-dark">내 정보</a>
                             <a th:href="@{/mypage/account/update}" style="margin:5px;" class="nav-link text-dark">내 정보
                                 업데이트</a>
-                            <a th:href="@{/usercar/list}" style="margin:5px;" class="nav-link text-bg-secondary">차량 목록</a>
+                            <a th:href="@{/usercar/list}" style="margin:5px;" class="nav-link text-bg-secondary">차량
+                                목록</a>
                             <a th:href="@{/usercar/add}" style="margin:5px;" class="nav-link text-dark">차량
                                 등록</a>
                         </div>
@@ -72,9 +73,18 @@
                     <div class="field-error" th:errors="*{carNumber}">차량 번호 오류</div>
                 </div>
 
-                <div class="px-5 m-3">
-                    <button class="w-100 btn btn-dark btn-lg" type="submit">등록</button>
+                <div class="row">
+                    <div class="col px-5 m-3">
+                        <a class="w-100 btn btn-dark btn-lg" th:href="@{/usercar/list/(id=${updateCar.getId()})}">
+                            취소
+                        </a>
+                    </div>
+
+                    <div class="col px-5 m-3">
+                        <button class="w-100 btn btn-primary btn-lg" type="submit">수정</button>
+                    </div>
                 </div>
+
             </form>
         </div>
     </div>
