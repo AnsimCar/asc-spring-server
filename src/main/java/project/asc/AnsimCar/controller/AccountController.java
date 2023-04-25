@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import project.asc.AnsimCar.authentication.AccountContext;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
+import project.asc.AnsimCar.dto.account.request.AccountPasswordResetRequest;
 import project.asc.AnsimCar.dto.account.request.AccountUpdateRequest;
 import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.service.AccountService;
@@ -81,6 +82,9 @@ public class AccountController {
     }
 
 
+    /**
+     * 내 정보
+     */
     @GetMapping("/mypage/account/info")
     public String myPageInfo(Authentication authentication, Model model) {
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
@@ -89,6 +93,9 @@ public class AccountController {
         return "account/info";
     }
 
+    /**
+     * 내 정보 업데이트
+     */
     @GetMapping("/mypage/account/update")
     public String myPageUpdateForm(Authentication authentication, Model model) {
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
@@ -111,4 +118,26 @@ public class AccountController {
         return "redirect:/logout";
     }
 
+    /**
+     * 비밀번호 재설정
+     */
+    @GetMapping("/mypage/password_reset")
+    public String passwordResetForm(Model model) {
+        model.addAttribute("password", AccountPasswordResetRequest.builder().build());
+
+        return "account/passwordReset";
+    }
+
+    @PostMapping("/mypage/password_reset")
+    public String passwordReset(Authentication authentication, @Validated @ModelAttribute("password") AccountPasswordResetRequest accountPasswordResetRequest, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) return "account/passwordReset";
+
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        accountService.passwordReset(account, accountPasswordResetRequest);
+
+        return "redirect:/logout";
+    }
 }
