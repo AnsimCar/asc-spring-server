@@ -2,6 +2,7 @@ package project.asc.AnsimCar.common.fixture;
 
 import project.asc.AnsimCar.domain.*;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,9 @@ public class RentFixture {
                 .build();
     }
 
+    public static RentCreateRequest createRentCreateRequest(Long userCarId, Address address) {
+        return new RentCreateRequest(userCarId, address.getSido(), address.getSigungu(), address.getEupmyeondong());
+    }
 
     public static RentUpdateRequest createRentUpdateRequest1() {
         return new RentUpdateRequest(

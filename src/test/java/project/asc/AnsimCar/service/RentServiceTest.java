@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.asc.AnsimCar.common.annotation.ServiceTest;
+import project.asc.AnsimCar.common.fixture.AddressFixture;
 import project.asc.AnsimCar.common.fixture.RentFixture;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.Address;
@@ -43,9 +44,10 @@ class RentServiceTest extends ServiceTest {
         Account account = createAccount();
         accountRepository.save(account);
         UserCar userCar = userCarRepository.save(createUserCar1(account));
+        Address address = AddressFixture.createAddress();
 
         //when
-        rentService.addRent(account.getId(), userCar.getId(), createAddressCreateRequest());
+        rentService.addRent(account.getId(), RentFixture.createRentCreateRequest(userCar.getId(), address));
         List<RentResponse> rentResponses = rentService.findByUserId(account.getId());
 
         //then

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::header"></head>
+<body>
+<div th:replace="layout/rentTop::top"></div>
+
+<div class="container">
+    <div class="row align-items-start">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                            <a th:href="@{/rent/list}" style="margin:5px;" class="nav-link text-dark">차량 대여</a>
+                            <a th:href="@{/list/return}" style="margin:5px;" class="nav-link text-dark">차량 반납</a>
+                            <a th:href="@{/rent/add}" style="margin:5px;" class="nav-link text-bg-secondary">차량 등록</a>
+                            <a th:href="@{/list/rentlist}" style="margin:5px;" class="nav-link text-dark">대여 기록</a>
+                            <a th:href="@{/list/addlist}" style="margin:5px;" class="nav-link text-dark">등록 기록</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div style="padding-top:50px;" class="col">
+            <div class=" text-center">
+                <h2>차량 등록</h2>
+            </div>
+
+            <form th:action="@{/rent/add}" th:object="${rent}" method="post">
+
+                <div th:if="${exception}" class="px-5 m-3">
+                    <p class="field-error" th:text="${exception}">렌트 등록 실패(차량 중복) 예외시 메시지</p>
+                </div>
+
+                <div class="px-5 m-3">
+                    <div>차량 선택</div>
+                    <select class="form-select" name="userCarId" th:errorclass="field-error">
+                        <option value="">==차량 선택==</option>
+                        <option th:each="userCar : ${userCars}" th:value="${userCar.id}"
+                                th:text="${userCar.carModel}">차종</option>
+                    </select>
+                </div>
+
+                <hr style="width:88%; margin: auto">
+
+                <p class="px-5 m-3" style="font-weight: bold">주차 장소를 입력해주세요.</p>
+
+                <div class="px-5 m-3">
+                    <label for="sido">시도(예: 서울특별시)</label>
+                    <input type="text" id="sido" name="sido" class="form-control" th:field="*{sido}" th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{sido}">
+                        시도 검증 오류
+                    </div>
+                </div>
+
+                <div class="px-5 m-3">
+                    <label for="sigungu">시군구(예: 강남구)</label>
+                    <input type="text" id="sigungu" name="sigungu" class="form-control" th:field="*{sigungu}" th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{sigungu}">
+                        시군구 검증 오류
+                    </div>
+                </div>
+
+                <div class="px-5 m-3">
+                    <label for="eupmyeondong">읍면동(예: 청담동)</label>
+                    <input type="text" id="eupmyeondong" name="eupmyeondong" class="form-control" th:field="*{eupmyeondong}" th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{eupmyeondong}">
+                        읍면동 검증 오류
+                    </div>
+                </div>
+
+                <div class="px-5 m-3">
+                    <button class="w-100 btn btn-dark btn-lg" type="submit">등록</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="layout/footer::footer"></div>
+</body>

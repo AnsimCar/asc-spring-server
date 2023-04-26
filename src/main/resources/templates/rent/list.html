@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/header::header"></head>
 <body>
-<div th:replace="layout/mypageTop::top"></div>
+<div th:replace="layout/rentTop::top"></div>
 
 <div class="container">
     <div class="row align-items-start">
@@ -13,7 +13,7 @@
                         <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
                             <a th:href="@{/rent/list}" style="margin:5px;" class="nav-link text-bg-secondary">차량 대여</a>
                             <a th:href="@{/list/return}" style="margin:5px;" class="nav-link text-dark">차량 반납</a>
-                            <a th:href="@{/list/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
+                            <a th:href="@{/rent/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
                             <a th:href="@{/list/rentlist}" style="margin:5px;" class="nav-link text-dark">대여 기록</a>
                             <a th:href="@{/list/addlist}" style="margin:5px;" class="nav-link text-dark">등록 기록</a>
                         </div>
@@ -26,7 +26,7 @@
                 <h2>차량 목록</h2>
             </div>
 
-            <details>
+            <details class="px-5 m-3">
                 <summary>차량 검색</summary>
 
                 <form th:action="@{/rent/list}" th:object="${rentSearchRequest}" method="post" class="form-inline">
@@ -72,7 +72,7 @@
 
             </details>
 
-            <div>
+            <div class="px-5 m-3">
                 <table id="table" class="table">
                     <thead>
                     <tr>
