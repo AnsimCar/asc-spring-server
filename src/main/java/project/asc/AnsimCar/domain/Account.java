@@ -34,8 +34,11 @@ public class Account extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
+    private List<UserCar> userCars = new ArrayList<>();
 
     protected Account() {}
 

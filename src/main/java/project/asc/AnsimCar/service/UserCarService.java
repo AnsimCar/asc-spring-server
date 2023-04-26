@@ -13,6 +13,7 @@ import project.asc.AnsimCar.exception.account.AccountNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarOwnerException;
 import project.asc.AnsimCar.repository.AccountRepository;
+import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.List;
 public class UserCarService {
     private final UserCarRepository userCarRepository;
     private final AccountRepository accountRepository;
+    private final RentRepository rentRepository;
 
     /**
      * 차량 등록
