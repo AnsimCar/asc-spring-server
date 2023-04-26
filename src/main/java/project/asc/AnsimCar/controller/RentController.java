@@ -5,17 +5,28 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import project.asc.AnsimCar.authentication.AccountContext;
+import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
+import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
+import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
+import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.service.RentService;
+import project.asc.AnsimCar.service.UserCarService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/rent")
@@ -23,6 +34,8 @@ import project.asc.AnsimCar.service.RentService;
 public class RentController {
 
     private final RentService rentService;
+    private final UserCarService userCarService;
+    private final RentRepository rentRepository;
 
     @ModelAttribute("carCategories")
     public CarCategory[] carCategories() {
@@ -64,4 +77,36 @@ public class RentController {
         return "rent/list";
     }
 
+
+    @GetMapping("/add")
+    public String addRent(Authentication authentication, Model model) {
+        modelAddAttributeUserCars(authentication, model);
+
+        model.addAttribute("rent", new RentCreateRequest());
+
+        return "rent/addRent";
+    }
+
+    @PostMapping("/add")
+    public String addRent(@Validated @ModelAttribute("rent") RentCreateRequest rentCreateRequest, BindingResult bindingResult, Authentication authentication, Model model) {
+        if (bindingResult.hasErrors()) {
+            modelAddAttributeUserCars(authentication, model);
+            return "rent/addRent";
+        }
+
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        rentService.addRent(account.getId(), rentCreateRequest);
+
+        return "redirect:/rent/list";
+    }
+
+    private void modelAddAttributeUserCars(Authentication authentication, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        List<UserCarResponse> userCarResponses = userCarService.findByAccountId(account.getId());
+        model.addAttribute("userCars", userCarResponses);
+    }
 }

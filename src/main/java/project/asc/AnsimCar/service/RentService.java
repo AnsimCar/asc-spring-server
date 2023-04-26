@@ -10,15 +10,13 @@ import project.asc.AnsimCar.domain.Address;
 import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.UserCar;
 import project.asc.AnsimCar.domain.type.Status;
-import project.asc.AnsimCar.dto.account.response.AccountResponse;
-import project.asc.AnsimCar.dto.address.request.AddressCreateRequest;
-import project.asc.AnsimCar.dto.address.response.AddressResponse;
+import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
-import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.exception.account.AccountNotFoundException;
+import project.asc.AnsimCar.exception.rent.RentExistException;
 import project.asc.AnsimCar.exception.rent.RentNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarOwnerException;
@@ -26,10 +24,11 @@ import project.asc.AnsimCar.repository.AccountRepository;
 import project.asc.AnsimCar.repository.AddressRepository;
 import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
-import project.asc.AnsimCar.repository.querydsl.rent.RentCustomRepository;
+import project.asc.AnsimCar.repository.querydsl.rent.RentRepositoryCustom;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -40,25 +39,29 @@ public class RentService {
     private final AccountRepository accountRepository;
     private final RentRepository rentRepository;
     private final AddressRepository addressRepository;
-    private final RentCustomRepository rentCustomRepository;
 
     /**
      * 렌트 정보 저장
      */
-    public void addRent(Long accountId, Long userCarId, AddressCreateRequest addressCreateRequest) {
+    public void addRent(Long accountId, RentCreateRequest rentCreateRequest) {
         Account account = accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
-        UserCar userCar = userCarRepository.findById(userCarId).orElseThrow(UserCarNotFoundException::new);
-        Address address = addressRepository.save(addressCreateRequest.toEntity());
+        UserCar userCar = userCarRepository.findById(rentCreateRequest.getUserCarId()).orElseThrow(UserCarNotFoundException::new);
+        Address address = addressRepository.save(rentCreateRequest.toAddressEntity());
 
-        Rent rent = Rent.builder()
-                .account(account)
-                .userCar(userCar)
-                .address(address)
-                .registrationDate(LocalDateTime.now())
-                .status(Status.AVAILABLE)
-                .build();
+        Optional<Rent> optional = rentRepository.findByUserCar_Id(userCar.getId());
+        if(optional.isPresent()) {      //null 이 아닌 경우
+            throw new RentExistException();
+        } else {                        //null 인 경우
+            Rent rent = Rent.builder()
+                    .account(account)
+                    .userCar(userCar)
+                    .address(address)
+                    .registrationDate(LocalDateTime.now())
+                    .status(Status.AVAILABLE)
+                    .build();
 
-        rentRepository.save(rent);
+            rentRepository.save(rent);
+        }
     }
 
     /**
@@ -112,16 +115,9 @@ public class RentService {
      */
     @Transactional(readOnly = true)
     public Page<RentItemDetailResponse> findByAvailable(Pageable pageable) {
-        return rentRepository.findByStatus(Status.AVAILABLE, pageable).map(rent -> new RentItemDetailResponse(
-                rent.getId(),
-                UserCarResponse.from(rent.getUserCar()),
-                AccountResponse.from(rent.getAccount()),
-                AddressResponse.from(rent.getAddress()),
-                rent.getRegistrationDate(),
-                rent.getStatus(),
-                rent.getRentalDate(),
-                rent.getReturnDate()
-        ));
+
+        return rentRepository.findByStatus(Status.AVAILABLE, pageable).map(RentItemDetailResponse::from);
+
     }
 
     /**
@@ -129,15 +125,8 @@ public class RentService {
      */
     @Transactional(readOnly = true)
     public Page<RentItemDetailResponse> findAllComplex(RentSearchRequest request, Pageable pageable) {
-        return rentCustomRepository.findAllComplex(request, pageable).map(rent -> new RentItemDetailResponse(
-                rent.getId(),
-                UserCarResponse.from(rent.getUserCar()),
-                AccountResponse.from(rent.getAccount()),
-                AddressResponse.from(rent.getAddress()),
-                rent.getRegistrationDate(),
-                rent.getStatus(),
-                rent.getRentalDate(),
-                rent.getReturnDate()
-        ));
+
+        return rentRepository.findAllComplex(request, pageable).map(RentItemDetailResponse::from);
+
     }
 }

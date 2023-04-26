@@ -21,11 +21,11 @@ import static project.asc.AnsimCar.domain.QRent.rent;
 import static project.asc.AnsimCar.domain.QUserCar.userCar;
 
 @Repository
-public class RentCustomRepositoryImpl implements RentCustomRepository {
+public class RentRepositoryCustomImpl implements RentRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public RentCustomRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
+    public RentRepositoryCustomImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 

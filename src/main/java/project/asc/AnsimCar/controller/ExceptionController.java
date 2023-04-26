@@ -1,19 +1,32 @@
 package project.asc.AnsimCar.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 
+import project.asc.AnsimCar.authentication.AccountContext;
+import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
 import project.asc.AnsimCar.dto.account.request.AccountPasswordResetRequest;
+import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
+import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.exception.account.EmailExistException;
 import project.asc.AnsimCar.exception.account.PasswordCheckException;
+import project.asc.AnsimCar.exception.rent.RentExistException;
 import project.asc.AnsimCar.exception.usercar.UserCarException;
+import project.asc.AnsimCar.service.UserCarService;
+
+import java.util.List;
 
 
 @ControllerAdvice
+@RequiredArgsConstructor
 public class ExceptionController {
+
+    private final UserCarService userCarService;
 
     /**
      * 이메일 중복 예외
@@ -35,5 +48,22 @@ public class ExceptionController {
         model.addAttribute("exception", e.getMessage());
 
         return "account/passwordReset";
+    }
+
+    /**
+     * 렌트 중복 예외 (이미 등록된 차량으로 렌트 등록 시 발생)
+     */
+    @ExceptionHandler(RentExistException.class)
+    public String RentExistExHandler(Authentication authentication, RentExistException e, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        List<UserCarResponse> userCarResponses = userCarService.findByAccountId(account.getId());
+        model.addAttribute("userCars", userCarResponses);
+
+        model.addAttribute("rent", new RentCreateRequest());
+        model.addAttribute("exception", e.getMessage());
+
+        return "rent/addRent";
     }
 }
