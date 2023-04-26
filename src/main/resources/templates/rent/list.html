@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::header"></head>
+<body>
+<div th:replace="layout/mypageTop::top"></div>
+
+<div class="container">
+    <div class="row align-items-start">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                            <a th:href="@{/rent/list}" style="margin:5px;" class="nav-link text-bg-secondary">차량 대여</a>
+                            <a th:href="@{/list/return}" style="margin:5px;" class="nav-link text-dark">차량 반납</a>
+                            <a th:href="@{/list/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
+                            <a th:href="@{/list/rentlist}" style="margin:5px;" class="nav-link text-dark">대여 기록</a>
+                            <a th:href="@{/list/addlist}" style="margin:5px;" class="nav-link text-dark">등록 기록</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div style="padding-top:50px;" class="col">
+            <div class=" text-center">
+                <h2>차량 목록</h2>
+            </div>
+
+            <details>
+                <summary>차량 검색</summary>
+
+                <form th:object="${rentSearchRequest}" method="get" class="form-inline">
+                    <div class="row" style="padding: 5px">
+                        <div class="col">
+                            <input type="text" th:field="*{sido}" class="form-control" placeholder="시도(예: 서울특별시)"/>
+                        </div>
+                        <div class="col">
+                            <input type="text" th:field="*{sigungu}" class="form-control" placeholder="시군구(예: 강남구)"/>
+                        </div>
+                        <div class="col">
+                            <input type="text" th:field="*{eupmyeondong}" class="form-control"
+                                   placeholder="읍면동(예: 청담동)"/>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding: 5px">
+                        <div class="col">
+                            <input type="text" th:field="*{carModel}" class="form-control" placeholder="모델명(예: 아반떼)"/>
+                        </div>
+                        <div class="col">
+                            <select th:field="*{carCategory}" class="form-select">
+                                <option value="">==차종 선택==</option>
+                                <option th:each="carCategory : ${carCategories}" th:value="${carCategory}"
+                                        th:text="${carCategory.getDescription()}"/>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <select th:field="*{fuel}" class="form-select">
+                                <option value="">==연료 선택==</option>
+                                <option th:each="fuel : ${fuels}" th:value="${fuel}"
+                                        th:text="${fuel.getDescription()}"/>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding: 10px">
+                        <button type="submit" class="btn btn-primary mb-2">검색</button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+
+            </details>
+
+            <div>
+                <table id="table" class="table">
+                    <thead>
+                    <tr>
+                        <th>모델명</th>
+                        <th>차종</th>
+                        <th>연료</th>
+                        <th>지역</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="car : ${list}">
+                        <td><a th:href="@{/usercar/list/(id = ${car.getId()})}"
+                               th:text="${car.getUserCar().getCarModel()}"/>
+                        <td th:text="${car.getUserCar().getCarCategory().getDescription()}"/>
+                        <td th:text="${car.getUserCar().getFuel().getDescription()}"/>
+                        <td th:text="${car.getAddressResponse().getSigungu()}"/>
+                        <td th:text="${car.getAddressResponse().getEupmyeongdong()}"/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div th:replace="layout/footer::footer"></div>
+</body>
+
+</html>

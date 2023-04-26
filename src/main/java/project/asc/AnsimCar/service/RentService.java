@@ -1,6 +1,8 @@
 package project.asc.AnsimCar.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.asc.AnsimCar.domain.Account;
@@ -9,16 +11,19 @@ import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.UserCar;
 import project.asc.AnsimCar.domain.type.Status;
 import project.asc.AnsimCar.dto.address.request.AddressCreateRequest;
+import project.asc.AnsimCar.dto.address.response.AddressResponse;
+import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.exception.account.AccountNotFoundException;
+import project.asc.AnsimCar.exception.rent.RentNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarOwnerException;
-import project.asc.AnsimCar.exception.rent.RentNotFoundException;
 import project.asc.AnsimCar.repository.AccountRepository;
 import project.asc.AnsimCar.repository.AddressRepository;
 import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
+import project.asc.AnsimCar.repository.querydsl.rent.RentCustomRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,6 +37,7 @@ public class RentService {
     private final AccountRepository accountRepository;
     private final RentRepository rentRepository;
     private final AddressRepository addressRepository;
+    private final RentCustomRepository rentCustomRepository;
 
     /**
      * 렌트 정보 저장
@@ -96,5 +102,37 @@ public class RentService {
         if (!rent.isOwner(accountId)) {
             throw new UserCarOwnerException();
         }
+    }
+
+    /**
+     * 모든 렌트카 조회(페이징)
+     */
+    @Transactional(readOnly = true)
+    public Page<RentResponse> findAllPaging(Pageable pageable) {
+        return rentRepository.findAll(pageable).map(rent -> new RentResponse(
+                rent.getId(),
+                rent.getUserCar(),
+                AddressResponse.from(rent.getAddress()),
+                rent.getRegistrationDate(),
+                rent.getStatus(),
+                rent.getRentalDate(),
+                rent.getReturnDate()
+        ));
+    }
+
+    /**
+     * 렌트 조건 검색
+     */
+    @Transactional(readOnly = true)
+    public Page<RentResponse> findAllComplex(RentSearchRequest request, Pageable pageable) {
+        return rentCustomRepository.findAllComplex(request, pageable).map(rent -> new RentResponse(
+                rent.getId(),
+                rent.getUserCar(),
+                AddressResponse.from(rent.getAddress()),
+                rent.getRegistrationDate(),
+                rent.getStatus(),
+                rent.getRentalDate(),
+                rent.getReturnDate()
+        ));
     }
 }
