@@ -10,11 +10,14 @@ import project.asc.AnsimCar.domain.Address;
 import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.UserCar;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.dto.address.request.AddressCreateRequest;
 import project.asc.AnsimCar.dto.address.response.AddressResponse;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
+import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
+import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.exception.account.AccountNotFoundException;
 import project.asc.AnsimCar.exception.rent.RentNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarNotFoundException;
@@ -108,10 +111,11 @@ public class RentService {
      * 모든 렌트카 조회(페이징)
      */
     @Transactional(readOnly = true)
-    public Page<RentResponse> findAllPaging(Pageable pageable) {
-        return rentRepository.findAll(pageable).map(rent -> new RentResponse(
+    public Page<RentItemDetailResponse> findByAvailable(Pageable pageable) {
+        return rentRepository.findByStatus(Status.AVAILABLE, pageable).map(rent -> new RentItemDetailResponse(
                 rent.getId(),
-                rent.getUserCar(),
+                UserCarResponse.from(rent.getUserCar()),
+                AccountResponse.from(rent.getAccount()),
                 AddressResponse.from(rent.getAddress()),
                 rent.getRegistrationDate(),
                 rent.getStatus(),
@@ -124,10 +128,11 @@ public class RentService {
      * 렌트 조건 검색
      */
     @Transactional(readOnly = true)
-    public Page<RentResponse> findAllComplex(RentSearchRequest request, Pageable pageable) {
-        return rentCustomRepository.findAllComplex(request, pageable).map(rent -> new RentResponse(
+    public Page<RentItemDetailResponse> findAllComplex(RentSearchRequest request, Pageable pageable) {
+        return rentCustomRepository.findAllComplex(request, pageable).map(rent -> new RentItemDetailResponse(
                 rent.getId(),
-                rent.getUserCar(),
+                UserCarResponse.from(rent.getUserCar()),
+                AccountResponse.from(rent.getAccount()),
                 AddressResponse.from(rent.getAddress()),
                 rent.getRegistrationDate(),
                 rent.getStatus(),
