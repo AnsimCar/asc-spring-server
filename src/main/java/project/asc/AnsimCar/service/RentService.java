@@ -55,9 +55,12 @@ public class RentService {
                     .account(account)
                     .userCar(userCar)
                     .address(address)
+                    .pricePerHour(rentCreateRequest.getPricePerHour())
                     .registrationDate(LocalDateTime.now())
                     .status(Status.AVAILABLE)
                     .build();
+
+            userCar.updateUsable(false);
 
             rentRepository.save(rent);
         }
@@ -105,6 +108,9 @@ public class RentService {
         validateOwner(accountId, rent);
 
         rent.updateRentalReturnDate(rentUpdateRequest);
+        UserCar userCar = userCarRepository.findById(rent.getUserCar().getId()).orElseThrow(UserCarNotFoundException::new);
+
+        userCar.updateUsable(true);
     }
 
     /**

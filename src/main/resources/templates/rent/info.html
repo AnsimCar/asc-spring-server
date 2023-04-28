@@ -51,6 +51,10 @@
                             <td th:text="${info.getUserCarResponse().getManufacturer()}"></td>
                         </tr>
                         <tr>
+                            <td th:text="시간 당 가격"/>
+                            <td th:text="${info.pricePerHourToString()}"></td>
+                        </tr>
+                        <tr>
                             <td th:text="연료"/>
                             <td th:text="${info.getUserCarResponse().getFuel().getDescription()}"></td>
                         </tr>

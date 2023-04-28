@@ -69,6 +69,16 @@
                     </div>
                 </div>
 
+                <p class="px-5 m-3" style="font-weight: bold">시간 당 가격을 입력해주세요.</p>
+
+                <div class="px-5 m-3">
+                    <label for="pricePerHour">시간 당 가격(예: 10000)</label>
+                    <input type="text" id="pricePerHour" name="pricePerHour" class="form-control" th:field="*{pricePerHour}" th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{pricePerHour}">
+                        시간 당 가격 검증 오류
+                    </div>
+                </div>
+
                 <div class="px-5 m-3">
                     <button class="w-100 btn btn-dark btn-lg" type="submit">등록</button>
                 </div>

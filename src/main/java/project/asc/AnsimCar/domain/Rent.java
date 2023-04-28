@@ -7,6 +7,7 @@ import project.asc.AnsimCar.domain.type.Status;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,10 @@ public class Rent {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    private int pricePerHour;
+
+    private int totalPrice;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime registrationDate;
 
@@ -53,10 +58,12 @@ public class Rent {
     }
 
     @Builder
-    public Rent(UserCar userCar, Account account, Address address, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public Rent(UserCar userCar, Account account, Address address, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.userCar = userCar;
         this.account = account;
         this.address = address;
+        this.pricePerHour = pricePerHour;
+        this.totalPrice = totalPrice;
         this.registrationDate = registrationDate;
         this.status = status;
         this.rentalDate = rentalDate;
@@ -70,8 +77,15 @@ public class Rent {
     public void updateRentalReturnDate(RentUpdateRequest rentUpdateRequest) {
         this.rentalDate = rentUpdateRequest.getRentalDate();
         this.returnDate = rentUpdateRequest.getReturnDate();
-    }
 
+        if (rentUpdateRequest.getReturnDate() != null) {
+            int totalSeconds = (int) Duration.between(rentUpdateRequest.getRentalDate(), rentUpdateRequest.getReturnDate()).getSeconds();
+
+            int totalHour = (totalSeconds / 60 / 60) + 1;
+
+            this.totalPrice = totalHour * pricePerHour;
+        }
+    }
 
 
     public boolean isOwner(Long accountId) {

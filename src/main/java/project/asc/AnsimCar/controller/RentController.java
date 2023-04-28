@@ -24,6 +24,7 @@ import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.service.RentService;
 import project.asc.AnsimCar.service.UserCarService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -33,7 +34,6 @@ public class RentController {
 
     private final RentService rentService;
     private final UserCarService userCarService;
-    private final RentRepository rentRepository;
 
     @ModelAttribute("carCategories")
     public CarCategory[] carCategories() {
@@ -115,6 +115,15 @@ public class RentController {
         Account account = accountContext.getAccount();
 
         List<UserCarResponse> userCarResponses = userCarService.findByAccountId(account.getId());
-        model.addAttribute("userCars", userCarResponses);
+
+        List<UserCarResponse> usableCarResponse = new ArrayList<>();
+
+        for (UserCarResponse userCarResponse : userCarResponses) {
+            if (userCarResponse.getUsable()) {
+                usableCarResponse.add(userCarResponse);
+            }
+        }
+
+        model.addAttribute("userCars", usableCarResponse);
     }
 }

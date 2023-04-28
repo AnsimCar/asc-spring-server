@@ -7,7 +7,10 @@ import project.asc.AnsimCar.domain.type.Status;
 import project.asc.AnsimCar.dto.address.response.AddressResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +22,10 @@ public class RentResponse {
 
     private AddressResponse addressResponse;
 
+    private int pricePerHour;
+
+    private int totalPrice;
+
     private LocalDateTime registrationDate;
 
     private Status status;
@@ -28,14 +35,24 @@ public class RentResponse {
     private LocalDateTime returnDate;
 
     @Builder
-    public RentResponse(Long id, UserCarResponse userCarResponse, AddressResponse addressResponse, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public RentResponse(Long id, UserCarResponse userCarResponse, AddressResponse addressResponse, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.id = id;
         this.userCarResponse = userCarResponse;
         this.addressResponse = addressResponse;
+        this.pricePerHour = pricePerHour;
+        this.totalPrice = totalPrice;
         this.registrationDate = registrationDate;
         this.status = status;
         this.rentalDate = rentalDate;
         this.returnDate = returnDate;
+    }
+
+    public String pricePerHourToString() {
+        return String.valueOf(pricePerHour);
+    }
+
+    public String totalPriceToString() {
+        return String.valueOf(totalPrice);
     }
 
     /**
@@ -46,6 +63,8 @@ public class RentResponse {
                 entity.getId(),
                 UserCarResponse.from(entity.getUserCar()),
                 AddressResponse.from(entity.getAddress()),
+                entity.getPricePerHour(),
+                entity.getTotalPrice(),
                 entity.getRegistrationDate(),
                 entity.getStatus(),
                 entity.getRentalDate(),
@@ -60,6 +79,8 @@ public class RentResponse {
         return Rent.builder()
                 .userCar(userCarResponse.toEntity())
                 .address(addressResponse.toEntity())
+                .pricePerHour(pricePerHour)
+                .totalPrice(totalPrice)
                 .registrationDate(registrationDate)
                 .status(status)
                 .rentalDate(rentalDate)

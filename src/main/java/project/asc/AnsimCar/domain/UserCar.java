@@ -36,21 +36,26 @@ public class UserCar extends BaseEntity {
 
     private String carNumber;           //차량 번호
 
+    private Boolean usable;
+
     @OneToMany(mappedBy = "userCar")
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userCar")
+    private List<Rent> rent = new ArrayList<>();
 
     protected UserCar() {
     }
 
     @Builder
-    public UserCar(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber, List<Review> reviews) {
+    public UserCar(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber, Boolean usable) {
         this.account = account;
         this.carModel = carModel;
         this.carCategory = carCategory;
         this.manufacturer = manufacturer;
         this.fuel = fuel;
         this.carNumber = carNumber;
-        this.reviews = reviews;
+        this.usable = usable;
     }
 
     public void updateUserCar(UserCarUpdateRequest userCarUpdateRequest) {
@@ -58,6 +63,10 @@ public class UserCar extends BaseEntity {
         this.carCategory = userCarUpdateRequest.getCarCategory();
         this.manufacturer = userCarUpdateRequest.getManufacturer();
         this.fuel = userCarUpdateRequest.getFuel();
+    }
+
+    public void updateUsable(Boolean usable) {
+        this.usable = usable;
     }
 
     //차량 Owner 검증

@@ -20,6 +20,10 @@ public class RentInfoResponse {
 
     private AddressResponse addressResponse;
 
+    private int pricePerHour;
+
+    private int totalPrice;
+
     private LocalDateTime registrationDate;
 
     private Status status;
@@ -29,11 +33,13 @@ public class RentInfoResponse {
     private LocalDateTime returnDate;
 
     @Builder
-    public RentInfoResponse(Long id, UserCarResponse userCarResponse, AccountResponse accountResponse, AddressResponse addressResponse, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public RentInfoResponse(Long id, UserCarResponse userCarResponse, AccountResponse accountResponse, AddressResponse addressResponse, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.id = id;
         this.userCarResponse = userCarResponse;
         this.accountResponse = accountResponse;
         this.addressResponse = addressResponse;
+        this.pricePerHour = pricePerHour;
+        this.totalPrice = totalPrice;
         this.registrationDate = registrationDate;
         this.status = status;
         this.rentalDate = rentalDate;
@@ -49,6 +55,8 @@ public class RentInfoResponse {
                 UserCarResponse.from(entity.getUserCar()),
                 AccountResponse.from(entity.getAccount()),
                 AddressResponse.from(entity.getAddress()),
+                entity.getPricePerHour(),
+                entity.getTotalPrice(),
                 entity.getRegistrationDate(),
                 entity.getStatus(),
                 entity.getRentalDate(),

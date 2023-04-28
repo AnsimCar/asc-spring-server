@@ -18,6 +18,4 @@ public interface UserCarRepository extends JpaRepository<UserCar, Long> {
     List<UserCar> findByManufacturer(String manufacturer);
 
     List<UserCar> findByFuel(Fuel fuel);
-
-
 }
