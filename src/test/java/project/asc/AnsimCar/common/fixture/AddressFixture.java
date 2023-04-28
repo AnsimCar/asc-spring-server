@@ -14,6 +14,8 @@ public class AddressFixture {
 
     public static final String 읍_면_동 = "지족동";
 
+    public static final String 상세주소 = "OO아파트 주차장";
+
     public static Address createAddress() {
         return Address.builder()
                 .sido(시_도)
@@ -26,7 +28,8 @@ public class AddressFixture {
         return new AddressCreateRequest(
                 시_도,
                 시_군_구,
-                읍_면_동
+                읍_면_동,
+                상세주소
         );
     }
 

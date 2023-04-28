@@ -24,18 +24,21 @@ public class RentCreateRequest {
     private String sigungu;
     @NotBlank(message = "읍면동(예: 청담동)를 입력해주세요.")
     private String eupmyeondong;
+    @NotBlank(message = "상세주소(예: 공용주차장)를 입력해주세요.")
+    private String detailAddress;
 
 
     public RentCreateRequest() {
     }
 
     @Builder
-    public RentCreateRequest(Long userCarId, int pricePerHour, String sido, String sigungu, String eupmyeondong) {
+    public RentCreateRequest(Long userCarId, int pricePerHour, String sido, String sigungu, String eupmyeondong, String detailAddress) {
         this.userCarId = userCarId;
         this.pricePerHour = pricePerHour;
         this.sido = sido;
         this.sigungu = sigungu;
         this.eupmyeondong = eupmyeondong;
+        this.detailAddress = detailAddress;
     }
 
     public Address toAddressEntity() {
@@ -43,6 +46,7 @@ public class RentCreateRequest {
                 .sido(sido)
                 .sigungu(sigungu)
                 .eupmyeondong(eupmyeondong)
+                .detailAddress(detailAddress)
                 .build();
     }
 }

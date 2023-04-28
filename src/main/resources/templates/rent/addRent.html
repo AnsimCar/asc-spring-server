@@ -65,6 +65,14 @@
                     </div>
                 </div>
 
+                <div class="px-5 m-3">
+                    <label for="">상세주소(예: 청담 공용주차장)</label>
+                    <input type="text" id="detailAddress" name="detailAddress" class="form-control" th:field="*{detailAddress}" th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{detailAddress}">
+                        상세주소 검증 오류
+                    </div>
+                </div>
+
                 <p class="px-5 m-3" style="font-weight: bold">시간 당 가격을 입력해주세요.</p>
 
                 <div class="px-5 m-3">

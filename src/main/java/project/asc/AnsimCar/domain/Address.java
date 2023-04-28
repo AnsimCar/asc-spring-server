@@ -19,14 +19,17 @@ public class Address {
 
     private String eupmyeondong;
 
+    private String detailAddress;
+
 
     protected Address() {
     }
 
     @Builder
-    public Address(String sido, String sigungu, String eupmyeondong) {
+    public Address(String sido, String sigungu, String eupmyeondong, String detailAddress) {
         this.sido = sido;
         this.sigungu = sigungu;
         this.eupmyeondong = eupmyeondong;
+        this.detailAddress = detailAddress;
     }
 }

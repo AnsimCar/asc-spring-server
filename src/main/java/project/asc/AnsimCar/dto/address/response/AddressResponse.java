@@ -14,12 +14,15 @@ public class AddressResponse {
 
     private String eupmyeongdong;
 
+    private String detailAddress;
+
     @Builder
-    public AddressResponse(Long id, String sido, String sigungu, String eupmyeongdong) {
+    public AddressResponse(Long id, String sido, String sigungu, String eupmyeongdong, String detailAddress) {
         this.id = id;
         this.sido = sido;
         this.sigungu = sigungu;
         this.eupmyeongdong = eupmyeongdong;
+        this.detailAddress = detailAddress;
     }
 
     /**
@@ -30,7 +33,8 @@ public class AddressResponse {
                 entity.getId(),
                 entity.getSido(),
                 entity.getSigungu(),
-                entity.getEupmyeondong()
+                entity.getEupmyeondong(),
+                entity.getDetailAddress()
         );
     }
 
@@ -42,6 +46,7 @@ public class AddressResponse {
                 .sido(sido)
                 .sigungu(sigungu)
                 .eupmyeondong(eupmyeongdong)
+                .detailAddress(detailAddress)
                 .build();
     }
 }
