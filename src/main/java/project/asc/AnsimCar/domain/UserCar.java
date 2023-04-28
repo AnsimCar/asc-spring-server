@@ -36,7 +36,7 @@ public class UserCar extends BaseEntity {
 
     private String carNumber;           //차량 번호
 
-    @OneToMany(mappedBy = "userCar")
+    @OneToMany(mappedBy = "userCar", cascade = CascadeType.REMOVE)
     private List<Review> reviews = new ArrayList<>();
 
     protected UserCar() {
