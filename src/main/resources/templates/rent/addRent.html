@@ -28,10 +28,6 @@
 
             <form th:action="@{/rent/add}" th:object="${rent}" method="post">
 
-                <div th:if="${exception}" class="px-5 m-3">
-                    <p class="field-error" th:text="${exception}">렌트 등록 실패(차량 중복) 예외시 메시지</p>
-                </div>
-
                 <div class="px-5 m-3">
                     <div>차량 선택</div>
                     <select class="form-select" name="userCarId" th:errorclass="field-error">

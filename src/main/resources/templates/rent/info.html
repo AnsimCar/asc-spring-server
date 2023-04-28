@@ -29,7 +29,7 @@
 
             <form th:action="@{/rent/list/(id = ${info.getId()})}" th:object="${info}" method="get">
 
-                <div>
+                <div class="px-5 m-3">
                     <table id="table" class="table" style="width: 100%">
                         <thead>
                         <tr>
@@ -51,8 +51,8 @@
                             <td th:text="${info.getUserCarResponse().getManufacturer()}"></td>
                         </tr>
                         <tr>
-                            <td th:text="시간 당 가격"/>
-                            <td th:text="${info.pricePerHourToString()}"></td>
+                            <td th:text="'시간 당 가격'"/>
+                            <td th:text="${info.getPricePerHour()}"></td>
                         </tr>
                         <tr>
                             <td th:text="연료"/>
@@ -68,13 +68,17 @@
                         </tr>
                         <tr>
                             <td th:text="평점"/>
-                            <td th:text="${info.getUserCarResponse().rateAverage()}"></td>
+                            <td th:text="${reviewScore}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="'대여자 정보'"/>
+                            <td><a th:href="@{/rent/detail/(id = ${info.getAccountResponse().getId()})}" th:text="${info.getAccountResponse().getUsername()}"/></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="row">
+                <div class="row px-5 m-3">
                     <div class="col">
                         <a class="w-100 btn btn-secondary btn-lg" href="javascript:window.history.back();">
                             뒤로가기
@@ -86,6 +90,7 @@
                             대여하기
                         </a>
                     </div>
+
                 </div>
 
             </form>
