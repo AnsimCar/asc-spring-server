@@ -16,7 +16,6 @@ import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.exception.account.AccountNotFoundException;
-import project.asc.AnsimCar.exception.rent.RentExistException;
 import project.asc.AnsimCar.exception.rent.RentNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarOwnerException;
@@ -27,7 +26,6 @@ import project.asc.AnsimCar.repository.UserCarRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -47,23 +45,19 @@ public class RentService {
         UserCar userCar = userCarRepository.findById(rentCreateRequest.getUserCarId()).orElseThrow(UserCarNotFoundException::new);
         Address address = addressRepository.save(rentCreateRequest.toAddressEntity());
 
-        Optional<Rent> optional = rentRepository.findByUserCar_Id(userCar.getId());
-        if (optional.isPresent()) {      //null 이 아닌 경우
-            throw new RentExistException();
-        } else {                        //null 인 경우
-            Rent rent = Rent.builder()
-                    .account(account)
-                    .userCar(userCar)
-                    .address(address)
-                    .pricePerHour(rentCreateRequest.getPricePerHour())
-                    .registrationDate(LocalDateTime.now())
-                    .status(Status.AVAILABLE)
-                    .build();
+        Rent rent = Rent.builder()
+                .account(account)
+                .userCar(userCar)
+                .address(address)
+                .pricePerHour(rentCreateRequest.getPricePerHour())
+                .registrationDate(LocalDateTime.now())
+                .status(Status.AVAILABLE)
+                .build();
 
-            userCar.updateUsable(false);
+        userCar.updateUsable(false);
 
-            rentRepository.save(rent);
-        }
+        rentRepository.save(rent);
+
     }
 
     /**
@@ -77,7 +71,7 @@ public class RentService {
      * id로 모두 조회
      */
     public RentResponse findInfoById(Long id) {
-        return RentResponse.from(rentRepository.findById(id).orElseThrow(RentNotFoundException::new));
+        return RentResponse.from(rentRepository.findEntityGraphById(id).orElseThrow(RentNotFoundException::new));
     }
 
     /**

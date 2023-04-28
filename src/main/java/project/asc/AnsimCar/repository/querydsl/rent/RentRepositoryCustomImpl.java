@@ -1,5 +1,6 @@
 package project.asc.AnsimCar.repository.querydsl.rent;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,6 +15,7 @@ import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.domain.type.Status;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
+import project.asc.AnsimCar.dto.rent.response.RentInfoResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,21 +67,6 @@ public class RentRepositoryCustomImpl implements RentRepositoryCustom {
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
     }
 
-    public Optional<Rent> findInfoById(Long id) {
-        Optional<Rent> result = Optional.ofNullable(jpaQueryFactory.selectFrom(rent)
-                .leftJoin(rent.userCar, userCar)
-                .fetchJoin()
-                .leftJoin(rent.account, account)
-                .fetchJoin()
-                .leftJoin(rent.address, address)
-                .fetchJoin()
-                .leftJoin(rent.userCar.reviews, review)
-                .fetchJoin()
-                .where(rent.id.eq(id))
-                .fetchOne());
-
-        return result;
-    }
 
     private BooleanExpression carCategoryEq(CarCategory carCategory) {
         return carCategory != null ? rent.userCar.carCategory.eq(carCategory) : null;

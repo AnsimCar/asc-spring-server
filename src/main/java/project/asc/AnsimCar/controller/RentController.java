@@ -21,6 +21,7 @@ import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.repository.RentRepository;
+import project.asc.AnsimCar.service.AccountService;
 import project.asc.AnsimCar.service.RentService;
 import project.asc.AnsimCar.service.UserCarService;
 
@@ -34,6 +35,8 @@ public class RentController {
 
     private final RentService rentService;
     private final UserCarService userCarService;
+
+    private final AccountService accountService;
 
     @ModelAttribute("carCategories")
     public CarCategory[] carCategories() {
@@ -125,5 +128,12 @@ public class RentController {
         }
 
         model.addAttribute("userCars", usableCarResponse);
+    }
+
+    @GetMapping("/detail")
+    public String rentDetail(@RequestParam("id") Long accountId, Model model) {
+        model.addAttribute("account", accountService.findById(accountId));
+
+        return "rent/detail";
     }
 }

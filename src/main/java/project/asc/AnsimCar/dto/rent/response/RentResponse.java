@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import project.asc.AnsimCar.domain.*;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.dto.address.response.AddressResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 
@@ -20,6 +21,8 @@ public class RentResponse {
 
     private UserCarResponse userCarResponse;
 
+    private AccountResponse accountResponse;
+
     private AddressResponse addressResponse;
 
     private int pricePerHour;
@@ -35,9 +38,10 @@ public class RentResponse {
     private LocalDateTime returnDate;
 
     @Builder
-    public RentResponse(Long id, UserCarResponse userCarResponse, AddressResponse addressResponse, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public RentResponse(Long id, UserCarResponse userCarResponse, AccountResponse accountResponse, AddressResponse addressResponse, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.id = id;
         this.userCarResponse = userCarResponse;
+        this.accountResponse = accountResponse;
         this.addressResponse = addressResponse;
         this.pricePerHour = pricePerHour;
         this.totalPrice = totalPrice;
@@ -47,13 +51,6 @@ public class RentResponse {
         this.returnDate = returnDate;
     }
 
-    public String pricePerHourToString() {
-        return String.valueOf(pricePerHour);
-    }
-
-    public String totalPriceToString() {
-        return String.valueOf(totalPrice);
-    }
 
     /**
      * 엔티티 -> ResponseDto
@@ -62,6 +59,7 @@ public class RentResponse {
         return new RentResponse(
                 entity.getId(),
                 UserCarResponse.from(entity.getUserCar()),
+                AccountResponse.from(entity.getAccount()),
                 AddressResponse.from(entity.getAddress()),
                 entity.getPricePerHour(),
                 entity.getTotalPrice(),
@@ -78,6 +76,7 @@ public class RentResponse {
     public Rent toEntity() {
         return Rent.builder()
                 .userCar(userCarResponse.toEntity())
+                .account(accountResponse.toEntity())
                 .address(addressResponse.toEntity())
                 .pricePerHour(pricePerHour)
                 .totalPrice(totalPrice)
