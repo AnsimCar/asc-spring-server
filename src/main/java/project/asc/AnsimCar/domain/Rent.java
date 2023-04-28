@@ -28,7 +28,7 @@ public class Rent {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "address_id")
     private Address address;
 
@@ -48,10 +48,10 @@ public class Rent {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime returnDate;
 
-    @OneToMany(mappedBy = "rent")
+    @OneToMany(mappedBy = "rent", cascade = CascadeType.REMOVE)
     private List<BeforeImage> beforeImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "rent")
+    @OneToMany(mappedBy = "rent", cascade = CascadeType.REMOVE)
     private List<AfterImage> afterImages = new ArrayList<>();
 
     protected Rent() {
