@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import project.asc.AnsimCar.domain.QRent;
+import project.asc.AnsimCar.domain.QReview;
 import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
@@ -14,10 +16,12 @@ import project.asc.AnsimCar.domain.type.Status;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static project.asc.AnsimCar.domain.QAccount.account;
 import static project.asc.AnsimCar.domain.QAddress.address;
 import static project.asc.AnsimCar.domain.QRent.rent;
+import static project.asc.AnsimCar.domain.QReview.*;
 import static project.asc.AnsimCar.domain.QUserCar.userCar;
 
 @Repository
@@ -59,6 +63,22 @@ public class RentRepositoryCustomImpl implements RentRepositoryCustom {
                         rent.status.eq(Status.AVAILABLE));
 
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
+    }
+
+    public Optional<Rent> findInfoById(Long id) {
+        Optional<Rent> result = Optional.ofNullable(jpaQueryFactory.selectFrom(rent)
+                .leftJoin(rent.userCar, userCar)
+                .fetchJoin()
+                .leftJoin(rent.account, account)
+                .fetchJoin()
+                .leftJoin(rent.address, address)
+                .fetchJoin()
+                .leftJoin(rent.userCar.reviews, review)
+                .fetchJoin()
+                .where(rent.id.eq(id))
+                .fetchOne());
+
+        return result;
     }
 
     private BooleanExpression carCategoryEq(CarCategory carCategory) {

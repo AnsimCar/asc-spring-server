@@ -43,13 +43,14 @@ public class UserCar extends BaseEntity {
     }
 
     @Builder
-    public UserCar(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
+    public UserCar(Account account, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber, List<Review> reviews) {
         this.account = account;
         this.carModel = carModel;
         this.carCategory = carCategory;
         this.manufacturer = manufacturer;
         this.fuel = fuel;
         this.carNumber = carNumber;
+        this.reviews = reviews;
     }
 
     public void updateUserCar(UserCarUpdateRequest userCarUpdateRequest) {

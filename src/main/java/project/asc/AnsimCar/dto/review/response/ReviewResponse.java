@@ -10,6 +10,8 @@ import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class ReviewResponse {
@@ -51,6 +53,27 @@ public class ReviewResponse {
                 entity.getDescription(),
                 entity.getReviewDate()
         );
+    }
+
+    /**
+     * 엔티티 -> RequestDto
+     */
+    public static List<ReviewResponse> from(List<Review> entities) {
+        List<ReviewResponse> reviewResponses = new ArrayList<>();
+
+        for (Review entity : entities) {
+            reviewResponses.add(new ReviewResponse(
+                    entity.getId(),
+                    entity.getUserCar(),
+                    entity.getRent(),
+                    entity.getAccount(),
+                    entity.getRate(),
+                    entity.getDescription(),
+                    entity.getReviewDate()
+            ));
+        }
+
+        return reviewResponses;
     }
 
     /**

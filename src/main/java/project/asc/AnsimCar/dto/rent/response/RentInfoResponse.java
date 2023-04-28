@@ -2,20 +2,21 @@ package project.asc.AnsimCar.dto.rent.response;
 
 import lombok.Builder;
 import lombok.Data;
-import project.asc.AnsimCar.domain.*;
+import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.dto.address.response.AddressResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
-public class RentResponse {
+public class RentInfoResponse {
     private Long id;
 
     private UserCarResponse userCarResponse;
+
+    private AccountResponse accountResponse;
 
     private AddressResponse addressResponse;
 
@@ -28,9 +29,10 @@ public class RentResponse {
     private LocalDateTime returnDate;
 
     @Builder
-    public RentResponse(Long id, UserCarResponse userCarResponse, AddressResponse addressResponse, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public RentInfoResponse(Long id, UserCarResponse userCarResponse, AccountResponse accountResponse, AddressResponse addressResponse, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.id = id;
         this.userCarResponse = userCarResponse;
+        this.accountResponse = accountResponse;
         this.addressResponse = addressResponse;
         this.registrationDate = registrationDate;
         this.status = status;
@@ -41,29 +43,16 @@ public class RentResponse {
     /**
      * 엔티티 -> ResponseDto
      */
-    public static RentResponse from(Rent entity) {
-        return new RentResponse(
+    public static RentInfoResponse from(Rent entity) {
+        return new RentInfoResponse(
                 entity.getId(),
                 UserCarResponse.from(entity.getUserCar()),
+                AccountResponse.from(entity.getAccount()),
                 AddressResponse.from(entity.getAddress()),
                 entity.getRegistrationDate(),
                 entity.getStatus(),
                 entity.getRentalDate(),
                 entity.getReturnDate()
         );
-    }
-
-    /**
-     * ResponseDto -> 엔티티
-     */
-    public Rent toEntity() {
-        return Rent.builder()
-                .userCar(userCarResponse.toEntity())
-                .address(addressResponse.toEntity())
-                .registrationDate(registrationDate)
-                .status(status)
-                .rentalDate(rentalDate)
-                .returnDate(returnDate)
-                .build();
     }
 }

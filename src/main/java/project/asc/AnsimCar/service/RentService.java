@@ -24,7 +24,6 @@ import project.asc.AnsimCar.repository.AccountRepository;
 import project.asc.AnsimCar.repository.AddressRepository;
 import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
-import project.asc.AnsimCar.repository.querydsl.rent.RentRepositoryCustom;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,7 +48,7 @@ public class RentService {
         Address address = addressRepository.save(rentCreateRequest.toAddressEntity());
 
         Optional<Rent> optional = rentRepository.findByUserCar_Id(userCar.getId());
-        if(optional.isPresent()) {      //null 이 아닌 경우
+        if (optional.isPresent()) {      //null 이 아닌 경우
             throw new RentExistException();
         } else {                        //null 인 경우
             Rent rent = Rent.builder()
@@ -62,6 +61,20 @@ public class RentService {
 
             rentRepository.save(rent);
         }
+    }
+
+    /**
+     * id로 조회
+     */
+    public RentResponse findById(Long id) {
+        return RentResponse.from(rentRepository.findById(id).orElseThrow(RentNotFoundException::new));
+    }
+
+    /**
+     * id로 모두 조회
+     */
+    public RentResponse findInfoById(Long id) {
+        return RentResponse.from(rentRepository.findById(id).orElseThrow(RentNotFoundException::new));
     }
 
     /**

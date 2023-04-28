@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::header"></head>
+<body>
+<div th:replace="layout/rentTop::top"></div>
+
+<div class="container">
+    <div class="row align-items-start">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                            <a th:href="@{/rent/list}" style="margin:5px;" class="nav-link text-bg-secondary">차량 대여</a>
+                            <a th:href="@{/list/return}" style="margin:5px;" class="nav-link text-dark">차량 반납</a>
+                            <a th:href="@{/rent/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
+                            <a th:href="@{/list/rentlist}" style="margin:5px;" class="nav-link text-dark">대여 기록</a>
+                            <a th:href="@{/list/addlist}" style="margin:5px;" class="nav-link text-dark">등록 기록</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div style="padding-top:50px;" class="col">
+            <div class=" text-center">
+                <h2>카 셰어링 정보</h2>
+            </div>
+
+            <form th:action="@{/rent/list/(id = ${info.getId()})}" th:object="${info}" method="get">
+
+                <div>
+                    <table id="table" class="table" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th style="width: 30%">목록</th>
+                            <th>내용</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="모델명"/>
+                            <td th:text="${info.getUserCarResponse().getCarModel()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="차종"/>
+                            <td th:text="${info.getUserCarResponse().getCarCategory().getDescription()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="제조사"/>
+                            <td th:text="${info.getUserCarResponse().getManufacturer()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="연료"/>
+                            <td th:text="${info.getUserCarResponse().getFuel().getDescription()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="지역"/>
+                            <td th:text="${info.getAddressResponse().getSido()} + ' ' + ${info.getAddressResponse().getSigungu()} + ' ' + ${info.getAddressResponse().getEupmyeongdong()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="상태"/>
+                            <td th:text="${info.getStatus().getDescription()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="평점"/>
+                            <td th:text="${info.getUserCarResponse().rateAverage()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <a class="w-100 btn btn-secondary btn-lg" href="javascript:window.history.back();">
+                            뒤로가기
+                        </a>
+                    </div>
+
+                    <div class="col">
+                        <a class="w-100 btn btn-primary btn-lg" th:href="@{/rent/rental(id=${info.getId()})}">
+                            대여하기
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div th:replace="layout/footer::footer"></div>
+</body>
+
+</html>

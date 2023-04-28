@@ -6,6 +6,10 @@ import project.asc.AnsimCar.domain.UserCar;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.dto.account.response.AccountResponse;
+import project.asc.AnsimCar.dto.review.response.ReviewResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class UserCarResponse {
@@ -23,8 +27,10 @@ public class UserCarResponse {
 
     private String carNumber;
 
+    private List<ReviewResponse> reviewResponses = new ArrayList<>();
+
     @Builder
-    public UserCarResponse(Long id, AccountResponse accountResponse, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber) {
+    public UserCarResponse(Long id, AccountResponse accountResponse, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber, List<ReviewResponse> reviewResponses) {
         this.id = id;
         this.accountResponse = accountResponse;
         this.carModel = carModel;
@@ -32,6 +38,7 @@ public class UserCarResponse {
         this.manufacturer = manufacturer;
         this.fuel = fuel;
         this.carNumber = carNumber;
+        this.reviewResponses = reviewResponses;
     }
 
     /**
@@ -45,7 +52,8 @@ public class UserCarResponse {
                 entity.getCarCategory(),
                 entity.getManufacturer(),
                 entity.getFuel(),
-                entity.getCarNumber()
+                entity.getCarNumber(),
+                ReviewResponse.from(entity.getReviews())
         );
     }
 
@@ -61,5 +69,16 @@ public class UserCarResponse {
                 .fuel(fuel)
                 .carNumber(carNumber)
                 .build();
+    }
+
+    /**
+     * 리뷰 평점 구하기
+     */
+    public Integer rateAverage() {
+        int score = 0;
+        for (ReviewResponse reviewResponse : reviewResponses) {
+            score += reviewResponse.getRate();
+        }
+        return score;
     }
 }
