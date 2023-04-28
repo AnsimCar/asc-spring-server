@@ -15,8 +15,10 @@ import project.asc.AnsimCar.authentication.AccountContext;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
+import project.asc.AnsimCar.domain.type.Status;
 import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
+import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
@@ -25,6 +27,7 @@ import project.asc.AnsimCar.service.AccountService;
 import project.asc.AnsimCar.service.RentService;
 import project.asc.AnsimCar.service.UserCarService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,5 +138,41 @@ public class RentController {
         model.addAttribute("account", accountService.findById(accountId));
 
         return "rent/detail";
+    }
+
+    /**
+     * 대여 기록
+     */
+    @GetMapping("/renthistory")
+    public String rentHistory(Authentication authentication, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        Page<RentResponse> rentResponses = rentService.findByRentAccountId(account.getId(), pageable);
+
+        model.addAttribute("rentList", rentResponses);
+
+        int nowPage = rentResponses.getPageable().getPageNumber() + 1;
+        model.addAttribute("list", rentResponses);
+        model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
+        model.addAttribute("next", pageable.next().getPageNumber());
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", Math.max(nowPage - 4, 1));
+        model.addAttribute("endPage", Math.min(nowPage + 5, rentResponses.getTotalPages()));
+
+        return "rent/rentHistory";
+    }
+
+    /**
+     * 대여
+     */
+    @GetMapping("/rental")
+    public String rental(@RequestParam("id") Long id, Authentication authentication) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        rentService.updateRentalReturnDate(account.getId(), id, new RentUpdateRequest(Status.WAITING_RENT, LocalDateTime.now(), null));
+
+        return "redirect:/rent/renthistory";
     }
 }

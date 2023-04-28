@@ -19,27 +19,37 @@ public class AccountResponse {
 
     private Integer age;
 
+    private String bankName;
+
+    private String bankAccount;
+
     @Builder
-    public AccountResponse(Long id, String username, String email, String password, String phoneNumber, Integer age) {
+    public AccountResponse(Long id, String username, String email, String password, String phoneNumber, Integer age, String bankName, String bankAccount) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.age = age;
+        this.bankName = bankName;
+        this.bankAccount = bankAccount;
     }
 
     /**
      * 엔티티 -> ResponseDto
      */
     public static AccountResponse from(Account entity) {
+        if (entity == null)
+            return null;
         return new AccountResponse(
                 entity.getId(),
                 entity.getUsername(),
                 entity.getEmail(),
                 entity.getPassword(),
                 entity.getPhoneNumber(),
-                entity.getAge()
+                entity.getAge(),
+                entity.getBankName(),
+                entity.getBankAccount()
         );
     }
 
@@ -53,6 +63,8 @@ public class AccountResponse {
                 .password(password)
                 .phoneNumber(phoneNumber)
                 .age(age)
+                .bankName(bankName)
+                .bankAccount(bankAccount)
                 .build();
     }
 }

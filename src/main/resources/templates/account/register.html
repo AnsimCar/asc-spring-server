@@ -56,6 +56,21 @@
             </div>
         </div>
 
+        <div>
+            <label for="bankName">은행명</label>
+            <input type="text" id="bankName" name="age" class="form-control" th:field="*{bankName}" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{bankName}">
+                은행명 오류
+            </div>
+        </div>
+
+        <div>
+            <label for="age">계좌번호</label>
+            <input type="text" id="bankAccount" name="bankAccount" class="form-control" th:field="*{bankAccount}" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{bankAccount}">
+                계좌번호 오류
+            </div>
+        </div>
 
         <hr class="my-4">
         <div class="row">
