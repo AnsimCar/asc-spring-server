@@ -23,6 +23,8 @@ public class RentResponse {
 
     private AccountResponse accountResponse;
 
+    private AccountResponse rentalAccountResponse;
+
     private AddressResponse addressResponse;
 
     private int pricePerHour;
@@ -38,10 +40,11 @@ public class RentResponse {
     private LocalDateTime returnDate;
 
     @Builder
-    public RentResponse(Long id, UserCarResponse userCarResponse, AccountResponse accountResponse, AddressResponse addressResponse, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public RentResponse(Long id, UserCarResponse userCarResponse, AccountResponse accountResponse, AccountResponse rentalAccountResponse, AddressResponse addressResponse, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.id = id;
         this.userCarResponse = userCarResponse;
         this.accountResponse = accountResponse;
+        this.rentalAccountResponse = rentalAccountResponse;
         this.addressResponse = addressResponse;
         this.pricePerHour = pricePerHour;
         this.totalPrice = totalPrice;
@@ -60,6 +63,7 @@ public class RentResponse {
                 entity.getId(),
                 UserCarResponse.from(entity.getUserCar()),
                 AccountResponse.from(entity.getAccount()),
+                AccountResponse.from(entity.getRentAccount()),
                 AddressResponse.from(entity.getAddress()),
                 entity.getPricePerHour(),
                 entity.getTotalPrice(),
@@ -77,6 +81,7 @@ public class RentResponse {
         return Rent.builder()
                 .userCar(userCarResponse.toEntity())
                 .account(accountResponse.toEntity())
+                .rentAccount(rentalAccountResponse.toEntity())
                 .address(addressResponse.toEntity())
                 .pricePerHour(pricePerHour)
                 .totalPrice(totalPrice)

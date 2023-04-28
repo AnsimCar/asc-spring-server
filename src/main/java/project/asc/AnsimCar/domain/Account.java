@@ -18,7 +18,8 @@ import java.util.List;
 public class Account extends BaseEntity {
 
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
     private Long id;
     private String username;
@@ -31,6 +32,10 @@ public class Account extends BaseEntity {
 
     private Integer age;
 
+    private String bankName;
+
+    private String bankAccount;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -40,15 +45,18 @@ public class Account extends BaseEntity {
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<UserCar> userCars = new ArrayList<>();
 
-    protected Account() {}
+    protected Account() {
+    }
 
     @Builder
-    public Account(String username, String email, String password, String phoneNumber, Integer age, Role role) {
+    public Account(String username, String email, String password, String phoneNumber, Integer age, String bankName, String bankAccount, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.age = age;
+        this.bankName = bankName;
+        this.bankAccount = bankAccount;
         this.role = role;
     }
 
@@ -58,6 +66,8 @@ public class Account extends BaseEntity {
         this.email = accountUpdateRequest.getEmail();
         this.phoneNumber = accountUpdateRequest.getPhoneNumber();
         this.age = accountUpdateRequest.getAge();
+        this.bankName = accountUpdateRequest.getBankName();
+        this.bankAccount = accountUpdateRequest.getBankAccount();
         this.role = Role.ROLE_USER;
     }
 

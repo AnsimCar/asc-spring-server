@@ -28,6 +28,10 @@ public class Rent {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rent_account_id")
+    private Account rentAccount;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "address_id")
     private Address address;
@@ -58,9 +62,10 @@ public class Rent {
     }
 
     @Builder
-    public Rent(UserCar userCar, Account account, Address address, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public Rent(UserCar userCar, Account account, Account rentAccount, Address address, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.userCar = userCar;
         this.account = account;
+        this.rentAccount = rentAccount;
         this.address = address;
         this.pricePerHour = pricePerHour;
         this.totalPrice = totalPrice;
@@ -74,7 +79,12 @@ public class Rent {
         this.status = rentUpdateRequest.getStatus();
     }
 
+    public void updateRentAccount(Account rentAccount) {
+        this.rentAccount = rentAccount;
+    }
+
     public void updateRentalReturnDate(RentUpdateRequest rentUpdateRequest) {
+        this.status = rentUpdateRequest.getStatus();
         this.rentalDate = rentUpdateRequest.getRentalDate();
         this.returnDate = rentUpdateRequest.getReturnDate();
 

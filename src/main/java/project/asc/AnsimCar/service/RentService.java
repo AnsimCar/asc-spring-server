@@ -99,12 +99,13 @@ public class RentService {
      */
     public void updateRentalReturnDate(Long accountId, Long rentId, RentUpdateRequest rentUpdateRequest) {
         Rent rent = rentRepository.findById(rentId).orElseThrow(RentNotFoundException::new);
-        validateOwner(accountId, rent);
 
         rent.updateRentalReturnDate(rentUpdateRequest);
+
+        rent.updateRentAccount(accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new));
         UserCar userCar = userCarRepository.findById(rent.getUserCar().getId()).orElseThrow(UserCarNotFoundException::new);
 
-        userCar.updateUsable(true);
+        userCar.updateUsable(false);
     }
 
     /**
@@ -130,7 +131,6 @@ public class RentService {
     public Page<RentItemDetailResponse> findByAvailable(Pageable pageable) {
 
         return rentRepository.findByStatus(Status.AVAILABLE, pageable).map(RentItemDetailResponse::from);
-
     }
 
     /**
@@ -140,6 +140,13 @@ public class RentService {
     public Page<RentItemDetailResponse> findAllComplex(RentSearchRequest request, Pageable pageable) {
 
         return rentRepository.findAllComplex(request, pageable).map(RentItemDetailResponse::from);
+    }
 
+    /**
+     * 대여자 아이디로 조회
+     */
+    @Transactional(readOnly = true)
+    public Page<RentResponse> findByRentAccountId(Long id, Pageable pageable) {
+        return rentRepository.findByRentAccount_Id(id, pageable).map(RentResponse::from);
     }
 }

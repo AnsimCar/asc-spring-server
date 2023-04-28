@@ -54,6 +54,20 @@
             나이 오류
           </div>
         </div>
+        <div class="px-5 m-3">
+          <label for="bankName">은행명</label>
+          <input type="text" id="bankName" th:field="*{bankName}" class="form-control" th:errorclass="field-error">
+          <div class="field-error" th:errors="*{bankName}">
+            은행명 오류
+          </div>
+        </div>
+        <div class="px-5 m-3">
+          <label for="bankAccount">계좌번호</label>
+          <input type="text" id="bankAccount" th:field="*{bankAccount}" class="form-control" th:errorclass="field-error">
+          <div class="field-error" th:errors="*{bankAccount}">
+            계좌번호 오류
+          </div>
+        </div>
 
         <div class="px-5 m-3">
           <button class="w-100 btn btn-dark btn-lg" type="submit">업데이트</button>

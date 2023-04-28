@@ -1,4 +1,5 @@
 package project.asc.AnsimCar.dto.account.request;
+
 import lombok.Builder;
 import lombok.Data;
 import project.asc.AnsimCar.domain.Account;
@@ -14,7 +15,8 @@ public class AccountCreateRequest {
     @NotBlank(message = "이름을 입력해주세요.")
     private String username;
 
-    @NotBlank(message = "이메일을 입력해주세요.") @Email(message = "이메일 형식을 맞춰주세요.")
+    @NotBlank(message = "이메일을 입력해주세요.")
+    @Email(message = "이메일 형식을 맞춰주세요.")
     private String email;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
@@ -26,13 +28,21 @@ public class AccountCreateRequest {
     @NotNull(message = "나이를 입력해주세요.")
     private Integer age;
 
+    @NotBlank(message = "은행을 입력해주세요.")
+    private String bankName;
+
+    @NotBlank(message = "계좌번호를 입력해주세요.")
+    private String bankAccount;
+
     @Builder
-    public AccountCreateRequest(final String username, final String email, final String password, final String phoneNumber, final Integer age) {
+    public AccountCreateRequest(final String username, final String email, final String password, final String phoneNumber, final Integer age, final String bankName, final String bankAccount) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.age = age;
+        this.bankName = bankName;
+        this.bankAccount = bankAccount;
     }
 
     /**
@@ -45,6 +55,8 @@ public class AccountCreateRequest {
                 .password(password)
                 .phoneNumber(phoneNumber)
                 .age(age)
+                .bankName(bankName)
+                .bankAccount(bankAccount)
                 .role(Role.ROLE_USER)
                 .build();
     }
