@@ -84,13 +84,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="car : ${list}">
-                        <td><a th:href="@{/usercar/list/(id = ${car.getId()})}"
-                               th:text="${car.getUserCarResponse().getCarModel()}"/>
-                        <td th:text="${car.getUserCarResponse().getCarCategory().getDescription()}"/>
-                        <td th:text="${car.getUserCarResponse().getFuel().getDescription()}"/>
-                        <td th:text="${car.getAddressResponse().getSigungu()}"/>
-                        <td th:text="${car.getAddressResponse().getEupmyeongdong()}"/>
+                    <tr th:each="rent : ${list}">
+                        <td><a th:href="@{/rent/list/(id = ${rent.getId()})}"
+                               th:text="${rent.getUserCarResponse().getCarModel()}"/>
+                        <td th:text="${rent.getUserCarResponse().getCarCategory().getDescription()}"/>
+                        <td th:text="${rent.getUserCarResponse().getFuel().getDescription()}"/>
+                        <td th:text="${rent.getAddressResponse().getSigungu()}"/>
+                        <td th:text="${rent.getAddressResponse().getEupmyeongdong()}"/>
                     </tr>
                     </tbody>
                 </table>

@@ -10,10 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import project.asc.AnsimCar.authentication.AccountContext;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.type.CarCategory;
@@ -21,11 +18,14 @@ import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
+import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.repository.RentRepository;
+import project.asc.AnsimCar.service.AccountService;
 import project.asc.AnsimCar.service.RentService;
 import project.asc.AnsimCar.service.UserCarService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -35,7 +35,8 @@ public class RentController {
 
     private final RentService rentService;
     private final UserCarService userCarService;
-    private final RentRepository rentRepository;
+
+    private final AccountService accountService;
 
     @ModelAttribute("carCategories")
     public CarCategory[] carCategories() {
@@ -56,13 +57,23 @@ public class RentController {
     }
 
     @PostMapping("/list")
-    public String SearchList(@ModelAttribute("rentSearchRequest") RentSearchRequest request,
+    public String searchList(@ModelAttribute("rentSearchRequest") RentSearchRequest request,
                              @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                              Model model) {
 
         Page<RentItemDetailResponse> rentItemDetailResponses = rentService.findAllComplex(request, pageable);
 
         return getPagingList(pageable, model, rentItemDetailResponses);
+    }
+
+    @GetMapping("/list/")
+    public String rentInfo(@RequestParam("id") Long id, Model model) {
+        RentResponse info = rentService.findInfoById(id);
+
+        model.addAttribute("info", info);
+        model.addAttribute("reviewScore", info.getUserCarResponse().rateAverage());
+
+        return "rent/info";
     }
 
     private String getPagingList(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model, Page<RentItemDetailResponse> rentItemDetailResponses) {
@@ -107,6 +118,22 @@ public class RentController {
         Account account = accountContext.getAccount();
 
         List<UserCarResponse> userCarResponses = userCarService.findByAccountId(account.getId());
-        model.addAttribute("userCars", userCarResponses);
+
+        List<UserCarResponse> usableCarResponse = new ArrayList<>();
+
+        for (UserCarResponse userCarResponse : userCarResponses) {
+            if (userCarResponse.getUsable()) {
+                usableCarResponse.add(userCarResponse);
+            }
+        }
+
+        model.addAttribute("userCars", usableCarResponse);
+    }
+
+    @GetMapping("/detail")
+    public String rentDetail(@RequestParam("id") Long accountId, Model model) {
+        model.addAttribute("account", accountService.findById(accountId));
+
+        return "rent/detail";
     }
 }

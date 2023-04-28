@@ -1,5 +1,6 @@
 package project.asc.AnsimCar.repository.querydsl.rent;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -7,17 +8,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import project.asc.AnsimCar.domain.QRent;
+import project.asc.AnsimCar.domain.QReview;
 import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.domain.type.Status;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
+import project.asc.AnsimCar.dto.rent.response.RentInfoResponse;
 
 import java.util.List;
+import java.util.Optional;
 
 import static project.asc.AnsimCar.domain.QAccount.account;
 import static project.asc.AnsimCar.domain.QAddress.address;
 import static project.asc.AnsimCar.domain.QRent.rent;
+import static project.asc.AnsimCar.domain.QReview.*;
 import static project.asc.AnsimCar.domain.QUserCar.userCar;
 
 @Repository
@@ -60,6 +66,7 @@ public class RentRepositoryCustomImpl implements RentRepositoryCustom {
 
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
     }
+
 
     private BooleanExpression carCategoryEq(CarCategory carCategory) {
         return carCategory != null ? rent.userCar.carCategory.eq(carCategory) : null;

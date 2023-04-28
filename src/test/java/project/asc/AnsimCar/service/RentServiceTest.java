@@ -10,6 +10,7 @@ import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.Address;
 import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.UserCar;
+import project.asc.AnsimCar.domain.type.Status;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.repository.AccountRepository;
@@ -17,6 +18,7 @@ import project.asc.AnsimCar.repository.AddressRepository;
 import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +31,17 @@ import static project.asc.AnsimCar.common.fixture.UserCarFixture.createUserCar1;
 
 class RentServiceTest extends ServiceTest {
 
-    @Autowired AccountRepository accountRepository;
-    @Autowired UserCarRepository userCarRepository;
-    @Autowired AddressRepository addressRepository;
-    @Autowired RentRepository rentRepository;
+    @Autowired
+    AccountRepository accountRepository;
+    @Autowired
+    UserCarRepository userCarRepository;
+    @Autowired
+    AddressRepository addressRepository;
+    @Autowired
+    RentRepository rentRepository;
 
-    @Autowired RentService rentService;
+    @Autowired
+    RentService rentService;
 
 
     @Test
@@ -128,5 +135,26 @@ class RentServiceTest extends ServiceTest {
         Optional<Rent> nonExistentRent = rentRepository.findById(rent.getId());
 
         assertThat(nonExistentRent).isEmpty();
+    }
+
+    @Test
+    @DisplayName("이용 금액")
+    void totalPrice() {
+        //given
+        Account account = createAccount();
+        accountRepository.save(account);
+
+        UserCar userCar = userCarRepository.save(createUserCar1(account));
+
+        Address address = addressRepository.save(createAddress());
+
+        Rent rent = RentFixture.createRent(userCar, account, address);
+        rentRepository.save(rent);
+
+        //when
+        rent.updateRentalReturnDate(new RentUpdateRequest(Status.WAITING_RENT, LocalDateTime.now().minusHours(3), LocalDateTime.now().minusMinutes(1)));
+
+        //then
+        assertThat(rent.getTotalPrice()).isEqualTo(30000);
     }
 }

@@ -11,6 +11,8 @@ import java.util.List;
 
 public class RentFixture {
 
+    public static final int 시간_당_가격 = 10000;
+
     public static final LocalDateTime 등록날짜 = LocalDateTime.of(2023, 4, 12, 12, 0);
 
     public static final Status 상태 = Status.AVAILABLE;
@@ -29,6 +31,7 @@ public class RentFixture {
                 .userCar(userCar)
                 .account(account)
                 .address(address)
+                .pricePerHour(시간_당_가격)
                 .registrationDate(등록날짜)
                 .status(상태)
                 .rentalDate(대여날짜)
@@ -37,7 +40,7 @@ public class RentFixture {
     }
 
     public static RentCreateRequest createRentCreateRequest(Long userCarId, Address address) {
-        return new RentCreateRequest(userCarId, address.getSido(), address.getSigungu(), address.getEupmyeondong());
+        return new RentCreateRequest(userCarId, 시간_당_가격, address.getSido(), address.getSigungu(), address.getEupmyeondong());
     }
 
     public static RentUpdateRequest createRentUpdateRequest1() {

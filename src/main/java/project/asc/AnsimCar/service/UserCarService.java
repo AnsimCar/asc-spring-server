@@ -44,7 +44,9 @@ public class UserCarService {
                 .carCategory(userCarCreateRequest.getCarCategory())
                 .manufacturer(userCarCreateRequest.getManufacturer())
                 .fuel(userCarCreateRequest.getFuel())
-                .carNumber(userCarCreateRequest.getCarNumber()).build();
+                .carNumber(userCarCreateRequest.getCarNumber())
+                .usable(true)
+                .build();
 
     }
 

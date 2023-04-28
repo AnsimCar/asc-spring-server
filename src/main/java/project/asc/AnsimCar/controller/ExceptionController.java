@@ -15,8 +15,6 @@ import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.exception.account.EmailExistException;
 import project.asc.AnsimCar.exception.account.PasswordCheckException;
-import project.asc.AnsimCar.exception.rent.RentExistException;
-import project.asc.AnsimCar.exception.usercar.UserCarException;
 import project.asc.AnsimCar.service.UserCarService;
 
 import java.util.List;
@@ -50,20 +48,5 @@ public class ExceptionController {
         return "account/passwordReset";
     }
 
-    /**
-     * 렌트 중복 예외 (이미 등록된 차량으로 렌트 등록 시 발생)
-     */
-    @ExceptionHandler(RentExistException.class)
-    public String RentExistExHandler(Authentication authentication, RentExistException e, Model model) {
-        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
-        Account account = accountContext.getAccount();
 
-        List<UserCarResponse> userCarResponses = userCarService.findByAccountId(account.getId());
-        model.addAttribute("userCars", userCarResponses);
-
-        model.addAttribute("rent", new RentCreateRequest());
-        model.addAttribute("exception", e.getMessage());
-
-        return "rent/addRent";
-    }
 }

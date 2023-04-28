@@ -4,9 +4,14 @@ import lombok.Builder;
 import lombok.Data;
 import project.asc.AnsimCar.domain.*;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.dto.address.response.AddressResponse;
+import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +19,15 @@ import java.util.List;
 public class RentResponse {
     private Long id;
 
-    private UserCar userCar;
+    private UserCarResponse userCarResponse;
+
+    private AccountResponse accountResponse;
 
     private AddressResponse addressResponse;
+
+    private int pricePerHour;
+
+    private int totalPrice;
 
     private LocalDateTime registrationDate;
 
@@ -27,15 +38,19 @@ public class RentResponse {
     private LocalDateTime returnDate;
 
     @Builder
-    public RentResponse(Long id, UserCar userCar, AddressResponse addressResponse, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public RentResponse(Long id, UserCarResponse userCarResponse, AccountResponse accountResponse, AddressResponse addressResponse, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
         this.id = id;
-        this.userCar = userCar;
+        this.userCarResponse = userCarResponse;
+        this.accountResponse = accountResponse;
         this.addressResponse = addressResponse;
+        this.pricePerHour = pricePerHour;
+        this.totalPrice = totalPrice;
         this.registrationDate = registrationDate;
         this.status = status;
         this.rentalDate = rentalDate;
         this.returnDate = returnDate;
     }
+
 
     /**
      * 엔티티 -> ResponseDto
@@ -43,8 +58,11 @@ public class RentResponse {
     public static RentResponse from(Rent entity) {
         return new RentResponse(
                 entity.getId(),
-                entity.getUserCar(),
+                UserCarResponse.from(entity.getUserCar()),
+                AccountResponse.from(entity.getAccount()),
                 AddressResponse.from(entity.getAddress()),
+                entity.getPricePerHour(),
+                entity.getTotalPrice(),
                 entity.getRegistrationDate(),
                 entity.getStatus(),
                 entity.getRentalDate(),
@@ -57,8 +75,11 @@ public class RentResponse {
      */
     public Rent toEntity() {
         return Rent.builder()
-                .userCar(userCar)
+                .userCar(userCarResponse.toEntity())
+                .account(accountResponse.toEntity())
                 .address(addressResponse.toEntity())
+                .pricePerHour(pricePerHour)
+                .totalPrice(totalPrice)
                 .registrationDate(registrationDate)
                 .status(status)
                 .rentalDate(rentalDate)

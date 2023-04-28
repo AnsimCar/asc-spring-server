@@ -8,6 +8,7 @@ import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.dto.account.request.AccountCreateRequest;
 import project.asc.AnsimCar.dto.account.request.AccountPasswordResetRequest;
 import project.asc.AnsimCar.dto.account.request.AccountUpdateRequest;
+import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.exception.account.AccountNotFoundException;
 import project.asc.AnsimCar.exception.account.EmailExistException;
 import project.asc.AnsimCar.exception.account.PasswordCheckException;
@@ -20,6 +21,10 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public AccountResponse findById(Long accountId) {
+        return AccountResponse.from(accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new));
+    }
 
     /**
      * 회원가입
