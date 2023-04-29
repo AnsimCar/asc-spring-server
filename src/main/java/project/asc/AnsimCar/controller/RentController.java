@@ -12,10 +12,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.asc.AnsimCar.authentication.AccountContext;
+import project.asc.AnsimCar.aws.s3.S3Upload;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.rent.request.ImageRequest;
 import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
@@ -27,6 +29,7 @@ import project.asc.AnsimCar.service.AccountService;
 import project.asc.AnsimCar.service.RentService;
 import project.asc.AnsimCar.service.UserCarService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +43,8 @@ public class RentController {
     private final UserCarService userCarService;
 
     private final AccountService accountService;
+
+    private final S3Upload s3Upload;
 
     @ModelAttribute("carCategories")
     public CarCategory[] carCategories() {
@@ -174,5 +179,30 @@ public class RentController {
         rentService.updateRentalReturnDate(account.getId(), id, new RentUpdateRequest(Status.WAITING_RENT, LocalDateTime.now(), null));
 
         return "redirect:/rent/renthistory";
+    }
+
+    /**
+     * 사진 등록 화면 이동
+     */
+    @GetMapping("/renthistory/photo")
+    public String photo(@RequestParam("id") Long rentId) {
+        return "rent/addPhoto";
+    }
+
+
+    /**
+     * 사진 등록
+     */
+    @PostMapping("/renthistory/photo")
+    public String photo(@RequestParam("id") Long rentId, @ModelAttribute ImageRequest imageRequest) throws IOException {
+
+        //TODO 반환받은 url을 플라스크 서버로 전송 -> 플라스크 서버에서 해당 이미지를 분석하여 s3에 저장 후 url 반환 -> 이 url을 DB에 저장
+        //TODO RestTemplate을 사용해서 플라스크 서버 API를 호출 해야 할듯하다.
+        String url = s3Upload.upload(rentId, imageRequest.getCarFront());
+        s3Upload.upload(rentId, imageRequest.getCarRear());
+        s3Upload.upload(rentId, imageRequest.getCarLeft());
+        s3Upload.upload(rentId, imageRequest.getCarRight());
+
+        return "rent/addPhoto";
     }
 }
