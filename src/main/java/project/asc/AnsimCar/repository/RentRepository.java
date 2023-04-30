@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public interface RentRepository extends JpaRepository<Rent, Long>, RentRepositoryCustom {
 
-    List<Rent> findByAccount_Id(Long accountId);
+    Page<Rent> findByAccount_Id(Long accountId, Pageable pageable);
 
     Page<Rent> findByStatus(Status status, Pageable pageable);
 

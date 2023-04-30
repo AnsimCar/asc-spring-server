@@ -11,11 +11,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import project.asc.AnsimCar.authentication.AccountContext;
 import project.asc.AnsimCar.domain.Account;
+import project.asc.AnsimCar.domain.BeforeImage;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.account.request.AccountUpdateRequest;
+import project.asc.AnsimCar.dto.image.before.request.BeforeImageCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
@@ -174,5 +178,59 @@ public class RentController {
         rentService.updateRentalReturnDate(account.getId(), id, new RentUpdateRequest(Status.WAITING_RENT, LocalDateTime.now(), null));
 
         return "redirect:/rent/renthistory";
+    }
+
+    /**
+     * 사진 등록
+     */
+    @GetMapping("/renthistory/photo")
+    public String addPhoto(@RequestParam("id") Long id, Authentication authentication) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentService.validateRentOwner(account.getId(), id)) {
+            return "redirect:/rent/renthistory";
+        }
+
+        return "rent/photo";
+    }
+
+    /**
+     * 사진 등록
+     */
+    @PostMapping("/renthistory/photo")
+    public String addPhoto(@ModelAttribute("id") @RequestParam("id") Long id, @ModelAttribute("img") BeforeImageCreateRequest beforeImageCreateRequest, Authentication authentication) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentService.validateRentOwner(account.getId(), id)) {
+            return "redirect:/rent/renthistory";
+        }
+
+        return "rent/photo";
+    }
+
+    /**
+     * 렌트 등록 기록
+     */
+
+    @GetMapping("/addhistory")
+    public String addHistory(Authentication authentication, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        Page<RentItemDetailResponse> rentResponses = rentService.findDetailByUserId(account.getId(), pageable);
+
+        model.addAttribute("rentList", rentResponses);
+
+        int nowPage = rentResponses.getPageable().getPageNumber() + 1;
+        model.addAttribute("list", rentResponses);
+        model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
+        model.addAttribute("next", pageable.next().getPageNumber());
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", Math.max(nowPage - 4, 1));
+        model.addAttribute("endPage", Math.min(nowPage + 5, rentResponses.getTotalPages()));
+
+        return "rent/addHistory";
     }
 }
