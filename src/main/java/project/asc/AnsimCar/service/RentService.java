@@ -38,7 +38,7 @@ public class RentService {
     private final AddressRepository addressRepository;
 
     /**
-     * 렌트 정보 저장
+     * 카셰어링 정보 저장
      */
     public void addRent(Long accountId, RentCreateRequest rentCreateRequest) {
         Account account = accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
@@ -75,16 +75,16 @@ public class RentService {
     }
 
     /**
-     * 계정Id로 렌트 조회
+     * 계정Id로 카셰어링 조회
      */
-    //TODO 추후에 사용자가 자신이 등록한 렌트를 확인하는 뷰를 개발할 때 렌트 정보만 띄울지, 차 + 렌트 정보를 같이 띄울지 고민해서 수정이 필요할 것 같다.
+    //TODO 추후에 사용자가 자신이 등록한 카셰어링을 확인하는 뷰를 개발할 때 렌트 정보만 띄울지, 차 + 렌트 정보를 같이 띄울지 고민해서 수정이 필요할 것 같다.
     public Page<RentItemDetailResponse> findDetailByUserIdPaging(Long accountId, Pageable pageable) {
 
         return rentRepository.findByAccount_Id(accountId, pageable).map(RentItemDetailResponse::from);
     }
 
     /**
-     * 렌트 상태 수정
+     * 카셰어링 상태 수정
      */
     public void updateRentStatus(Long accountId, Long rentId, RentUpdateRequest rentUpdateRequest) {
         Rent rent = rentRepository.findById(rentId).orElseThrow(RentNotFoundException::new);
@@ -94,7 +94,7 @@ public class RentService {
     }
 
     /**
-     * 렌트 대여, 반납 날짜 업데이트
+     * 카셰어링 대여, 반납 날짜 업데이트
      */
     public void updateRentalReturnDate(Long accountId, Long rentId, RentUpdateRequest rentUpdateRequest) {
         Rent rent = rentRepository.findById(rentId).orElseThrow(RentNotFoundException::new);
@@ -108,7 +108,7 @@ public class RentService {
     }
 
     /**
-     * 렌트 삭제
+     * 카셰어링 삭제
      */
     public void deleteRent(Long accountId, Long rentId) {
         Rent rent = rentRepository.findById(rentId).orElseThrow(RentNotFoundException::new);
@@ -124,7 +124,7 @@ public class RentService {
     }
 
     /**
-     * 모든 렌트카 조회(페이징)
+     * 모든 카셰어링 조회(페이징)
      */
     @Transactional(readOnly = true)
     public Page<RentItemDetailResponse> findByAvailable(Pageable pageable) {
@@ -133,7 +133,7 @@ public class RentService {
     }
 
     /**
-     * 렌트 조건 검색
+     * 카셰어링 조건 검색
      */
     @Transactional(readOnly = true)
     public Page<RentItemDetailResponse> findAllComplex(RentSearchRequest request, Pageable pageable) {
@@ -150,7 +150,7 @@ public class RentService {
     }
 
 //    /**
-//     * 렌트 시 사진 등록
+//     * 카셰어링 시 사진 등록
 //     */
 //    public void addPhoto(Long rentId, Long rentAccountId, List<MultipartFile> multipartFile) {
 //        Rent rent = rentRepository.findById(rentId).orElseThrow(RentNotFoundException::new);
@@ -169,5 +169,9 @@ public class RentService {
             return false;
         }
         return true;
+    }
+
+    public Page<RentResponse> findNotReviewedByRentUserId(final Long accountId, Pageable pageable) {
+        return rentRepository.findNotReviewedByRentUserId(accountId, pageable).map(RentResponse::from);
     }
 }

@@ -93,7 +93,7 @@ class ReviewRepositoryTest extends RepositoryTest {
     }
 
     @Test
-    @DisplayName("렌트 기록으로 리뷰 조회")
+    @DisplayName("카셰어링 기록으로 리뷰 조회")
     void findByRent_Id() {
         //given
         given();

@@ -29,10 +29,8 @@ public class UserCarResponse {
 
     private Boolean usable;
 
-    private List<ReviewResponse> reviewResponses = new ArrayList<>();
-
     @Builder
-    public UserCarResponse(Long id, AccountResponse accountResponse, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber, Boolean usable, List<ReviewResponse> reviewResponses) {
+    public UserCarResponse(Long id, AccountResponse accountResponse, String carModel, CarCategory carCategory, String manufacturer, Fuel fuel, String carNumber, Boolean usable) {
         this.id = id;
         this.accountResponse = accountResponse;
         this.carModel = carModel;
@@ -41,7 +39,6 @@ public class UserCarResponse {
         this.fuel = fuel;
         this.carNumber = carNumber;
         this.usable = usable;
-        this.reviewResponses = reviewResponses;
     }
 
     /**
@@ -56,8 +53,7 @@ public class UserCarResponse {
                 entity.getManufacturer(),
                 entity.getFuel(),
                 entity.getCarNumber(),
-                entity.getUsable(),
-                ReviewResponse.from(entity.getReviews())
+                entity.getUsable()
         );
     }
 
@@ -74,16 +70,5 @@ public class UserCarResponse {
                 .carNumber(carNumber)
                 .usable(usable)
                 .build();
-    }
-
-    /**
-     * 리뷰 평점 구하기
-     */
-    public Integer rateAverage() {
-        int score = 0;
-        for (ReviewResponse reviewResponse : reviewResponses) {
-            score += reviewResponse.getRate();
-        }
-        return score;
     }
 }

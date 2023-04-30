@@ -22,9 +22,11 @@ import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
+import project.asc.AnsimCar.dto.review.response.ReviewResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.service.AccountService;
 import project.asc.AnsimCar.service.RentService;
+import project.asc.AnsimCar.service.ReviewService;
 import project.asc.AnsimCar.service.UserCarService;
 
 import java.time.LocalDateTime;
@@ -38,8 +40,8 @@ public class RentController {
 
     private final RentService rentService;
     private final UserCarService userCarService;
-
     private final AccountService accountService;
+    private final ReviewService reviewService;
 
     @ModelAttribute("carCategories")
     public CarCategory[] carCategories() {
@@ -72,9 +74,18 @@ public class RentController {
     @GetMapping("/list/")
     public String rentInfo(@RequestParam("id") Long id, Model model) {
         RentResponse info = rentService.findInfoById(id);
+        List<ReviewResponse> reviewResponses = reviewService.findByUserCarId(info.getUserCarResponse().getId());
+
+        int total = 0;
+        int count = 0;
+
+        for (ReviewResponse reviewResponse : reviewResponses) {
+            total += reviewResponse.getRate();
+            count++;
+        }
 
         model.addAttribute("info", info);
-        model.addAttribute("reviewScore", info.getUserCarResponse().rateAverage());
+        model.addAttribute("reviewScore", Math.round((double) total / count) / 100.0);
 
         return "rent/info";
     }
@@ -207,7 +218,7 @@ public class RentController {
     }
 
     /**
-     * 렌트 등록 기록
+     * 카셰어링 등록 기록
      */
     @GetMapping("/addhistory")
     public String addHistory(Authentication authentication, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
@@ -230,7 +241,7 @@ public class RentController {
     }
 
     /**
-     * 렌트 등록 상세 기록
+     * 카셰어링 등록 상세 기록
      */
     @GetMapping("/addhistory/")
     public String addHistoryDetail(@ModelAttribute("id") @RequestParam("id") Long id, Authentication authentication, Model model) {
@@ -247,7 +258,7 @@ public class RentController {
     }
 
     /**
-     * 렌트 등록 기록 삭제
+     * 카셰어링 등록 기록 삭제
      */
     @GetMapping("/addhistory/delete")
     public String deleteAddHistory(@ModelAttribute("id") @RequestParam("id") Long id, Authentication authentication) {

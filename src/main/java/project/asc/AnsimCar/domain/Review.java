@@ -19,7 +19,7 @@ public class Review {
     @JoinColumn(name = "user_car_id")
     private UserCar userCar;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rent_id")
     private Rent rent;
 

@@ -21,11 +21,11 @@ public class ReviewFixture {
                 .build();
     }
 
-    public static ReviewCreateRequest reviewCreateRequest(UserCar userCar, Rent rent, Account account, int rate, String description, LocalDateTime reviewDate) {
+    public static ReviewCreateRequest reviewCreateRequest(Long userCarId, Long rentId, Long accountId, int rate, String description, LocalDateTime reviewDate) {
         return new ReviewCreateRequest(
-                userCar,
-                rent,
-                account,
+                userCarId,
+                rentId,
+                accountId,
                 rate,
                 description,
                 reviewDate

@@ -89,10 +89,10 @@ class ReviewServiceTest extends ServiceTest {
     @DisplayName("리뷰 등록 & 아이디로 리뷰 조회")
     void addReview() {
         //given
-        ReviewCreateRequest reviewCreateRequest = new ReviewCreateRequest(rentCar, rent1, rentAccount1, 4, "좋아요.", LocalDateTime.now());
+        ReviewCreateRequest reviewCreateRequest = new ReviewCreateRequest(rentCar.getId(), rent1.getId(), rentAccount1.getId(), 4, "좋아요.", LocalDateTime.now());
 
         //when
-        ReviewResponse reviewResponse = reviewService.addReview(reviewCreateRequest.getUserCar().getId(), reviewCreateRequest.getRent().getId(), reviewCreateRequest.getAccount().getId(), reviewCreateRequest);
+        ReviewResponse reviewResponse = reviewService.addReview(reviewCreateRequest.getUserCarId(), reviewCreateRequest.getRentId(), reviewCreateRequest.getAccountId(), reviewCreateRequest);
         ReviewResponse result = reviewService.findById(reviewResponse.getId());
 
         //then
@@ -122,7 +122,7 @@ class ReviewServiceTest extends ServiceTest {
         ReviewResponse result = reviewService.findByRentId(rent1.getId());
 
         //then
-        assertThat(result.getAccount().getEmail()).isEqualTo(rentAccount1.getEmail());
+        assertThat(result.getAccountResponse().getEmail()).isEqualTo(rentAccount1.getEmail());
     }
 
     @Test
@@ -147,7 +147,7 @@ class ReviewServiceTest extends ServiceTest {
         ReviewUpdateRequest reviewUpdateRequest = new ReviewUpdateRequest(2, "생각해 보니 별로네요.");
 
         //when
-        reviewService.updateReview(review.getAccount().getId(), review.getId(), reviewUpdateRequest);
+        reviewService.updateReview(review.getAccountResponse().getId(), review.getId(), reviewUpdateRequest);
         ReviewResponse result = reviewService.findByUserCarId(rentCar.getId()).get(0);
 
         //then
@@ -163,7 +163,7 @@ class ReviewServiceTest extends ServiceTest {
         ReviewResponse review = reviewService.findByUserCarId(rentCar.getId()).get(0);
 
         //when
-        reviewService.deleteReview(review.getAccount().getId(), review.getId());
+        reviewService.deleteReview(review.getAccountResponse().getId(), review.getId());
 
         //then
         Assertions.assertThrows(ReviewNotFoundException.class, () -> {

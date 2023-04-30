@@ -6,18 +6,19 @@ import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.UserCar;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
 public class ReviewCreateRequest {
-    @NotBlank(message = "차량을 입력해주세요.")
-    UserCar userCar;
+    @NotNull(message = "차량을 입력해주세요.")
+    Long userCarId;
 
-    @NotBlank(message = "렌트 내역을 입력해주세요.")
-    Rent rent;
+    @NotNull(message = "카셰어링 내역을 입력해주세요.")
+    Long rentId;
 
-    @NotBlank(message = "리뷰어를 입력하세요.")
-    Account account;
+    @NotNull(message = "리뷰어를 입력하세요.")
+    Long accountId;
 
     @NotBlank(message = "별점을 입력하세요.")
     int rate;
@@ -30,10 +31,10 @@ public class ReviewCreateRequest {
     private ReviewCreateRequest() {
     }
 
-    public ReviewCreateRequest(final UserCar userCar, final Rent rent, final Account account, final int rate, final String description, final LocalDateTime reviewDate) {
-        this.userCar = userCar;
-        this.rent = rent;
-        this.account = account;
+    public ReviewCreateRequest(final Long userCarId, final Long rent, final Long account, final int rate, final String description, final LocalDateTime reviewDate) {
+        this.userCarId = userCarId;
+        this.rentId = rentId;
+        this.accountId = accountId;
         this.rate = rate;
         this.description = description;
         this.reviewDate = reviewDate;
