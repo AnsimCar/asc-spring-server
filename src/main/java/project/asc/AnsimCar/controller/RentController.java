@@ -11,14 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import project.asc.AnsimCar.authentication.AccountContext;
 import project.asc.AnsimCar.domain.Account;
-import project.asc.AnsimCar.domain.BeforeImage;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.domain.type.Status;
-import project.asc.AnsimCar.dto.account.request.AccountUpdateRequest;
 import project.asc.AnsimCar.dto.image.before.request.BeforeImageCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
@@ -26,7 +23,6 @@ import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
-import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.service.AccountService;
 import project.asc.AnsimCar.service.RentService;
 import project.asc.AnsimCar.service.UserCarService;
@@ -213,13 +209,12 @@ public class RentController {
     /**
      * 렌트 등록 기록
      */
-
     @GetMapping("/addhistory")
     public String addHistory(Authentication authentication, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
         Account account = accountContext.getAccount();
 
-        Page<RentItemDetailResponse> rentResponses = rentService.findDetailByUserId(account.getId(), pageable);
+        Page<RentItemDetailResponse> rentResponses = rentService.findDetailByUserIdPaging(account.getId(), pageable);
 
         model.addAttribute("rentList", rentResponses);
 
@@ -232,5 +227,42 @@ public class RentController {
         model.addAttribute("endPage", Math.min(nowPage + 5, rentResponses.getTotalPages()));
 
         return "rent/addHistory";
+    }
+
+    /**
+     * 렌트 등록 상세 기록
+     */
+    @GetMapping("/addhistory/")
+    public String addHistoryDetail(@ModelAttribute("id") @RequestParam("id") Long id, Authentication authentication, Model model) {
+        RentResponse rentResponse = rentService.findInfoById(id);
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentResponse.isOwner(account.getId()))
+            return "redirect:/rent/addhistory";
+
+        model.addAttribute("rent", rentResponse);
+
+        return "rent/addHistoryDetail";
+    }
+
+    /**
+     * 렌트 등록 기록 삭제
+     */
+    @GetMapping("/addhistory/delete")
+    public String deleteAddHistory(@ModelAttribute("id") @RequestParam("id") Long id, Authentication authentication) {
+        RentResponse rentResponse = rentService.findInfoById(id);
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentResponse.isOwner(account.getId()))
+            return "redirect:/rent/addhistory";
+
+        if (rentResponse.getRentalAccountResponse() != null)
+            return "redirect:/rent/addhistory/?id=" + id;
+
+        rentService.deleteRent(account.getId(), id);
+
+        return "redirect:/rent/addhistory";
     }
 }

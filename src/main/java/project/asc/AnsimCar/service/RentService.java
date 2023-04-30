@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.Address;
 import project.asc.AnsimCar.domain.Rent;
@@ -27,7 +26,6 @@ import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional
@@ -80,7 +78,7 @@ public class RentService {
      * 계정Id로 렌트 조회
      */
     //TODO 추후에 사용자가 자신이 등록한 렌트를 확인하는 뷰를 개발할 때 렌트 정보만 띄울지, 차 + 렌트 정보를 같이 띄울지 고민해서 수정이 필요할 것 같다.
-    public Page<RentItemDetailResponse> findDetailByUserId(Long accountId, Pageable pageable) {
+    public Page<RentItemDetailResponse> findDetailByUserIdPaging(Long accountId, Pageable pageable) {
 
         return rentRepository.findByAccount_Id(accountId, pageable).map(RentItemDetailResponse::from);
     }
