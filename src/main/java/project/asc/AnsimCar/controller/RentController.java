@@ -16,13 +16,13 @@ import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.image.before.request.BeforeImageCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
-import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.service.AccountService;
 import project.asc.AnsimCar.service.RentService;
 import project.asc.AnsimCar.service.UserCarService;
@@ -174,5 +174,95 @@ public class RentController {
         rentService.updateRentalReturnDate(account.getId(), id, new RentUpdateRequest(Status.WAITING_RENT, LocalDateTime.now(), null));
 
         return "redirect:/rent/renthistory";
+    }
+
+    /**
+     * 사진 등록
+     */
+    @GetMapping("/renthistory/photo")
+    public String addPhoto(@RequestParam("id") Long id, Authentication authentication) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentService.validateRentOwner(account.getId(), id)) {
+            return "redirect:/rent/renthistory";
+        }
+
+        return "rent/photo";
+    }
+
+    /**
+     * 사진 등록
+     */
+    @PostMapping("/renthistory/photo")
+    public String addPhoto(@ModelAttribute("id") @RequestParam("id") Long id, @ModelAttribute("img") BeforeImageCreateRequest beforeImageCreateRequest, Authentication authentication) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentService.validateRentOwner(account.getId(), id)) {
+            return "redirect:/rent/renthistory";
+        }
+
+        return "rent/photo";
+    }
+
+    /**
+     * 렌트 등록 기록
+     */
+    @GetMapping("/addhistory")
+    public String addHistory(Authentication authentication, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        Page<RentItemDetailResponse> rentResponses = rentService.findDetailByUserIdPaging(account.getId(), pageable);
+
+        model.addAttribute("rentList", rentResponses);
+
+        int nowPage = rentResponses.getPageable().getPageNumber() + 1;
+        model.addAttribute("list", rentResponses);
+        model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
+        model.addAttribute("next", pageable.next().getPageNumber());
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", Math.max(nowPage - 4, 1));
+        model.addAttribute("endPage", Math.min(nowPage + 5, rentResponses.getTotalPages()));
+
+        return "rent/addHistory";
+    }
+
+    /**
+     * 렌트 등록 상세 기록
+     */
+    @GetMapping("/addhistory/")
+    public String addHistoryDetail(@ModelAttribute("id") @RequestParam("id") Long id, Authentication authentication, Model model) {
+        RentResponse rentResponse = rentService.findInfoById(id);
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentResponse.isOwner(account.getId()))
+            return "redirect:/rent/addhistory";
+
+        model.addAttribute("rent", rentResponse);
+
+        return "rent/addHistoryDetail";
+    }
+
+    /**
+     * 렌트 등록 기록 삭제
+     */
+    @GetMapping("/addhistory/delete")
+    public String deleteAddHistory(@ModelAttribute("id") @RequestParam("id") Long id, Authentication authentication) {
+        RentResponse rentResponse = rentService.findInfoById(id);
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentResponse.isOwner(account.getId()))
+            return "redirect:/rent/addhistory";
+
+        if (rentResponse.getRentalAccountResponse() != null)
+            return "redirect:/rent/addhistory/?id=" + id;
+
+        rentService.deleteRent(account.getId(), id);
+
+        return "redirect:/rent/addhistory";
     }
 }

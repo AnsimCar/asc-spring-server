@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::header"></head>
+<body>
+<div th:replace="layout/rentTop::top"></div>
+
+<div class="container">
+    <div class="row align-items-start">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                            <a th:href="@{/rent/list}" style="margin:5px;" class="nav-link text-dark">차량 대여</a>
+                            <a th:href="@{/rent/return}" style="margin:5px;" class="nav-link text-dark">차량 반납</a>
+                            <a th:href="@{/rent/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
+                            <a th:href="@{/rent/renthistory}" style="margin:5px;" class="nav-link text-dark">대여
+                                기록</a>
+                            <a th:href="@{/rent/addhistory}" style="margin:5px;" class="nav-link text-bg-secondary">등록 기록</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div style="padding-top:50px;" class="col">
+            <div class=" text-center">
+                <h2>등록 기록</h2>
+            </div>
+
+            <div class="px-5 m-3">
+                <table id="table" class="table">
+                    <thead>
+                    <tr>
+                        <th>모델명</th>
+                        <th>지역</th>
+                        <th>상태</th>
+                        <th>시간 당 가격</th>
+                        <th>차량 번호</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rent : ${rentList}">
+                        <td><a th:href="@{/rent/addhistory/(id = ${rent.getId()})}"
+                               th:text="${rent.getUserCarResponse().getCarModel()}"/>
+                        <td th:text="${rent.getAddressResponse().getSigungu() + ' ' + rent.getAddressResponse().getEupmyeongdong()}"/>
+                        <td th:text="${rent.getStatus().getDescription()}"/>
+                        <td th:text="${rent.getPricePerHour()}"/>
+                        <td th:text="${rent.getUserCarResponse().getCarNumber()}"/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination justify-content-center">
+                <div class="pagination justify-content-center">
+                    <a class="btn btn-light"
+                       th:href="@{/rent/addhistory(page=${previous})}"
+                       type="button"><
+                    </a>
+                    &nbsp
+                    <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                        <a class="btn btn-light" th:if="${page != nowPage}"
+                           th:href="@{/rent/addhistory(page=${page - 1})}"
+                           th:text="${page}"></a>
+                        <strong class="btn btn-light" th:if="${page == nowPage}"
+                                th:text="${page}" style="color : blue"></strong>
+                    </th:block>
+                    &nbsp
+                    <a class="btn btn-light"
+                       th:href="@{/rent/addhistory(page=${next})}"
+                       type="button">>
+                    </a>
+                </div>
+            </div>
+
+            </th:block>
+
+        </div>
+    </div>
+</div>
+
+<div th:replace="layout/footer::footer"></div>
+</body>
+
+</html>

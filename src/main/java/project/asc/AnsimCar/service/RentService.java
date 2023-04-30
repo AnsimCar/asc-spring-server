@@ -19,13 +19,13 @@ import project.asc.AnsimCar.exception.account.AccountNotFoundException;
 import project.asc.AnsimCar.exception.rent.RentNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarOwnerException;
+import project.asc.AnsimCar.exception.usercar.UserCarRentOwnerException;
 import project.asc.AnsimCar.repository.AccountRepository;
 import project.asc.AnsimCar.repository.AddressRepository;
 import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional
@@ -78,10 +78,9 @@ public class RentService {
      * 계정Id로 렌트 조회
      */
     //TODO 추후에 사용자가 자신이 등록한 렌트를 확인하는 뷰를 개발할 때 렌트 정보만 띄울지, 차 + 렌트 정보를 같이 띄울지 고민해서 수정이 필요할 것 같다.
-    public List<RentResponse> findByUserId(Long accountId) {
-        List<Rent> rents = rentRepository.findByAccount_Id(accountId);
+    public Page<RentItemDetailResponse> findDetailByUserIdPaging(Long accountId, Pageable pageable) {
 
-        return rents.stream().map(RentResponse::from).toList();
+        return rentRepository.findByAccount_Id(accountId, pageable).map(RentItemDetailResponse::from);
     }
 
     /**
@@ -118,7 +117,7 @@ public class RentService {
         rentRepository.deleteById(rentId);
     }
 
-    public void validateOwner(Long accountId, Rent rent) {
+    private void validateOwner(Long accountId, Rent rent) {
         if (!rent.isOwner(accountId)) {
             throw new UserCarOwnerException();
         }
@@ -148,5 +147,27 @@ public class RentService {
     @Transactional(readOnly = true)
     public Page<RentResponse> findByRentAccountId(Long id, Pageable pageable) {
         return rentRepository.findByRentAccount_Id(id, pageable).map(RentResponse::from);
+    }
+
+//    /**
+//     * 렌트 시 사진 등록
+//     */
+//    public void addPhoto(Long rentId, Long rentAccountId, List<MultipartFile> multipartFile) {
+//        Rent rent = rentRepository.findById(rentId).orElseThrow(RentNotFoundException::new);
+//        validateRentOwner(rentAccountId, rent);
+//    }
+
+    private void validateRentOwner(Long accountId, Rent rent) {
+        if (!rent.isRentOwner(accountId)) {
+            throw new UserCarRentOwnerException();
+        }
+    }
+
+    public boolean validateRentOwner(Long accountId, Long rentId) {
+        Rent rent = rentRepository.findById(rentId).orElseThrow(RentNotFoundException::new);
+        if (!rent.isRentOwner(accountId)) {
+            return false;
+        }
+        return true;
     }
 }

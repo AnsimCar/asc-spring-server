@@ -91,4 +91,14 @@ public class RentResponse {
                 .returnDate(returnDate)
                 .build();
     }
+
+    /**
+     * 렌트 주인 확인
+     */
+    public boolean isOwner(Long accountId) {
+        if (accountId == null) {
+            return false;
+        }
+        return accountResponse.getId().equals(accountId);
+    }
 }
