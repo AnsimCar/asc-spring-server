@@ -82,14 +82,14 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 Id로 검색
+     * 카셰어링 Id로 검색
      */
     public ReviewResponse findById(final Long id) {
         return ReviewResponse.from(reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new));
     }
 
     /**
-     * 렌트 차량으로 리뷰 검색
+     * 카셰어링 차량으로 리뷰 검색
      */
     public List<ReviewResponse> findByUserCarId(final Long userCarId) {
         List<Review> reviews = reviewRepository.findByUserCar_Id(userCarId);
@@ -107,7 +107,7 @@ public class ReviewService {
     }
 
     /**
-     * 렌트 Id로 리뷰 검색
+     * 카셰어링 Id로 리뷰 검색
      */
     public ReviewResponse findByRentId(final Long rentId) {
         return ReviewResponse.from(reviewRepository.findByRent_Id(rentId).orElseThrow(ReviewNotFoundException::new));

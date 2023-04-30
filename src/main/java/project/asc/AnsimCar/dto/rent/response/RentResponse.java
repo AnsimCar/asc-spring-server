@@ -93,7 +93,7 @@ public class RentResponse {
     }
 
     /**
-     * 렌트 주인 확인
+     * 카셰어링 주인 확인
      */
     public boolean isOwner(Long accountId) {
         if (accountId == null) {

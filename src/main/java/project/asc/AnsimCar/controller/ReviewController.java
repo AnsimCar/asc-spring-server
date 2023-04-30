@@ -31,7 +31,7 @@ public class ReviewController {
     private final UserCarService userCarService;
 
     /**
-     * 렌트 목록
+     * 카셰어링 목록
      */
     @GetMapping("/rentlist")
     public String rentList(Authentication authentication, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {

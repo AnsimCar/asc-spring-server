@@ -5,8 +5,8 @@ import lombok.Data;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.Review;
-import project.asc.AnsimCar.domain.UserCar;
 import project.asc.AnsimCar.dto.account.response.AccountResponse;
+import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 
 import java.time.LocalDateTime;
@@ -17,11 +17,11 @@ import java.util.List;
 public class ReviewResponse {
     private Long id;
 
-    private UserCar userCar;
+    private UserCarResponse userCarResponse;
 
-    private Rent rent;
+    private RentResponse rentResponse;
 
-    private Account account;
+    private AccountResponse accountResponse;
 
     private int rate;
 
@@ -30,11 +30,11 @@ public class ReviewResponse {
     private LocalDateTime reviewDate;
 
     @Builder
-    public ReviewResponse(Long id, UserCar userCar, Rent rent, Account account, int rate, String description, LocalDateTime reviewDate) {
+    public ReviewResponse(Long id, UserCarResponse userCarResponse, RentResponse rentResponse, AccountResponse accountResponse, int rate, String description, LocalDateTime reviewDate) {
         this.id = id;
-        this.userCar = userCar;
-        this.rent = rent;
-        this.account = account;
+        this.userCarResponse = userCarResponse;
+        this.rentResponse = rentResponse;
+        this.accountResponse = accountResponse;
         this.rate = rate;
         this.description = description;
         this.reviewDate = reviewDate;
@@ -46,9 +46,9 @@ public class ReviewResponse {
     public static ReviewResponse from(Review entity) {
         return new ReviewResponse(
                 entity.getId(),
-                entity.getUserCar(),
-                entity.getRent(),
-                entity.getAccount(),
+                UserCarResponse.from(entity.getUserCar()),
+                RentResponse.from(entity.getRent()),
+                AccountResponse.from(entity.getAccount()),
                 entity.getRate(),
                 entity.getDescription(),
                 entity.getReviewDate()
@@ -62,15 +62,15 @@ public class ReviewResponse {
         List<ReviewResponse> reviewResponses = new ArrayList<>();
 
         for (Review entity : entities) {
-            reviewResponses.add(new ReviewResponse(
-                    entity.getId(),
-                    entity.getUserCar(),
-                    entity.getRent(),
-                    entity.getAccount(),
-                    entity.getRate(),
-                    entity.getDescription(),
-                    entity.getReviewDate()
-            ));
+            reviewResponses.add(ReviewResponse.builder()
+                    .id(entity.getId())
+                    .userCarResponse(UserCarResponse.from(entity.getUserCar()))
+                    .rentResponse(RentResponse.from(entity.getRent()))
+                    .accountResponse(AccountResponse.from(entity.getAccount()))
+                    .rate(entity.getRate())
+                    .description(entity.getDescription())
+                    .reviewDate(entity.getReviewDate())
+                    .build());
         }
 
         return reviewResponses;
@@ -81,9 +81,9 @@ public class ReviewResponse {
      */
     public Review toEntity() {
         return Review.builder()
-                .userCar(userCar)
-                .rent(rent)
-                .account(account)
+                .userCar(userCarResponse.toEntity())
+                .rent(rentResponse.toEntity())
+                .account(accountResponse.toEntity())
                 .rate(rate)
                 .description(description)
                 .reviewDate(reviewDate)
