@@ -1,12 +1,15 @@
 package project.asc.AnsimCar.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.Review;
 import project.asc.AnsimCar.domain.UserCar;
+import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.review.request.ReviewCreateRequest;
 import project.asc.AnsimCar.dto.review.request.ReviewUpdateRequest;
 import project.asc.AnsimCar.dto.review.response.ReviewResponse;
@@ -98,6 +101,11 @@ public class ReviewService {
         return reviewResponses;
     }
 
+    public Page<ReviewResponse> findByUserCarId(final Long userCarId, Pageable pageable) {
+
+        return reviewRepository.findByUserCar_Id(userCarId, pageable).map(ReviewResponse::from);
+    }
+
     /**
      * 렌트 Id로 리뷰 검색
      */
@@ -116,6 +124,10 @@ public class ReviewService {
         }
 
         return reviewResponses;
+    }
+
+    public Page<ReviewResponse> findByAccountId(final Long accountId, Pageable pageable) {
+        return reviewRepository.findByAccount_Id(accountId, pageable).map(ReviewResponse::from);
     }
 
     /**

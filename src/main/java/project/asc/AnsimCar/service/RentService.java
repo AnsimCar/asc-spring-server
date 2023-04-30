@@ -170,4 +170,8 @@ public class RentService {
         }
         return true;
     }
+
+    public Page<RentResponse> findNotReviewedByRentUserId(final Long accountId, Pageable pageable) {
+        return rentRepository.findNotReviewedByRentUserId(accountId, pageable).map(RentResponse::from);
+    }
 }

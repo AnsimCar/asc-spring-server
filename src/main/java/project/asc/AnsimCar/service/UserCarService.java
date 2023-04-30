@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.UserCar;
 import project.asc.AnsimCar.domain.type.CarCategory;
+import project.asc.AnsimCar.dto.usercar.request.UserCarCreateRequest;
 import project.asc.AnsimCar.dto.usercar.request.UserCarUpdateRequest;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
-import project.asc.AnsimCar.dto.usercar.request.UserCarCreateRequest;
 import project.asc.AnsimCar.exception.account.AccountNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarOwnerException;
@@ -25,7 +25,6 @@ import java.util.List;
 public class UserCarService {
     private final UserCarRepository userCarRepository;
     private final AccountRepository accountRepository;
-    private final RentRepository rentRepository;
 
     /**
      * 차량 등록
