@@ -2,6 +2,7 @@ package project.asc.AnsimCar.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import project.asc.AnsimCar.domain.type.Rate;
 import project.asc.AnsimCar.dto.review.request.ReviewUpdateRequest;
 
 import javax.persistence.*;
@@ -54,7 +55,7 @@ public class Review {
     }
 
     public void updateReview(ReviewUpdateRequest reviewUpdateRequest) {
-        this.rate = reviewUpdateRequest.getRate();
+        this.rate = reviewUpdateRequest.getRate().getDescription();
         this.description = reviewUpdateRequest.getDescription();
     }
 }

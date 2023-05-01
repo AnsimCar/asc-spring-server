@@ -85,7 +85,7 @@ public class RentController {
         }
 
         model.addAttribute("info", info);
-        model.addAttribute("reviewScore", Math.round((double) total / count) / 100.0);
+        model.addAttribute("reviewScore", Math.round(((double) total / count) * 100) / 100.0);
 
         return "rent/info";
     }

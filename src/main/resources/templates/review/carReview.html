@@ -11,11 +11,9 @@
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
-                            <a th:href="@{/review/addreviewlist}" style="margin:5px;" class="nav-link text-dark">등록해야 할
-                                리뷰</a>
-                            <a th:href="@{/review/rentlist}" style="margin:5px;" class="nav-link text-bg-secondary">카셰어링
-                                리뷰 목록</a>
-                            <a th:href="@{/review/carlist}" style="margin:5px;" class="nav-link text-dark">차량 목록</a>
+                            <a th:href="@{/review/addreviewlist}" style="margin:5px;" class="nav-link text-dark">등록해야 할 리뷰</a>
+                            <a th:href="@{/review/rentlist}" style="margin:5px;" class="nav-link text-dark">카셰어링 리뷰 목록</a>
+                            <a th:href="@{/review/carlist}" style="margin:5px;" class="nav-link text-bg-secondary">차량 목록</a>
                         </div>
                     </li>
                 </ul>
@@ -24,10 +22,10 @@
 
         <div style="padding-top:50px;" class="col">
             <div class=" text-center">
-                <h2>카셰어링 리뷰</h2>
+                <h2>차량 리뷰</h2>
             </div>
 
-            <form th:action="@{/review/rentreview(id = ${review.getId()})}" th:object="${review}" method="get">
+            <form th:action="@{/review/carreviewlist(id = ${review.getId()})}" th:object="${review}" method="get">
 
                 <div class="px-5 m-3">
                     <table id="table" class="table" style="width: 100%">
@@ -62,12 +60,6 @@
                     <div class="col">
                         <a class="w-100 btn btn-secondary btn-lg" href="javascript:window.history.back();">
                             뒤로가기
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a class="w-100 btn btn-danger btn-lg" th:href="@{/review/delete(id=${review.getId()})}">
-                            삭제하기
                         </a>
                     </div>
 

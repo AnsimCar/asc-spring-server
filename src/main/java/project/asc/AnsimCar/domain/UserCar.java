@@ -42,7 +42,7 @@ public class UserCar extends BaseEntity {
     private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "userCar")
-    private List<Rent> rent = new ArrayList<>();
+    private List<Rent> rents = new ArrayList<>();
 
     protected UserCar() {
     }

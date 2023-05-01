@@ -2,9 +2,8 @@ package project.asc.AnsimCar.dto.review.response;
 
 import lombok.Builder;
 import lombok.Data;
-import project.asc.AnsimCar.domain.Account;
-import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.Review;
+import project.asc.AnsimCar.domain.type.Rate;
 import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
@@ -64,9 +63,6 @@ public class ReviewResponse {
         for (Review entity : entities) {
             reviewResponses.add(ReviewResponse.builder()
                     .id(entity.getId())
-                    .userCarResponse(UserCarResponse.from(entity.getUserCar()))
-                    .rentResponse(RentResponse.from(entity.getRent()))
-                    .accountResponse(AccountResponse.from(entity.getAccount()))
                     .rate(entity.getRate())
                     .description(entity.getDescription())
                     .reviewDate(entity.getReviewDate())
@@ -88,5 +84,12 @@ public class ReviewResponse {
                 .description(description)
                 .reviewDate(reviewDate)
                 .build();
+    }
+
+    public boolean isOwner(Long accountId) {
+        if (accountId == null) {
+            return false;
+        }
+        return accountResponse.getId().equals(accountId);
     }
 }

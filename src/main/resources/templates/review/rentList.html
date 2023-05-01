@@ -32,6 +32,7 @@
                         <th>지역</th>
                         <th>대여 시간</th>
                         <th>반납 시간</th>
+                        <th>별점</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -42,6 +43,7 @@
                         <td th:text="${review.getRentResponse().getAddressResponse().getSigungu() + ' ' + review.getRentResponse().getAddressResponse().getEupmyeongdong() + ' ' + review.getRentResponse().getAddressResponse().getDetailAddress()}"/>
                         <td th:text="${#temporals.format(review.getRentResponse().getRentalDate(), 'yyyy년 MM월 dd일 HH시 mm분')}"/>
                         <td th:text="${#temporals.format(review.getRentResponse().getRentalDate(), 'yyyy년 MM월 dd일 HH시 mm분')}"/>
+                        <td th:text="'★'+${review.getRate()}"/>
                         <td><a class="w-80 h-25 btn btn-primary btn-sm"
                                th:href="@{/review/rentreview(id=${review.getId()})}">
                             리뷰 보기
