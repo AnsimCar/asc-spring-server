@@ -194,14 +194,18 @@ public class RentController {
      * 사진 등록
      */
     @PostMapping("/renthistory/photo")
-    public String photo(@RequestParam("id") Long rentId, @ModelAttribute ImageRequest imageRequest) throws IOException {
+    public String photo(@RequestParam("id") Long rentId, @ModelAttribute ImageRequest imageRequest, Authentication authentication) throws IOException {
+
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+        Long accountId = account.getId();
 
         //TODO 반환받은 url을 플라스크 서버로 전송 -> 플라스크 서버에서 해당 이미지를 분석하여 s3에 저장 후 url 반환 -> 이 url을 DB에 저장
         //TODO RestTemplate을 사용해서 플라스크 서버 API를 호출 해야 할듯하다.
-        String url = s3Upload.upload(rentId, imageRequest.getCarFront());
-        s3Upload.upload(rentId, imageRequest.getCarRear());
-        s3Upload.upload(rentId, imageRequest.getCarLeft());
-        s3Upload.upload(rentId, imageRequest.getCarRight());
+        String url = s3Upload.upload(accountId, rentId, imageRequest.getCarFront());
+        s3Upload.upload(accountId, rentId, imageRequest.getCarRear());
+        s3Upload.upload(accountId, rentId, imageRequest.getCarLeft());
+        s3Upload.upload(accountId, rentId, imageRequest.getCarRight());
 
         return "rent/addPhoto";
     }

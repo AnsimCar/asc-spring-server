@@ -22,7 +22,7 @@ public class S3Upload {
 
     private final AmazonS3 amazonS3;
 
-    public String upload(Long rentId, MultipartFile multipartFile) throws IOException {
+    public String upload(Long accountId, Long rentId, MultipartFile multipartFile) throws IOException {
         String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
 
         ObjectMetadata objMeta = new ObjectMetadata();
@@ -30,7 +30,7 @@ public class S3Upload {
         objMeta.setContentLength(multipartFile.getSize());
         objMeta.setContentLength(multipartFile.getInputStream().available());
 
-        String path = "user/" + "rent/" + LocalDate.now() + "/" + rentId.toString() + "/" + "rent/" + "original/" +  s3FileName;
+        String path = accountId + "/" + "rent/" + LocalDate.now() + "/" + rentId.toString() + "/" + "rent/" + "original/" +  s3FileName;
 
         amazonS3.putObject(bucket, path, multipartFile.getInputStream(), objMeta);
 
