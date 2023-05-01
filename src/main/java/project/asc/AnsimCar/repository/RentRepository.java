@@ -15,11 +15,11 @@ import java.util.Optional;
 
 public interface RentRepository extends JpaRepository<Rent, Long>, RentRepositoryCustom {
 
-    List<Rent> findByAccount_Id(Long accountId);
+    Page<Rent> findByAccount_Id(Long accountId, Pageable pageable);
 
     Page<Rent> findByStatus(Status status, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"userCar", "account", "address"})
+    @EntityGraph(attributePaths = {"userCar", "account", "address", "rentAccount"})
     Optional<Rent> findEntityGraphById(Long id);
 
     @EntityGraph(attributePaths = {"userCar", "account", "address"})

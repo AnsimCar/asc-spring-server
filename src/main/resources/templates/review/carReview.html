@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::header"></head>
+<body>
+<div th:replace="layout/reviewTop::top"></div>
+
+<div class="container">
+    <div class="row align-items-start">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                            <a th:href="@{/review/addreviewlist}" style="margin:5px;" class="nav-link text-dark">등록해야 할 리뷰</a>
+                            <a th:href="@{/review/rentlist}" style="margin:5px;" class="nav-link text-dark">카셰어링 리뷰 목록</a>
+                            <a th:href="@{/review/carlist}" style="margin:5px;" class="nav-link text-bg-secondary">차량 목록</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div style="padding-top:50px;" class="col">
+            <div class=" text-center">
+                <h2>차량 리뷰</h2>
+            </div>
+
+            <form th:action="@{/review/carreviewlist(id = ${review.getId()})}" th:object="${review}" method="get">
+
+                <div class="px-5 m-3">
+                    <table id="table" class="table" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th style="width: 30%">목록</th>
+                            <th>내용</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="모델명"/>
+                            <td th:text="${review.getUserCarResponse().getCarModel()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="별점"/>
+                            <td th:text="${review.getRate()} + '점'"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="내용"/>
+                            <td th:text="${review.getDescription()}"></td>
+                        </tr>
+                        <tr>
+                            <td th:text="작성일"/>
+                            <td th:text="${#temporals.format(review.getReviewDate(), 'yyyy년 MM월 dd일 HH시 mm분')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row px-5 m-3">
+                    <div class="col">
+                        <a class="w-100 btn btn-secondary btn-lg" href="javascript:window.history.back();">
+                            뒤로가기
+                        </a>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div th:replace="layout/footer::footer"></div>
+</body>
+
+</html>

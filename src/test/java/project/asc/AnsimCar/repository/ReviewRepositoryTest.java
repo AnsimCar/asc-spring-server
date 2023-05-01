@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import project.asc.AnsimCar.common.annotation.RepositoryTest;
 import project.asc.AnsimCar.common.fixture.ReviewFixture;
 import project.asc.AnsimCar.domain.*;
+import project.asc.AnsimCar.domain.type.Rate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -68,9 +69,9 @@ class ReviewRepositoryTest extends RepositoryTest {
     }
 
     void given() {
-        Review review1 = ReviewFixture.createReview(rentCar, rent1, rentAccount1, 4, "좋아요.", LocalDateTime.now());
-        Review review2 = ReviewFixture.createReview(rentCar, rent2, rentAccount2, 5, null, LocalDateTime.now());
-        Review review3 = ReviewFixture.createReview(rentCar, rent3, rentAccount3, 3, "그저 그래요.", LocalDateTime.now());
+        Review review1 = ReviewFixture.createReview(rentCar, rent1, rentAccount1, Rate.THREE, "좋아요.", LocalDateTime.now());
+        Review review2 = ReviewFixture.createReview(rentCar, rent2, rentAccount2, Rate.FOUR, null, LocalDateTime.now());
+        Review review3 = ReviewFixture.createReview(rentCar, rent3, rentAccount3, Rate.ONE, "그저 그래요.", LocalDateTime.now());
 
         reviews = Arrays.asList(review1, review2, review3);
 
@@ -93,7 +94,7 @@ class ReviewRepositoryTest extends RepositoryTest {
     }
 
     @Test
-    @DisplayName("렌트 기록으로 리뷰 조회")
+    @DisplayName("카셰어링 기록으로 리뷰 조회")
     void findByRent_Id() {
         //given
         given();

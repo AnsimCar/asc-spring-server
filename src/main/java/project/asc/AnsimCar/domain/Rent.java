@@ -58,11 +58,14 @@ public class Rent {
     @OneToMany(mappedBy = "rent", cascade = CascadeType.REMOVE)
     private List<AfterImage> afterImages = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "rent", cascade = CascadeType.REMOVE)
+    private Review review;
+
     protected Rent() {
     }
 
     @Builder
-    public Rent(UserCar userCar, Account account, Account rentAccount, Address address, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate) {
+    public Rent(UserCar userCar, Account account, Account rentAccount, Address address, int pricePerHour, int totalPrice, LocalDateTime registrationDate, Status status, LocalDateTime rentalDate, LocalDateTime returnDate, Review review) {
         this.userCar = userCar;
         this.account = account;
         this.rentAccount = rentAccount;
@@ -73,6 +76,7 @@ public class Rent {
         this.status = status;
         this.rentalDate = rentalDate;
         this.returnDate = returnDate;
+        this.review = review;
     }
 
     public void updateStatus(RentUpdateRequest rentUpdateRequest) {
@@ -103,5 +107,12 @@ public class Rent {
             return false;
         }
         return account.getId().equals(accountId);
+    }
+
+    public boolean isRentOwner(Long accountId) {
+        if (accountId == null) {
+            return false;
+        }
+        return rentAccount.getId().equals(accountId);
     }
 }

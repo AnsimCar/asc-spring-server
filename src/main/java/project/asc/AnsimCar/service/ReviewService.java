@@ -1,12 +1,15 @@
 package project.asc.AnsimCar.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.Review;
 import project.asc.AnsimCar.domain.UserCar;
+import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.review.request.ReviewCreateRequest;
 import project.asc.AnsimCar.dto.review.request.ReviewUpdateRequest;
 import project.asc.AnsimCar.dto.review.response.ReviewResponse;
@@ -21,6 +24,7 @@ import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.repository.ReviewRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +54,7 @@ public class ReviewService {
     }
 
     private void validateOwner(Long accountId, Rent rent) {
-        if (!rent.isOwner(accountId)) {
+        if (!rent.isRentOwner(accountId)) {
             throw new RentOwnerException();
         }
     }
@@ -60,9 +64,9 @@ public class ReviewService {
                 .userCar(userCar)
                 .rent(rent)
                 .account(account)
-                .rate(reviewCreateRequest.getRate())
+                .rate(reviewCreateRequest.getRate().getDescription())
                 .description(reviewCreateRequest.getDescription())
-                .reviewDate(reviewCreateRequest.getReviewDate())
+                .reviewDate(LocalDateTime.now())
                 .build();
     }
 
@@ -79,14 +83,14 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 Id로 검색
+     * 카셰어링 Id로 검색
      */
     public ReviewResponse findById(final Long id) {
         return ReviewResponse.from(reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new));
     }
 
     /**
-     * 렌트 차량으로 리뷰 검색
+     * 카셰어링 차량으로 리뷰 검색
      */
     public List<ReviewResponse> findByUserCarId(final Long userCarId) {
         List<Review> reviews = reviewRepository.findByUserCar_Id(userCarId);
@@ -98,8 +102,13 @@ public class ReviewService {
         return reviewResponses;
     }
 
+    public Page<ReviewResponse> findByUserCarId(final Long userCarId, Pageable pageable) {
+
+        return reviewRepository.findByUserCar_Id(userCarId, pageable).map(ReviewResponse::from);
+    }
+
     /**
-     * 렌트 Id로 리뷰 검색
+     * 카셰어링 Id로 리뷰 검색
      */
     public ReviewResponse findByRentId(final Long rentId) {
         return ReviewResponse.from(reviewRepository.findByRent_Id(rentId).orElseThrow(ReviewNotFoundException::new));
@@ -116,6 +125,10 @@ public class ReviewService {
         }
 
         return reviewResponses;
+    }
+
+    public Page<ReviewResponse> findByAccountId(final Long accountId, Pageable pageable) {
+        return reviewRepository.findByAccount_Id(accountId, pageable).map(ReviewResponse::from);
     }
 
     /**

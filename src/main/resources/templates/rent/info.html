@@ -24,7 +24,7 @@
 
         <div style="padding-top:50px;" class="col">
             <div class=" text-center">
-                <h2>카 셰어링 정보</h2>
+                <h2>카셰어링 정보</h2>
             </div>
 
             <form th:action="@{/rent/list/(id = ${info.getId()})}" th:object="${info}" method="get">
@@ -68,7 +68,7 @@
                         </tr>
                         <tr>
                             <td th:text="평점"/>
-                            <td th:text="${reviewScore}"></td>
+                            <td th:text="'★'+${reviewScore}"></td>
                         </tr>
                         <tr>
                             <td th:text="'대여자 정보'"/>

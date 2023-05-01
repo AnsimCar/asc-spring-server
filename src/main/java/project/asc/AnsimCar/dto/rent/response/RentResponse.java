@@ -91,4 +91,21 @@ public class RentResponse {
                 .returnDate(returnDate)
                 .build();
     }
+
+    /**
+     * 카셰어링 주인 확인
+     */
+    public boolean isOwner(Long accountId) {
+        if (accountId == null) {
+            return false;
+        }
+        return accountResponse.getId().equals(accountId);
+    }
+
+    public boolean isRentalOwner(Long accountId) {
+        if (accountId == null) {
+            return false;
+        }
+        return rentalAccountResponse.getId().equals(accountId);
+    }
 }

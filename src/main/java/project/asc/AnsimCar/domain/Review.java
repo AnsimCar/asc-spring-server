@@ -2,6 +2,7 @@ package project.asc.AnsimCar.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import project.asc.AnsimCar.domain.type.Rate;
 import project.asc.AnsimCar.dto.review.request.ReviewUpdateRequest;
 
 import javax.persistence.*;
@@ -19,7 +20,7 @@ public class Review {
     @JoinColumn(name = "user_car_id")
     private UserCar userCar;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rent_id")
     private Rent rent;
 
@@ -54,7 +55,7 @@ public class Review {
     }
 
     public void updateReview(ReviewUpdateRequest reviewUpdateRequest) {
-        this.rate = reviewUpdateRequest.getRate();
+        this.rate = reviewUpdateRequest.getRate().getDescription();
         this.description = reviewUpdateRequest.getDescription();
     }
 }

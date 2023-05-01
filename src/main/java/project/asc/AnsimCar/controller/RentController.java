@@ -17,16 +17,18 @@ import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.image.before.request.BeforeImageCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.ImageRequest;
 import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
+import project.asc.AnsimCar.dto.review.response.ReviewResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
-import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.service.AccountService;
 import project.asc.AnsimCar.service.RentService;
+import project.asc.AnsimCar.service.ReviewService;
 import project.asc.AnsimCar.service.UserCarService;
 
 import java.io.IOException;
@@ -41,8 +43,8 @@ public class RentController {
 
     private final RentService rentService;
     private final UserCarService userCarService;
-
     private final AccountService accountService;
+    private final ReviewService reviewService;
 
     private final S3Upload s3Upload;
 
@@ -77,9 +79,18 @@ public class RentController {
     @GetMapping("/list/")
     public String rentInfo(@RequestParam("id") Long id, Model model) {
         RentResponse info = rentService.findInfoById(id);
+        List<ReviewResponse> reviewResponses = reviewService.findByUserCarId(info.getUserCarResponse().getId());
+
+        int total = 0;
+        int count = 0;
+
+        for (ReviewResponse reviewResponse : reviewResponses) {
+            total += reviewResponse.getRate();
+            count++;
+        }
 
         model.addAttribute("info", info);
-        model.addAttribute("reviewScore", info.getUserCarResponse().rateAverage());
+        model.addAttribute("reviewScore", Math.round(((double) total / count) * 100) / 100.0);
 
         return "rent/info";
     }
@@ -181,19 +192,80 @@ public class RentController {
         return "redirect:/rent/renthistory";
     }
 
+
+    /**
+     * 카셰어링 등록 기록
+     */
+    @GetMapping("/addhistory")
+    public String addHistory(Authentication authentication, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        Page<RentItemDetailResponse> rentResponses = rentService.findDetailByUserIdPaging(account.getId(), pageable);
+
+        model.addAttribute("rentList", rentResponses);
+
+        int nowPage = rentResponses.getPageable().getPageNumber() + 1;
+        model.addAttribute("list", rentResponses);
+        model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
+        model.addAttribute("next", pageable.next().getPageNumber());
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", Math.max(nowPage - 4, 1));
+        model.addAttribute("endPage", Math.min(nowPage + 5, rentResponses.getTotalPages()));
+
+        return "rent/addHistory";
+    }
+
+    /**
+     * 카셰어링 등록 상세 기록
+     */
+    @GetMapping("/addhistory/")
+    public String addHistoryDetail(@ModelAttribute("id") @RequestParam("id") Long id, Authentication authentication, Model model) {
+        RentResponse rentResponse = rentService.findInfoById(id);
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentResponse.isOwner(account.getId()))
+            return "redirect:/rent/addhistory";
+
+        model.addAttribute("rent", rentResponse);
+
+        return "rent/addHistoryDetail";
+    }
+
+    /**
+     * 카셰어링 등록 기록 삭제
+     */
+    @GetMapping("/addhistory/delete")
+    public String deleteAddHistory(@ModelAttribute("id") @RequestParam("id") Long id, Authentication authentication) {
+        RentResponse rentResponse = rentService.findInfoById(id);
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentResponse.isOwner(account.getId()))
+            return "redirect:/rent/addhistory";
+
+        if (rentResponse.getRentalAccountResponse() != null)
+            return "redirect:/rent/addhistory/?id=" + id;
+
+        rentService.deleteRent(account.getId(), id);
+
+        return "redirect:/rent/addhistory";
+    }
+
     /**
      * 사진 등록 화면 이동
      */
-    @GetMapping("/renthistory/photo")
+    @GetMapping("/renthistory/upload")
     public String photo(@RequestParam("id") Long rentId) {
-        return "rent/addPhoto";
+        return "rent/upload";
     }
 
 
     /**
      * 사진 등록
      */
-    @PostMapping("/renthistory/photo")
+    @PostMapping("/renthistory/upload")
     public String photo(@RequestParam("id") Long rentId, @ModelAttribute ImageRequest imageRequest, Authentication authentication) throws IOException {
 
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
@@ -207,6 +279,6 @@ public class RentController {
         s3Upload.upload(accountId, rentId, imageRequest.getCarLeft());
         s3Upload.upload(accountId, rentId, imageRequest.getCarRight());
 
-        return "rent/addPhoto";
+        return "rent/upload";
     }
 }

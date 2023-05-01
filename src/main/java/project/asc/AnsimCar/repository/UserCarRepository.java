@@ -1,5 +1,6 @@
 package project.asc.AnsimCar.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import project.asc.AnsimCar.domain.UserCar;
 import project.asc.AnsimCar.domain.type.CarCategory;

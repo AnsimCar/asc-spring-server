@@ -75,15 +75,4 @@ public class UserCarResponse {
                 .usable(usable)
                 .build();
     }
-
-    /**
-     * 리뷰 평점 구하기
-     */
-    public Integer rateAverage() {
-        int score = 0;
-        for (ReviewResponse reviewResponse : reviewResponses) {
-            score += reviewResponse.getRate();
-        }
-        return score;
-    }
 }
