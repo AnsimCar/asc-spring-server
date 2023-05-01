@@ -257,7 +257,7 @@ public class RentController {
      * 사진 등록 화면 이동
      */
     @GetMapping("/renthistory/upload")
-    public String photo(@RequestParam("id") Long rentId) {
+    public String upload(@RequestParam("id") Long rentId) {
         return "rent/upload";
     }
 
@@ -266,7 +266,7 @@ public class RentController {
      * 사진 등록
      */
     @PostMapping("/renthistory/upload")
-    public String photo(@RequestParam("id") Long rentId, @ModelAttribute ImageRequest imageRequest, Authentication authentication) throws IOException {
+    public String upload(@RequestParam("id") Long rentId, @ModelAttribute ImageRequest imageRequest, Authentication authentication) throws IOException {
 
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
         Account account = accountContext.getAccount();
@@ -280,5 +280,29 @@ public class RentController {
         s3Upload.upload(accountId, rentId, imageRequest.getCarRight());
 
         return "rent/upload";
+    }
+
+    @GetMapping("/return")
+    public String returnCar(Authentication authentication, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        RentResponse rentResponse = rentService.findByRentAccountIdAndStatus(account.getId());
+        model.addAttribute("rent", rentResponse);
+
+        return "rent/return";
+    }
+
+    @GetMapping("/return/detail")
+    public String returnCarDetail(@RequestParam("id")Long rentId, Authentication authentication, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        RentResponse rentResponse = rentService.findById(rentId);
+        rentService.updateRentalReturnDate(account.getId(), rentId, new RentUpdateRequest(Status.WAITING_RETURN, rentResponse.getRentalDate(), LocalDateTime.now()));
+
+        model.addAttribute("rent", rentService.findById(rentId));
+
+        return "rent/returnDetail";
     }
 }
