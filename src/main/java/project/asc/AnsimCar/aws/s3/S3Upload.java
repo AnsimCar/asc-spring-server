@@ -6,8 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import project.asc.AnsimCar.dto.rent.request.ImageRequest;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -19,14 +22,18 @@ public class S3Upload {
 
     private final AmazonS3 amazonS3;
 
-    public String upload(MultipartFile multipartFile) throws IOException {
+    public String upload(Long accountId, Long rentId, MultipartFile multipartFile) throws IOException {
         String s3FileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
 
         ObjectMetadata objMeta = new ObjectMetadata();
+        objMeta.setContentType(multipartFile.getContentType());
+        objMeta.setContentLength(multipartFile.getSize());
         objMeta.setContentLength(multipartFile.getInputStream().available());
 
-        amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
+        String path = accountId + "/" + "rent/" + LocalDate.now() + "/" + rentId.toString() + "/" + "rent/" + "original/" +  s3FileName;
 
-        return amazonS3.getUrl(bucket, s3FileName).toString();
+        amazonS3.putObject(bucket, path, multipartFile.getInputStream(), objMeta);
+
+        return amazonS3.getUrl(bucket, path).toString();
     }
 }

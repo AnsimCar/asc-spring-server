@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::header"></head>
+<body>
+<div th:replace="layout/rentTop::top"></div>
+
+<div class="container">
+  <div class="row align-items-start">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+              <a th:href="@{/rent/list}" style="margin:5px;" class="nav-link text-dark">차량 대여</a>
+              <a th:href="@{/rent/return}" style="margin:5px;" class="nav-link text-dark">차량 반납</a>
+              <a th:href="@{/rent/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
+              <a th:href="@{/rent/renthistory}" style="margin:5px;" class="nav-link text-bg-secondary">대여
+                기록</a>
+              <a th:href="@{/rent/addhistory}" style="margin:5px;" class="nav-link text-dark">등록 기록</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div style="padding-top:50px;" class="col">
+      <div class=" text-center">
+        <h2>사진 등록</h2>
+      </div>
+
+      <form th:action method="post" enctype="multipart/form-data">
+        <div class="px-5 m-3">
+          <label for="carFront">차량 정면 사진</label>
+          <input type="file" id="carFront" name="carFront" class="form-control">
+        </div>
+
+        <div class="px-5 m-3">
+          <label for="carRear">차량 후면 사진</label>
+          <input type="file" id="carRear" name="carRear" class="form-control">
+        </div>
+
+        <div class="px-5 m-3">
+          <label for="carLeft">차량 좌측 사진</label>
+          <input type="file" id="carLeft" name="carLeft" class="form-control">
+        </div>
+
+        <div class="px-5 m-3">
+          <label for="carRight">차량 우측 사진</label>
+          <input type="file" id="carRight" name="carRight" class="form-control">
+        </div>
+
+        <hr style="width:88%; margin: auto">
+
+        <div class="px-5 m-3">
+          <button class="w-100 btn btn-dark btn-lg" type="submit">등록</button>
+        </div>
+      </form>
+
+
+    </div>
+  </div>
+</div>
+
+<div th:replace="layout/footer::footer"></div>
+</body>
+
+</html>

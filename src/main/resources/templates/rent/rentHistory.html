@@ -49,7 +49,7 @@
                         <td th:text="${rent.getAddressResponse().getSigungu()+ ' ' + rent.getAddressResponse().getEupmyeongdong()}"/>
                         <td th:text="${rent.getStatus().getDescription()}"/>
                         <td><a class="w-80 h-25 btn btn-primary btn-sm"
-                               th:href="@{/rent/renthistory/photo(id=${rent.getId()})}">
+                               th:href="@{/rent/renthistory/upload(id=${rent.getId()})}">
                             사진 등록
                         </a>
                         </td>
