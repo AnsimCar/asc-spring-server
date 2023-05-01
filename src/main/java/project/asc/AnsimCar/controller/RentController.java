@@ -289,6 +289,7 @@ public class RentController {
 
         RentResponse rentResponse = rentService.findByRentAccountIdAndStatus(account.getId());
         model.addAttribute("rent", rentResponse);
+        model.addAttribute("totalPrice", rentResponse.getTotalPrice());
 
         return "rent/return";
     }

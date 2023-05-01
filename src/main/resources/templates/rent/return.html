@@ -62,6 +62,10 @@
                         <td th:text="반납일"></td>
                         <td th:text="${#temporals.format(rent.getReturnDate(), 'yyyy년 MM월 dd일 HH시 mm분')}"/>
                     </tr>
+                    <tr>
+                        <td th:text="'총 사용 금액'"></td>
+                        <td th:text="${totalPrice}"/>
+                    </tr>
                     </tbody>
                 </table>
             </div>
