@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::header"></head>
+<body>
+<div th:replace="layout/rentTop::top"></div>
+
+<div class="container">
+  <div class="row align-items-start">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+              <a th:href="@{/rent/list}" style="margin:5px;" class="nav-link text-dark">차량 대여</a>
+              <a th:href="@{/rent/return}" style="margin:5px;" class="nav-link text-bg-secondary">차량 반납</a>
+              <a th:href="@{/rent/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
+              <a th:href="@{/rent/renthistory}" style="margin:5px;" class="nav-link text-dark">대여
+                기록</a>
+              <a th:href="@{/rent/addhistory}" style="margin:5px;" class="nav-link text-dark">등록 기록</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div style="padding-top:50px;" class="col px-5 m-3">
+      <div class=" text-center">
+        <h2>차량 반납</h2>
+      </div>
+
+      <hr class="my-4">
+      <div>
+        <table id="table2" class="table">
+
+          <thead>
+          <tr>
+            <th>요금</th>
+            <th>정보</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td th:text="'이용 기간'"></td>
+            <td th:text="${rent.getRentalDate() + ' - ' + rent.getReturnDate()}"/>
+          </tr>
+          <tr>
+            <td th:text="'요금'"></td>
+            <td th:text="${rent.getTotalPrice()}"/>
+          </tr>
+          <tr>
+            <td th:text="'계좌번호'"></td>
+            <td th:text="${rent.getAccountResponse().getBankAccount()}"/>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+</div>
+
+<div th:replace="layout/footer::footer"></div>
+</body>
+
+</html>

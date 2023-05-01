@@ -12,19 +12,20 @@
                     <li class="nav-item">
                         <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
                             <a th:href="@{/rent/list}" style="margin:5px;" class="nav-link text-dark">차량 대여</a>
-                            <a th:href="@{/rent/return}" style="margin:5px;" class="nav-link text-dark">차량 반납</a>
+                            <a th:href="@{/rent/return}" style="margin:5px;" class="nav-link text-bg-secondary">차량 반납</a>
                             <a th:href="@{/rent/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
-                            <a th:href="@{/rent/renthistory}" style="margin:5px;" class="nav-link text-dark">대여 기록</a>
-                            <a th:href="@{/rent/addhistory}" style="margin:5px;" class="nav-link text-bg-secondary">등록
+                            <a th:href="@{/rent/renthistory}" style="margin:5px;" class="nav-link text-dark">대여
                                 기록</a>
+                            <a th:href="@{/rent/addhistory}" style="margin:5px;" class="nav-link text-dark">등록 기록</a>
                         </div>
                     </li>
                 </ul>
             </div>
         </nav>
+
         <div style="padding-top:50px;" class="col px-5 m-3">
             <div class=" text-center">
-                <h2>상세 등록 기록</h2>
+                <h2>차량 반납</h2>
             </div>
 
             <hr class="my-4">
@@ -39,26 +40,20 @@
                     <tbody>
                     <tr>
                         <td th:text="모델명"></td>
-                        <td><a th:href="@{/usercar/list/(id = ${rent.getUserCarResponse().getId()})}"
-                               th:text="${rent.getUserCarResponse().getCarModel()}"/>
+                        <td><a th:text="${rent.getUserCarResponse().getCarModel()}"/>
                     </tr>
                     <tr>
-                        <td th:text="주소"></td>
-                        <td th:text="${rent.getAddressResponse().getSigungu() + ' ' + rent.getAddressResponse().getEupmyeongdong()}"/>
+                        <td th:text="'반납 주소'"></td>
+                        <td th:text="${rent.getAddressResponse().getSigungu() + ' ' + rent.getAddressResponse().getEupmyeongdong() + ' ' + rent.getAddressResponse().getSido() + ' ' + rent.getAddressResponse().getDetailAddress()}"/>
                     </tr>
                     <tr>
                         <td th:text="'시간 당 가격'"></td>
                         <td th:text="${rent.getPricePerHour()}"/>
                     </tr>
                     <tr>
-                        <td th:text="등록일"></td>
-                        <td th:text="${#temporals.format(rent.getRegistrationDate(), 'yyyy년 MM월 dd일 HH시 mm분')}"/>
-                    </tr>
-                    <tr>
                         <td th:text="상태"></td>
                         <td th:text="${rent.getStatus().getDescription()}"/>
                     </tr>
-
                     <tr>
                         <td th:text="대여일"></td>
                         <td th:text="${#temporals.format(rent.getRentalDate(), 'yyyy년 MM월 dd일 HH시 mm분')}"/>
@@ -69,43 +64,27 @@
                     </tr>
                     </tbody>
                 </table>
-
             </div>
 
-            <div>
-                <table id="table2" class="table">
 
-                    <thead>
-                    <tr>
-                        <th>대여자</th>
-                        <th>정보</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td th:text="'반납자 이름'"></td>
-                        <td th:if="${rent.getRentalAccountResponse() != null}" th:text="${rent.getRentalAccountResponse().getUsername()}"/>
-                    </tr>
-                    <tr>
-                        <td th:text="'반납자 번호'"></td>
-                        <td th:if="${rent.getRentalAccountResponse() != null}" th:text="${rent.getRentalAccountResponse().getPhoneNumber()}"/>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <hr class="my-4">
-
-            <h6 style="color: red">※대여자가 없을 경우에만 삭제가 가능합니다.</h6>
+            <h6 style="color: red">※대여자가 차량 상태 및 입금 여부 확인 후 반납 완료 처리됩니다.</h6>
 
             <div class="row">
                 <div class="col">
-                    <a class="w-100 btn btn-danger btn-lg" th:href="@{/rent/addhistory/delete(id=${rent.getId()})}">
-                        삭제
+                    <a class="w-100 btn btn-danger btn-lg" th:if="${rent.getStatus().toString()=='RENTING'}" th:href="@{/rent/return/detail(id=${rent.getId()})}">
+                        반납
+                    </a>
+                    <a class="w-100 btn btn-danger btn-lg" th:if="${rent.getStatus().toString()=='WAITING_RETURN'}">
+                        반납 대기 중
                     </a>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+
+
     </div>
 </div>
 
