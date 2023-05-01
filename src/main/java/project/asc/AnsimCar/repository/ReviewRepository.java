@@ -15,6 +15,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @EntityGraph(attributePaths = {"userCar", "rent", "account"})
     Page<Review> findByUserCar_Id(Long userCarId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"userCar", "rent", "account"})
     Optional<Review> findByRent_Id(Long rendId);
 
     List<Review> findByAccount_Id(Long accountId);

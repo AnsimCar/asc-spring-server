@@ -63,9 +63,6 @@ public class ReviewResponse {
         for (Review entity : entities) {
             reviewResponses.add(ReviewResponse.builder()
                     .id(entity.getId())
-                    .userCarResponse(UserCarResponse.from(entity.getUserCar()))
-                    .rentResponse(RentResponse.from(entity.getRent()))
-                    .accountResponse(AccountResponse.from(entity.getAccount()))
                     .rate(entity.getRate())
                     .description(entity.getDescription())
                     .reviewDate(entity.getReviewDate())
@@ -87,5 +84,12 @@ public class ReviewResponse {
                 .description(description)
                 .reviewDate(reviewDate)
                 .build();
+    }
+
+    public boolean isOwner(Long accountId) {
+        if (accountId == null) {
+            return false;
+        }
+        return accountResponse.getId().equals(accountId);
     }
 }

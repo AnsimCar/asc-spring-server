@@ -22,6 +22,7 @@ import project.asc.AnsimCar.service.RentService;
 import project.asc.AnsimCar.service.ReviewService;
 import project.asc.AnsimCar.service.UserCarService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -145,8 +146,20 @@ public class ReviewController {
     @GetMapping("/carreviewlist")
     public String carReviewList(@RequestParam("id") Long id, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
         Page<ReviewResponse> reviewResponses = reviewService.findByUserCarId(id, pageable);
+        UserCarResponse userCarResponse = userCarService.findById(id);
 
         model.addAttribute("reviews", reviewResponses);
+        model.addAttribute("carName", userCarResponse.getCarModel());
+
+        int total = 0;
+        int count = 0;
+
+        for (ReviewResponse reviewResponse : reviewResponses) {
+            total += reviewResponse.getRate();
+            count++;
+        }
+
+        model.addAttribute("rate", Math.round(((double) total / count) * 100) / 100.0);
 
         int nowPage = reviewResponses.getPageable().getPageNumber() + 1;
         model.addAttribute("list", reviewResponses);
@@ -157,5 +170,43 @@ public class ReviewController {
         model.addAttribute("endPage", Math.min(nowPage + 5, reviewResponses.getTotalPages()));
 
         return "review/carReviewList";
+    }
+
+    /**
+     * 렌트 상세 리뷰
+     */
+    @GetMapping("/rentreview")
+    public String rentReview(@RequestParam("id") Long id, Model model) {
+        model.addAttribute("review", reviewService.findById(id));
+
+        return "review/rentReview";
+    }
+
+    /**
+     * 리뷰 삭제
+     */
+    @GetMapping("/delete")
+    public String deleteReview(@RequestParam("id") Long id, Authentication authentication) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        ReviewResponse reviewResponse = reviewService.findById(id);
+
+        if (!reviewResponse.isOwner(account.getId()))
+            return "redirect:/review/rentlist";
+
+        reviewService.deleteReview(account.getId(), id);
+
+        return "redirect:/review/rentlist";
+    }
+
+    /**
+     * 차량 리뷰 상세 리뷰
+     */
+    @GetMapping("/carreview")
+    public String carReview(@RequestParam("id") Long id, Model model) {
+        model.addAttribute("review", reviewService.findById(id));
+
+        return "review/carReview";
     }
 }

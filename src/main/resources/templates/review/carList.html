@@ -11,9 +11,12 @@
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
-                            <a th:href="@{/review/addreviewlist}" style="margin:5px;" class="nav-link text-dark">등록해야 할 리뷰</a>
-                            <a th:href="@{/review/rentlist}" style="margin:5px;" class="nav-link text-dark">카셰어링 리뷰 목록</a>
-                            <a th:href="@{/review/carlist}" style="margin:5px;" class="nav-link text-bg-secondary">차량 목록</a>
+                            <a th:href="@{/review/addreviewlist}" style="margin:5px;" class="nav-link text-dark">등록해야 할
+                                리뷰</a>
+                            <a th:href="@{/review/rentlist}" style="margin:5px;" class="nav-link text-dark">카셰어링 리뷰
+                                목록</a>
+                            <a th:href="@{/review/carlist}" style="margin:5px;" class="nav-link text-bg-secondary">차량
+                                목록</a>
                         </div>
                     </li>
                 </ul>
@@ -30,6 +33,7 @@
                     <tr>
                         <th>모델명</th>
                         <th>차량 번호</th>
+                        <th>리뷰 개수</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -38,6 +42,7 @@
                     <tr th:each="userCarResponse : ${userCarResponses}">
                         <td th:text="${userCarResponse.getCarModel()}"/>
                         <td th:text="${userCarResponse.getCarNumber()}"/>
+                        <td th:text="${userCarResponse.getReviewResponses().size()}"/>
                         <td><a class="w-80 h-25 btn btn-primary btn-sm"
                                th:href="@{/review/carreviewlist(id=${userCarResponse.getId()})}">
                             리뷰 보기
