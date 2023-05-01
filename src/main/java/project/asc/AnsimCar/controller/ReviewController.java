@@ -8,12 +8,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import project.asc.AnsimCar.authentication.AccountContext;
 import project.asc.AnsimCar.domain.Account;
+import project.asc.AnsimCar.domain.type.Rate;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
+import project.asc.AnsimCar.dto.review.request.ReviewCreateRequest;
 import project.asc.AnsimCar.dto.review.response.ReviewResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.service.RentService;
@@ -29,6 +31,14 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final RentService rentService;
     private final UserCarService userCarService;
+
+    /**
+     * enum
+     */
+    @ModelAttribute("rates")
+    public Rate[] rates() {
+        return Rate.values();
+    }
 
     /**
      * 카셰어링 목록
@@ -51,6 +61,44 @@ public class ReviewController {
         model.addAttribute("endPage", Math.min(nowPage + 5, reviewResponses.getTotalPages()));
 
         return "review/rentList";
+    }
+
+    /**
+     * 리뷰 등록
+     */
+    @GetMapping("/addreview")
+    public String addReview(@RequestParam("id") Long id, Authentication authentication, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        RentResponse rentResponse = rentService.findInfoById(id);
+
+        if (!rentResponse.isRentalOwner(account.getId()))
+            return "redirect:/review/addreviewlist";
+
+        model.addAttribute("rent", rentResponse);
+        model.addAttribute("review", new ReviewCreateRequest());
+
+        return "review/addReview";
+    }
+
+    @PostMapping("/addreview")
+    public String addReview(@Validated @ModelAttribute("review") ReviewCreateRequest reviewCreateRequest, BindingResult bindingResult, @RequestParam("id") Long id, Authentication authentication) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        RentResponse rentResponse = rentService.findInfoById(id);
+
+        if (!rentResponse.isRentalOwner(account.getId()))
+            return "redirect:/review/addreviewlist";
+
+        if (bindingResult.hasErrors()) {
+            return "review/addReview";
+        }
+
+        reviewService.addReview(rentResponse.getUserCarResponse().getId(), rentResponse.getId(), account.getId(), reviewCreateRequest);
+
+        return "redirect:/review/rentlist";
     }
 
     /**

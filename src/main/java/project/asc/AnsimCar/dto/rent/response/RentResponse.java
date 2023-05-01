@@ -101,4 +101,11 @@ public class RentResponse {
         }
         return accountResponse.getId().equals(accountId);
     }
+
+    public boolean isRentalOwner(Long accountId) {
+        if (accountId == null) {
+            return false;
+        }
+        return rentalAccountResponse.getId().equals(accountId);
+    }
 }

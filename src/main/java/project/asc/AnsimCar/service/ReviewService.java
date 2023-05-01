@@ -24,6 +24,7 @@ import project.asc.AnsimCar.repository.RentRepository;
 import project.asc.AnsimCar.repository.ReviewRepository;
 import project.asc.AnsimCar.repository.UserCarRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class ReviewService {
     }
 
     private void validateOwner(Long accountId, Rent rent) {
-        if (!rent.isOwner(accountId)) {
+        if (!rent.isRentOwner(accountId)) {
             throw new RentOwnerException();
         }
     }
@@ -63,9 +64,9 @@ public class ReviewService {
                 .userCar(userCar)
                 .rent(rent)
                 .account(account)
-                .rate(reviewCreateRequest.getRate())
+                .rate(reviewCreateRequest.getRate().getDescription())
                 .description(reviewCreateRequest.getDescription())
-                .reviewDate(reviewCreateRequest.getReviewDate())
+                .reviewDate(LocalDateTime.now())
                 .build();
     }
 

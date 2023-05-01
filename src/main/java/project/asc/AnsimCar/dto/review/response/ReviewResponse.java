@@ -2,9 +2,8 @@ package project.asc.AnsimCar.dto.review.response;
 
 import lombok.Builder;
 import lombok.Data;
-import project.asc.AnsimCar.domain.Account;
-import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.domain.Review;
+import project.asc.AnsimCar.domain.type.Rate;
 import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
