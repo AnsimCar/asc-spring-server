@@ -58,7 +58,7 @@ public class Rent {
     @OneToMany(mappedBy = "rent", cascade = CascadeType.REMOVE)
     private List<AfterImage> afterImages = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "rent", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "rent", cascade = CascadeType.REMOVE)
     private Review review;
 
     protected Rent() {

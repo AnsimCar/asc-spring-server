@@ -282,6 +282,9 @@ public class RentController {
         return "redirect:/rent/renthistory";
     }
 
+    /**
+     * 반납할 차량 조회
+     */
     @GetMapping("/return")
     public String returnCar(Authentication authentication, Model model) {
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
@@ -293,6 +296,9 @@ public class RentController {
         return "rent/return";
     }
 
+    /**
+     * 차량 반납
+     */
     @GetMapping("/return/detail")
     public String returnCarDetail(@RequestParam("id") Long rentId, Authentication authentication, Model model) {
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
@@ -305,4 +311,22 @@ public class RentController {
 
         return "rent/returnDetail";
     }
+
+    /**
+     * 반납 완료 처리
+     */
+    @GetMapping("/return/complete")
+    public String returnComplete(@RequestParam("id") Long rentId, Authentication authentication) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        rentService.updateRentStatus(account.getId(), rentId, RentUpdateRequest.builder().status(Status.RETURN).build());
+
+        return "redirect:/rent/addhistory?id=" + rentId;
+    }
+
+//    @GetMapping("/rent/check")
+//    public String checkCar() {
+//
+//    }
 }
