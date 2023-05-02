@@ -155,7 +155,7 @@ public class RentService {
      */
     @Transactional(readOnly = true)
     public RentResponse findByRentAccountIdAndStatus(Long id) {
-        return rentRepository.findByRentAccount_IdAndStatusOrStatus(id, Status.RENTING, Status.WAITING_RETURN).map(RentResponse::from).orElseThrow(NotRentingAndWaitingReturnException::new);
+        return rentRepository.findByRentAccountIdAndStatusOrStatus(id, Status.RENTING, Status.WAITING_RETURN).map(RentResponse::from).orElseThrow(NotRentingAndWaitingReturnException::new);
     }
 
 

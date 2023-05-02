@@ -19,6 +19,7 @@ import project.asc.AnsimCar.domain.type.Status;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
 import project.asc.AnsimCar.dto.rent.response.RentInfoResponse;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,5 +104,24 @@ public class RentRepositoryCustomImpl implements RentRepositoryCustom {
 
     private BooleanExpression carFuelEq(Fuel fuel) {
         return fuel != null ? rent.userCar.fuel.eq(fuel) : null;
+    }
+
+    @Override
+    public Optional<Rent> findByRentAccountIdAndStatusOrStatus(Long rentAccountId, Status status1, Status status2) {
+
+        Rent findRent = jpaQueryFactory.selectFrom(QRent.rent)
+                .leftJoin(QRent.rent.review, review)
+                .fetchJoin()
+                .leftJoin(QRent.rent.account, account)
+                .fetchJoin()
+                .leftJoin(QRent.rent.rentAccount, account)
+                .fetchJoin()
+                .leftJoin(QRent.rent.address, address)
+                .fetchJoin()
+                .leftJoin(QRent.rent.userCar, userCar)
+                .fetchJoin()
+                .where(QRent.rent.rentAccount.id.eq(rentAccountId), QRent.rent.status.in(status1, status2)).fetchOne();
+
+        return Optional.ofNullable(findRent);
     }
 }
