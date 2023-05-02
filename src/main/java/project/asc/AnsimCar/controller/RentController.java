@@ -274,12 +274,12 @@ public class RentController {
 
         //TODO 반환받은 url을 플라스크 서버로 전송 -> 플라스크 서버에서 해당 이미지를 분석하여 s3에 저장 후 url 반환 -> 이 url을 DB에 저장
         //TODO RestTemplate을 사용해서 플라스크 서버 API를 호출 해야 할듯하다.
-        String url = s3Upload.upload(accountId, rentId, imageRequest.getCarFront());
-        s3Upload.upload(accountId, rentId, imageRequest.getCarRear());
-        s3Upload.upload(accountId, rentId, imageRequest.getCarLeft());
-        s3Upload.upload(accountId, rentId, imageRequest.getCarRight());
+        s3Upload.upload(accountId, rentId, imageRequest.getCarFront(), "front");
+        s3Upload.upload(accountId, rentId, imageRequest.getCarRear(), "rear");
+        s3Upload.upload(accountId, rentId, imageRequest.getCarLeft(), "left");
+        s3Upload.upload(accountId, rentId, imageRequest.getCarRight(), "right");
 
-        return "rent/upload";
+        return "redirect:/rent/renthistory";
     }
 
     @GetMapping("/return")
@@ -289,13 +289,12 @@ public class RentController {
 
         RentResponse rentResponse = rentService.findByRentAccountIdAndStatus(account.getId());
         model.addAttribute("rent", rentResponse);
-        model.addAttribute("totalPrice", rentResponse.getTotalPrice());
 
         return "rent/return";
     }
 
     @GetMapping("/return/detail")
-    public String returnCarDetail(@RequestParam("id")Long rentId, Authentication authentication, Model model) {
+    public String returnCarDetail(@RequestParam("id") Long rentId, Authentication authentication, Model model) {
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
         Account account = accountContext.getAccount();
 

@@ -6,7 +6,6 @@ import project.asc.AnsimCar.domain.*;
 import project.asc.AnsimCar.domain.type.Status;
 import project.asc.AnsimCar.dto.account.response.AccountResponse;
 import project.asc.AnsimCar.dto.address.response.AddressResponse;
-import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 
 import java.time.Duration;
@@ -108,15 +107,5 @@ public class RentResponse {
             return false;
         }
         return rentalAccountResponse.getId().equals(accountId);
-    }
-
-    public void totalPrice() {
-        if (rentalDate != null) {
-            int totalSeconds = (int) Duration.between(rentalDate, returnDate).getSeconds();
-
-            int totalHour = (totalSeconds / 60 / 60) + 1;
-
-            this.totalPrice = totalHour * pricePerHour;
-        }
     }
 }
