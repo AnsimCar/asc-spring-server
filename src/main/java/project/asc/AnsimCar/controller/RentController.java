@@ -275,6 +275,11 @@ public class RentController {
         rentImageService.add(rentId, s3Upload.upload(accountId, rentId, imageRequest.getCarFront(), "front"), s3Upload.upload(accountId, rentId, imageRequest.getCarRear(), "rear"),
                 s3Upload.upload(accountId, rentId, imageRequest.getCarLeft(), "left"), s3Upload.upload(accountId, rentId, imageRequest.getCarRight(), "right"));
 
+        rentService.updateRentStatus(accountId, rentId, RentUpdateRequest.builder()
+                .rentalDate(LocalDateTime.now())
+                .status(Status.RENTING)
+                .build());
+
         return "redirect:/rent/renthistory";
     }
 
