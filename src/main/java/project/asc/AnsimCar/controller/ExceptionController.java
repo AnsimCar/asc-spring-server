@@ -15,6 +15,7 @@ import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
 import project.asc.AnsimCar.exception.account.EmailExistException;
 import project.asc.AnsimCar.exception.account.PasswordCheckException;
+import project.asc.AnsimCar.exception.rent.NotRentingAndWaitingReturnException;
 import project.asc.AnsimCar.service.UserCarService;
 
 import java.util.List;
@@ -48,5 +49,9 @@ public class ExceptionController {
         return "account/passwordReset";
     }
 
+    @ExceptionHandler(NotRentingAndWaitingReturnException.class)
+    public String NotRentingAndWaitingReturnExHandler(NotRentingAndWaitingReturnException e) {
 
+        return "rent/returnEx";
+    }
 }

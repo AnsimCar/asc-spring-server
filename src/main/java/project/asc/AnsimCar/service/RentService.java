@@ -16,6 +16,7 @@ import project.asc.AnsimCar.dto.rent.request.RentUpdateRequest;
 import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.exception.account.AccountNotFoundException;
+import project.asc.AnsimCar.exception.rent.NotRentingAndWaitingReturnException;
 import project.asc.AnsimCar.exception.rent.RentNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarNotFoundException;
 import project.asc.AnsimCar.exception.usercar.UserCarOwnerException;
@@ -118,7 +119,7 @@ public class RentService {
     }
 
     private void validateOwner(Long accountId, Rent rent) {
-        if (!rent.isOwner(accountId)) {
+        if (!rent.isRentOwner(accountId)) {
             throw new UserCarOwnerException();
         }
     }
@@ -142,12 +143,22 @@ public class RentService {
     }
 
     /**
-     * 대여자 아이디로 조회
+     * 대여자 아이디로 조회(페이징)
      */
     @Transactional(readOnly = true)
     public Page<RentResponse> findByRentAccountId(Long id, Pageable pageable) {
         return rentRepository.findByRentAccount_Id(id, pageable).map(RentResponse::from);
     }
+
+    /**
+     * 대여자 아이디와 상태 조건으로 조회
+     */
+    @Transactional(readOnly = true)
+    public RentResponse findByRentAccountIdAndStatus(Long id) {
+        return rentRepository.findByRentAccountIdAndStatusOrStatus(id, Status.RENTING, Status.WAITING_RETURN).map(RentResponse::from).orElseThrow(NotRentingAndWaitingReturnException::new);
+    }
+
+
 
 //    /**
 //     * 카셰어링 시 사진 등록

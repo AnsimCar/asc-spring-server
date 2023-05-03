@@ -83,12 +83,14 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td th:text="'대여자 이름'"></td>
-                        <td th:if="${rent.getRentalAccountResponse() != null}" th:text="${rent.getRentalAccountResponse().getUsername()}"/>
+                        <td th:text="'반납자 이름'"></td>
+                        <td th:if="${rent.getRentalAccountResponse() != null}"
+                            th:text="${rent.getRentalAccountResponse().getUsername()}"/>
                     </tr>
                     <tr>
-                        <td th:text="'대여자 번호'"></td>
-                        <td th:if="${rent.getRentalAccountResponse() != null}" th:text="${rent.getRentalAccountResponse().getPhoneNumber()}"/>
+                        <td th:text="'반납자 번호'"></td>
+                        <td th:if="${rent.getRentalAccountResponse() != null}"
+                            th:text="${rent.getRentalAccountResponse().getPhoneNumber()}"/>
                     </tr>
                     </tbody>
                 </table>
@@ -99,17 +101,22 @@
             <h6 style="color: red">※대여자가 없을 경우에만 삭제가 가능합니다.</h6>
 
             <div class="row">
-                <div class="col">
+                <div class="row">
                     <a class="w-100 btn btn-danger btn-lg" th:href="@{/rent/addhistory/delete(id=${rent.getId()})}">
                         삭제
                     </a>
+                </div>
+                <div class="row" th:if="${rent.getStatus().toString()=='WAITING_RETURN'}">
+                    <hr class="my-4">
+                    <a class="w-100 btn btn-primary btn-lg" th:href="@{/rent/return/check(id=${rent.getId()})}">차량 상태
+                        확인</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div th:replace="layout/footer::footer"></div>
+<!--<div th:replace="layout/footer::footer"></div>-->
 </body>
 
 </html>

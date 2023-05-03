@@ -1,5 +1,6 @@
 package project.asc.AnsimCar.dto.rent.request;
 
+import lombok.Builder;
 import lombok.Data;
 import project.asc.AnsimCar.domain.type.Status;
 
@@ -18,6 +19,7 @@ public class RentUpdateRequest {
     private RentUpdateRequest() {
     }
 
+    @Builder
     public RentUpdateRequest(final Status status, final LocalDateTime rentalDate, final LocalDateTime returnDate) {
         this.status = status;
         this.rentalDate = rentalDate;

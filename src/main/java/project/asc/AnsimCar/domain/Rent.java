@@ -53,12 +53,12 @@ public class Rent {
     private LocalDateTime returnDate;
 
     @OneToMany(mappedBy = "rent", cascade = CascadeType.REMOVE)
-    private List<BeforeImage> beforeImages = new ArrayList<>();
+    private List<RentImage> rentImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "rent", cascade = CascadeType.REMOVE)
-    private List<AfterImage> afterImages = new ArrayList<>();
+    private List<ReturnImage> returnImages = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "rent", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "rent", cascade = CascadeType.REMOVE)
     private Review review;
 
     protected Rent() {

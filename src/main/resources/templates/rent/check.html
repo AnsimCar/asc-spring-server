@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::header"></head>
+<body>
+<div th:replace="layout/rentTop::top"></div>
+
+<div class="container">
+    <div class="row align-items-start">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                            <a th:href="@{/rent/list}" style="margin:5px;" class="nav-link text-dark">차량 대여</a>
+                            <a th:href="@{/rent/return}" style="margin:5px;" class="nav-link text-dark">차량 반납</a>
+                            <a th:href="@{/rent/add}" style="margin:5px;" class="nav-link text-dark">차량 등록</a>
+                            <a th:href="@{/rent/renthistory}" style="margin:5px;" class="nav-link text-dark">대여 기록</a>
+                            <a th:href="@{/rent/addhistory}" style="margin:5px;" class="nav-link text-bg-secondary">등록
+                                기록</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div style="padding-top:50px;" class="col px-5 m-3">
+            <div class=" text-center">
+                <h2>상세 등록 기록</h2>
+            </div>
+
+            <hr class="my-4">
+            <div>
+
+                <h4>대여 시 사진</h4>
+
+                <label for="rentFront">전면</label>
+                <img th:src="${rentImage.getImageFront()}" th:height="400px" id="rentFront">
+                <label for="rentRear">후면</label>
+                <img th:src="${rentImage.getImageRear()}" th:height="400px" id="rentRear">
+                <label for="rentLeft">좌측</label>
+                <img th:src="${rentImage.getImageLeft()}" th:height="400px" id="rentLeft">
+                <label for="rentRight">우측</label>
+                <img th:src="${rentImage.getImageRight()}" th:height="400px" id="rentRight">
+
+                <hr class="my-4">
+
+                <h4>반납 시 사진</h4>
+
+                <label for="returnFront">전면</label>
+                <img th:src="${returnImage.getImageFront()}" th:height="400px" id="returnFront">
+                <label for="returnRear">후면</label>
+                <img th:src="${returnImage.getImageRear()}" th:height="400px" id="returnRear">
+                <label for="returnLeft">좌측</label>
+                <img th:src="${returnImage.getImageLeft()}" th:height="400px" id="returnLeft">
+                <label for="returnRight">우측</label>
+                <img th:src="${returnImage.getImageRight()}" th:height="400px" id="returnRight">
+            </div>
+
+            <hr class="my-4">
+
+
+            <div class="row">
+                <div class="col">
+                    <a class="w-100 btn btn-secondary btn-lg" href="javascript:window.history.back();">
+                        뒤로가기
+                    </a>
+                </div>
+                <div class="col">
+                    <a class="w-100 btn btn-danger btn-lg" th:href="@{/rent/return/complete(id=${id})}">
+                        반납 완료
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div th:replace="layout/footer::footer"></div>-->
+</body>
+
+</html>

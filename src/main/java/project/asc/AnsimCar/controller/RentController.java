@@ -17,7 +17,6 @@ import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.domain.type.Status;
-import project.asc.AnsimCar.dto.image.before.request.BeforeImageCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.ImageRequest;
 import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
@@ -26,10 +25,7 @@ import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.dto.review.response.ReviewResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
-import project.asc.AnsimCar.service.AccountService;
-import project.asc.AnsimCar.service.RentService;
-import project.asc.AnsimCar.service.ReviewService;
-import project.asc.AnsimCar.service.UserCarService;
+import project.asc.AnsimCar.service.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -45,6 +41,8 @@ public class RentController {
     private final UserCarService userCarService;
     private final AccountService accountService;
     private final ReviewService reviewService;
+    private final RentImageService rentImageService;
+    private final ReturnImageService returnImageService;
 
     private final S3Upload s3Upload;
 
@@ -234,6 +232,25 @@ public class RentController {
     }
 
     /**
+     * 카셰어링 등록 상세 기록
+     */
+    @GetMapping("/return/check")
+    public String checkImages(@ModelAttribute("id") @RequestParam("id") Long id, Authentication authentication, Model model) {
+        RentResponse rentResponse = rentService.findInfoById(id);
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentResponse.isOwner(account.getId()))
+            return "redirect:/rent/addhistory";
+
+        model.addAttribute("id", id);
+        model.addAttribute("rentImage", rentImageService.findByRentId(id));
+        model.addAttribute("returnImage", returnImageService.findByRentId(id));
+
+        return "rent/check";
+    }
+
+    /**
      * 카셰어링 등록 기록 삭제
      */
     @GetMapping("/addhistory/delete")
@@ -257,7 +274,7 @@ public class RentController {
      * 사진 등록 화면 이동
      */
     @GetMapping("/renthistory/upload")
-    public String photo(@RequestParam("id") Long rentId) {
+    public String upload(@RequestParam("id") Long rentId) {
         return "rent/upload";
     }
 
@@ -266,7 +283,7 @@ public class RentController {
      * 사진 등록
      */
     @PostMapping("/renthistory/upload")
-    public String photo(@RequestParam("id") Long rentId, @ModelAttribute ImageRequest imageRequest, Authentication authentication) throws IOException {
+    public String upload(@RequestParam("id") Long rentId, @ModelAttribute ImageRequest imageRequest, Authentication authentication) throws IOException {
 
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
         Account account = accountContext.getAccount();
@@ -274,11 +291,81 @@ public class RentController {
 
         //TODO 반환받은 url을 플라스크 서버로 전송 -> 플라스크 서버에서 해당 이미지를 분석하여 s3에 저장 후 url 반환 -> 이 url을 DB에 저장
         //TODO RestTemplate을 사용해서 플라스크 서버 API를 호출 해야 할듯하다.
-        String url = s3Upload.upload(accountId, rentId, imageRequest.getCarFront());
-        s3Upload.upload(accountId, rentId, imageRequest.getCarRear());
-        s3Upload.upload(accountId, rentId, imageRequest.getCarLeft());
-        s3Upload.upload(accountId, rentId, imageRequest.getCarRight());
+        rentImageService.add(rentId, s3Upload.uploadRentImage(accountId, rentId, imageRequest.getCarFront(), "front"), s3Upload.uploadRentImage(accountId, rentId, imageRequest.getCarRear(), "rear"),
+                s3Upload.uploadRentImage(accountId, rentId, imageRequest.getCarLeft(), "left"), s3Upload.uploadRentImage(accountId, rentId, imageRequest.getCarRight(), "right"));
 
-        return "rent/upload";
+        rentService.updateRentStatus(accountId, rentId, RentUpdateRequest.builder()
+                .rentalDate(LocalDateTime.now())
+                .status(Status.RENTING)
+                .build());
+
+        return "redirect:/rent/renthistory";
     }
+
+    /**
+     * 반납할 차량 조회
+     */
+    @GetMapping("/return")
+    public String returnCar(Authentication authentication, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        RentResponse rentResponse = rentService.findByRentAccountIdAndStatus(account.getId());
+        model.addAttribute("rent", rentResponse);
+
+        return "rent/return";
+    }
+
+    /**
+     * 차량 반납
+     */
+//    @GetMapping("/return/detail")
+//    public String returnCarDetail(@RequestParam("id") Long rentId, Authentication authentication, Model model) {
+//        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+//        Account account = accountContext.getAccount();
+//
+////        RentResponse rentResponse = rentService.findById(rentId);
+////        rentService.updateRentalReturnDate(account.getId(), rentId, new RentUpdateRequest(Status.WAITING_RETURN, rentResponse.getRentalDate(), LocalDateTime.now()));
+//
+//        model.addAttribute("rent", rentService.findById(rentId));
+//
+//        return "rent/returnDetail";
+//    }
+
+    /**
+     * 차량 반납
+     */
+    @PostMapping("/return")
+    public String returnCarDetail(@RequestParam("id") Long rentId, @ModelAttribute ImageRequest imageRequest, Authentication authentication) throws IOException {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+        Long accountId = account.getId();
+
+        RentResponse rentResponse = rentService.findById(rentId);
+        rentService.updateRentalReturnDate(account.getId(), rentId, new RentUpdateRequest(Status.WAITING_RETURN, rentResponse.getRentalDate(), LocalDateTime.now()));
+
+        returnImageService.add(rentId, s3Upload.uploadReturnImage(accountId, rentId, imageRequest.getCarFront(), "front"), s3Upload.uploadReturnImage(accountId, rentId, imageRequest.getCarRear(), "rear"),
+                s3Upload.uploadReturnImage(accountId, rentId, imageRequest.getCarLeft(), "left"), s3Upload.uploadReturnImage(accountId, rentId, imageRequest.getCarRight(), "right"));
+
+        return "redirect:/rent/return";
+    }
+
+
+    /**
+     * 반납 완료 처리
+     */
+    @GetMapping("/return/complete")
+    public String returnComplete(@RequestParam("id") Long rentId, Authentication authentication) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        rentService.updateRentStatus(account.getId(), rentId, RentUpdateRequest.builder().status(Status.RETURN).build());
+
+        return "redirect:/rent/addhistory?id=" + rentId;
+    }
+
+//    @GetMapping("/rent/check")
+//    public String checkCar() {
+//
+//    }
 }
