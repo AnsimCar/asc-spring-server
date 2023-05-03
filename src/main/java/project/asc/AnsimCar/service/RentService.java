@@ -119,7 +119,7 @@ public class RentService {
     }
 
     private void validateOwner(Long accountId, Rent rent) {
-        if (!rent.isRentOwner(accountId)) {
+        if (!rent.isOwner(accountId)) {
             throw new UserCarOwnerException();
         }
     }
@@ -157,7 +157,6 @@ public class RentService {
     public RentResponse findByRentAccountIdAndStatus(Long id) {
         return rentRepository.findByRentAccountIdAndStatusOrStatus(id, Status.RENTING, Status.WAITING_RETURN).map(RentResponse::from).orElseThrow(NotRentingAndWaitingReturnException::new);
     }
-
 
 
 //    /**

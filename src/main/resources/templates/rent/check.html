@@ -32,27 +32,35 @@
 
                 <h4>대여 시 사진</h4>
 
-                <label for="rentFront">전면</label>
-                <img th:src="${rentImage.getImageFront()}" th:height="400px" id="rentFront">
-                <label for="rentRear">후면</label>
-                <img th:src="${rentImage.getImageRear()}" th:height="400px" id="rentRear">
-                <label for="rentLeft">좌측</label>
-                <img th:src="${rentImage.getImageLeft()}" th:height="400px" id="rentLeft">
-                <label for="rentRight">우측</label>
-                <img th:src="${rentImage.getImageRight()}" th:height="400px" id="rentRight">
+                <label for="rentFront">전면</label><br>
+                <img th:src="${rentImage.getImageFront()}" th:height="200px" id="rentFront">
+                <br>
+                <label for="rentRear">후면</label><br>
+                <img th:src="${rentImage.getImageRear()}" th:height="200px" id="rentRear">
+                <br>
+                <label for="rentLeft">좌측</label><br>
+                <img th:src="${rentImage.getImageLeft()}" th:height="200px" id="rentLeft">
+                <br>
+                <label for="rentRight">우측</label><br>
+                <img th:src="${rentImage.getImageRight()}" th:height="200px" id="rentRight">
+                <br>
 
                 <hr class="my-4">
 
                 <h4>반납 시 사진</h4>
 
-                <label for="returnFront">전면</label>
-                <img th:src="${returnImage.getImageFront()}" th:height="400px" id="returnFront">
-                <label for="returnRear">후면</label>
-                <img th:src="${returnImage.getImageRear()}" th:height="400px" id="returnRear">
-                <label for="returnLeft">좌측</label>
-                <img th:src="${returnImage.getImageLeft()}" th:height="400px" id="returnLeft">
-                <label for="returnRight">우측</label>
-                <img th:src="${returnImage.getImageRight()}" th:height="400px" id="returnRight">
+                <label for="returnFront">전면</label><br>
+                <img th:src="${returnImage.getImageFront()}" th:height="200px" id="returnFront">
+                <br>
+                <label for="returnRear">후면</label><br>
+                <img th:src="${returnImage.getImageRear()}" th:height="200px" id="returnRear">
+                <br>
+                <label for="returnLeft">좌측</label><br>
+                <img th:src="${returnImage.getImageLeft()}" th:height="200px" id="returnLeft">
+                <br>
+                <label for="returnRight">우측</label><br>
+                <img th:src="${returnImage.getImageRight()}" th:height="200px" id="returnRight">
+                <br>
             </div>
 
             <hr class="my-4">
@@ -65,7 +73,7 @@
                     </a>
                 </div>
                 <div class="col">
-                    <a class="w-100 btn btn-danger btn-lg" th:href="@{/rent/return/complete(id=${id})}">
+                    <a class="w-100 btn btn-primary btn-lg" th:href="@{/rent/return/complete(id=${id})}">
                         반납 완료
                     </a>
                 </div>

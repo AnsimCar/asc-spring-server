@@ -98,10 +98,11 @@
 
             <hr class="my-4">
 
-            <h6 style="color: red">※대여자가 없을 경우에만 삭제가 가능합니다.</h6>
+            <h6 th:if="${rent.getStatus().toString()=='WAITING_RETURN'}" style="color: red">※대여자가 없을 경우에만 삭제가
+                가능합니다.</h6>
 
             <div class="row">
-                <div class="row">
+                <div class="row" th:if="${rent.getStatus().toString()=='WAITING_RETURN'}">
                     <a class="w-100 btn btn-danger btn-lg" th:href="@{/rent/addhistory/delete(id=${rent.getId()})}">
                         삭제
                     </a>

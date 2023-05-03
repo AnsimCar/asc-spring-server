@@ -48,10 +48,17 @@
                         <td th:text="${#temporals.format(rent.getReturnDate(), 'yyyy년 MM월 dd일 HH시 mm분')}"/>
                         <td th:text="${rent.getAddressResponse().getSigungu()+ ' ' + rent.getAddressResponse().getEupmyeongdong()}"/>
                         <td th:text="${rent.getStatus().getDescription()}"/>
-                        <td><a class="w-80 h-25 btn btn-primary btn-sm"
-                               th:href="@{/rent/renthistory/upload(id=${rent.getId()})}">
-                            사진 등록
-                        </a>
+                        <div>
+                            <td th:if="${rent.getStatus().toString() != 'RETURN'}"><a
+                                    class="w-80 h-25 btn btn-primary btn-sm"
+                                    th:href="@{/rent/renthistory/upload(id=${rent.getId()})}">
+                                사진 등록
+                            </a>
+                            <td th:if="${rent.getStatus().toString() == 'RETURN'}"><a
+                                    class="w-80 h-25 btn btn-secondary btn-sm">
+                                등록 완료
+                            </a>
+                        </div>
                         </td>
                     </tr>
                     </tbody>
