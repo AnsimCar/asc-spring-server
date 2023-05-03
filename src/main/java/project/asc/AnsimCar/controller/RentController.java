@@ -57,9 +57,12 @@ public class RentController {
     }
 
     @GetMapping("/list")
-    public String list(@ModelAttribute("rentSearchRequest") RentSearchRequest request, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+    public String list(@ModelAttribute("rentSearchRequest") RentSearchRequest request, Authentication authentication, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
 
-        Page<RentItemDetailResponse> rentItemDetailResponses = rentService.findByAvailable(pageable);
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        Page<RentItemDetailResponse> rentItemDetailResponses = rentService.findByAvailable(account.getId(), pageable);
 
         return getPagingList(pageable, model, rentItemDetailResponses);
     }

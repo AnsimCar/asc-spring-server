@@ -128,9 +128,9 @@ public class RentService {
      * 모든 카셰어링 조회(페이징)
      */
     @Transactional(readOnly = true)
-    public Page<RentItemDetailResponse> findByAvailable(Pageable pageable) {
+    public Page<RentItemDetailResponse> findByAvailable(Long id, Pageable pageable) {
 
-        return rentRepository.findByStatus(Status.AVAILABLE, pageable).map(RentItemDetailResponse::from);
+        return rentRepository.findByStatusAndAccount_IdNot(Status.AVAILABLE, id, pageable).map(RentItemDetailResponse::from);
     }
 
     /**
