@@ -8,12 +8,18 @@ import project.asc.AnsimCar.domain.AfterImage;
 public class AfterImageResponse {
     private Long id;
 
-    private String imageUrl;
+    private String imageFront;
+    private String imageRear;
+    private String imageRight;
+    private String imageLeft;
 
     @Builder
-    public AfterImageResponse(Long id, String imageUrl) {
+    public AfterImageResponse(Long id, String imageFront, String imageRear, String imageRight, String imageLeft) {
         this.id = id;
-        this.imageUrl = imageUrl;
+        this.imageFront = imageFront;
+        this.imageRear = imageRear;
+        this.imageRight = imageRight;
+        this.imageLeft = imageLeft;
     }
 
     /**
@@ -22,7 +28,10 @@ public class AfterImageResponse {
     public static AfterImageResponse from(AfterImage entity) {
         return new AfterImageResponse(
                 entity.getId(),
-                entity.getImageUrl()
+                entity.getImageFront(),
+                entity.getImageRear(),
+                entity.getImageRight(),
+                entity.getImageLeft()
         );
     }
 
@@ -31,7 +40,10 @@ public class AfterImageResponse {
      */
     public AfterImage toEntity() {
         return AfterImage.builder()
-                .imageUrl(imageUrl)
+                .imageFront(imageFront)
+                .imageRear(imageRear)
+                .imageRight(imageRight)
+                .imageLeft(imageLeft)
                 .build();
     }
 }

@@ -17,13 +17,20 @@ public class BeforeImage {
     @JoinColumn(name = "rent_id")
     private Rent rent;
 
-    private String imageUrl;
+    private String imageFront;
+    private String imageRear;
+    private String imageRight;
+    private String imageLeft;
 
     protected BeforeImage() {
     }
 
     @Builder
-    public BeforeImage(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public BeforeImage(Rent rent, String imageFront, String imageRear, String imageRight, String imageLeft) {
+        this.rent = rent;
+        this.imageFront = imageFront;
+        this.imageRear = imageRear;
+        this.imageRight = imageRight;
+        this.imageLeft = imageLeft;
     }
 }

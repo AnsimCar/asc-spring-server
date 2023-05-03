@@ -26,10 +26,7 @@ import project.asc.AnsimCar.dto.rent.response.RentItemDetailResponse;
 import project.asc.AnsimCar.dto.rent.response.RentResponse;
 import project.asc.AnsimCar.dto.review.response.ReviewResponse;
 import project.asc.AnsimCar.dto.usercar.response.UserCarResponse;
-import project.asc.AnsimCar.service.AccountService;
-import project.asc.AnsimCar.service.RentService;
-import project.asc.AnsimCar.service.ReviewService;
-import project.asc.AnsimCar.service.UserCarService;
+import project.asc.AnsimCar.service.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -45,6 +42,8 @@ public class RentController {
     private final UserCarService userCarService;
     private final AccountService accountService;
     private final ReviewService reviewService;
+    private final BeforeImageService beforeImageService;
+    private final AfterImageService afterImageService;
 
     private final S3Upload s3Upload;
 
@@ -274,10 +273,8 @@ public class RentController {
 
         //TODO 반환받은 url을 플라스크 서버로 전송 -> 플라스크 서버에서 해당 이미지를 분석하여 s3에 저장 후 url 반환 -> 이 url을 DB에 저장
         //TODO RestTemplate을 사용해서 플라스크 서버 API를 호출 해야 할듯하다.
-        s3Upload.upload(accountId, rentId, imageRequest.getCarFront(), "front");
-        s3Upload.upload(accountId, rentId, imageRequest.getCarRear(), "rear");
-        s3Upload.upload(accountId, rentId, imageRequest.getCarLeft(), "left");
-        s3Upload.upload(accountId, rentId, imageRequest.getCarRight(), "right");
+        beforeImageService.add(rentId, s3Upload.upload(accountId, rentId, imageRequest.getCarFront(), "front"), s3Upload.upload(accountId, rentId, imageRequest.getCarRear(), "rear"),
+                s3Upload.upload(accountId, rentId, imageRequest.getCarLeft(), "left"), s3Upload.upload(accountId, rentId, imageRequest.getCarRight(), "right"));
 
         return "redirect:/rent/renthistory";
     }
