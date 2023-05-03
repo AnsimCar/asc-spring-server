@@ -3,7 +3,7 @@ package project.asc.AnsimCar.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.asc.AnsimCar.domain.AfterImage;
+import project.asc.AnsimCar.domain.ReturnImage;
 import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.exception.rent.RentNotFoundException;
 import project.asc.AnsimCar.repository.ReturnImageRepository;
@@ -22,7 +22,7 @@ public class ReturnImageService {
     public void add(Long rendId, String imageFront, String imageRear, String imageRight, String imageLeft) {
         Rent rent = rentRepository.findById(rendId).orElseThrow(RentNotFoundException::new);
 
-        AfterImage afterImage = AfterImage.builder()
+        ReturnImage returnImage = ReturnImage.builder()
                 .rent(rent)
                 .imageFront(imageFront)
                 .imageRear(imageRear)
@@ -30,6 +30,6 @@ public class ReturnImageService {
                 .imageLeft(imageLeft)
                 .build();
 
-        returnImageRepository.save(afterImage);
+        returnImageRepository.save(returnImage);
     }
 }

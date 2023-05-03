@@ -1,7 +1,7 @@
 package project.asc.AnsimCar.dto.image.returnImage.request;
 
 import lombok.Data;
-import project.asc.AnsimCar.domain.AfterImage;
+import project.asc.AnsimCar.domain.ReturnImage;
 
 import javax.validation.constraints.NotBlank;
 
@@ -26,7 +26,7 @@ public class ReturnImageCreateRequest {
         this.imageLeft = imageLeft;
     }
 
-    public AfterImage toEntity() {
-        return new AfterImage(imageFront, imageRear, imageRight, imageLeft);
+    public ReturnImage toEntity() {
+        return new ReturnImage(imageFront, imageRear, imageRight, imageLeft);
     }
 }

@@ -21,9 +21,9 @@ public class RentFixture {
 
     public static final LocalDateTime 반납날짜 = LocalDateTime.of(2023, 4, 22, 8, 0);
 
-    public static final List<BeforeImage> beforeImages = new ArrayList<>();
+    public static final List<RentImage> RENT_IMAGES = new ArrayList<>();
 
-    public static final List<AfterImage> afterImages = new ArrayList<>();
+    public static final List<ReturnImage> RETURN_IMAGES = new ArrayList<>();
 
 
     public static Rent createRent(UserCar userCar, Account account, Address address) {

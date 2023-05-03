@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-public class BeforeImage {
+public class RentImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "before_image_id")
@@ -22,11 +22,11 @@ public class BeforeImage {
     private String imageRight;
     private String imageLeft;
 
-    protected BeforeImage() {
+    protected RentImage() {
     }
 
     @Builder
-    public BeforeImage(Rent rent, String imageFront, String imageRear, String imageRight, String imageLeft) {
+    public RentImage(Rent rent, String imageFront, String imageRear, String imageRight, String imageLeft) {
         this.rent = rent;
         this.imageFront = imageFront;
         this.imageRear = imageRear;

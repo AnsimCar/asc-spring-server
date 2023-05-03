@@ -2,7 +2,7 @@ package project.asc.AnsimCar.dto.image.rentImage.response;
 
 import lombok.Builder;
 import lombok.Data;
-import project.asc.AnsimCar.domain.BeforeImage;
+import project.asc.AnsimCar.domain.RentImage;
 
 @Data
 public class RentImageResponse {
@@ -25,7 +25,7 @@ public class RentImageResponse {
     /**
      * 엔티티 -> RequestDto
      */
-    public static RentImageResponse from(BeforeImage entity) {
+    public static RentImageResponse from(RentImage entity) {
         return new RentImageResponse(
                 entity.getId(),
                 entity.getImageFront(),
@@ -38,8 +38,8 @@ public class RentImageResponse {
     /**
      * RequestDto -> 엔티티
      */
-    public BeforeImage toEntity() {
-        return BeforeImage.builder()
+    public RentImage toEntity() {
+        return RentImage.builder()
                 .imageFront(imageFront)
                 .imageRear(imageRear)
                 .imageRight(imageRight)

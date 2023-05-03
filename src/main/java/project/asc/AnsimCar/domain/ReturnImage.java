@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-public class AfterImage {
+public class ReturnImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "after_image_id")
@@ -22,11 +22,11 @@ public class AfterImage {
     private String imageRight;
     private String imageLeft;
 
-    protected AfterImage() {
+    protected ReturnImage() {
     }
 
     @Builder
-    public AfterImage(Rent rent, String imageFront, String imageRear, String imageRight, String imageLeft) {
+    public ReturnImage(Rent rent, String imageFront, String imageRear, String imageRight, String imageLeft) {
         this.rent = rent;
         this.imageFront = imageFront;
         this.imageRear = imageRear;
@@ -34,7 +34,7 @@ public class AfterImage {
         this.imageLeft = imageLeft;
     }
 
-    public AfterImage(String imageFront, String imageRear, String imageRight, String imageLeft) {
+    public ReturnImage(String imageFront, String imageRear, String imageRight, String imageLeft) {
         this.imageFront = imageFront;
         this.imageRear = imageRear;
         this.imageRight = imageRight;
