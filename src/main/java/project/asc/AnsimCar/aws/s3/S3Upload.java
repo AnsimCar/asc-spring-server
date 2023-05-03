@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import project.asc.AnsimCar.dto.rent.request.ImageRequest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,8 +14,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -28,13 +25,26 @@ public class S3Upload {
 
     private final AmazonS3 amazonS3;
 
-    public String upload(Long accountId, Long rentId, MultipartFile multipartFile, String loc) throws IOException {
+    public String uploadRentImage(Long accountId, Long rentId, MultipartFile multipartFile, String loc) throws IOException {
         ObjectMetadata objMeta = new ObjectMetadata();
         objMeta.setContentType(multipartFile.getContentType());
         objMeta.setContentLength(multipartFile.getSize());
         objMeta.setContentLength(multipartFile.getInputStream().available());
 
         String path = accountId + "/" + "rent/" + LocalDate.now() + "/" + rentId.toString() + "/" + "rent/" + "original/" + loc;
+
+        amazonS3.putObject(bucket, path, multipartFile.getInputStream(), objMeta);
+
+        return imageRender(amazonS3.getUrl(bucket, path).toString());
+    }
+
+    public String uploadReturnImage(Long accountId, Long rentId, MultipartFile multipartFile, String loc) throws IOException {
+        ObjectMetadata objMeta = new ObjectMetadata();
+        objMeta.setContentType(multipartFile.getContentType());
+        objMeta.setContentLength(multipartFile.getSize());
+        objMeta.setContentLength(multipartFile.getInputStream().available());
+
+        String path = accountId + "/" + "rent/" + LocalDate.now() + "/" + rentId.toString() + "/" + "return/" + "original/" + loc;
 
         amazonS3.putObject(bucket, path, multipartFile.getInputStream(), objMeta);
 

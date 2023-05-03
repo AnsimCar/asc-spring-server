@@ -119,7 +119,7 @@ public class RentService {
     }
 
     private void validateOwner(Long accountId, Rent rent) {
-        if (!rent.isOwner(accountId)) {
+        if (!rent.isRentOwner(accountId)) {
             throw new UserCarOwnerException();
         }
     }

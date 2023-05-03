@@ -291,8 +291,8 @@ public class RentController {
 
         //TODO 반환받은 url을 플라스크 서버로 전송 -> 플라스크 서버에서 해당 이미지를 분석하여 s3에 저장 후 url 반환 -> 이 url을 DB에 저장
         //TODO RestTemplate을 사용해서 플라스크 서버 API를 호출 해야 할듯하다.
-        rentImageService.add(rentId, s3Upload.upload(accountId, rentId, imageRequest.getCarFront(), "front"), s3Upload.upload(accountId, rentId, imageRequest.getCarRear(), "rear"),
-                s3Upload.upload(accountId, rentId, imageRequest.getCarLeft(), "left"), s3Upload.upload(accountId, rentId, imageRequest.getCarRight(), "right"));
+        rentImageService.add(rentId, s3Upload.uploadRentImage(accountId, rentId, imageRequest.getCarFront(), "front"), s3Upload.uploadRentImage(accountId, rentId, imageRequest.getCarRear(), "rear"),
+                s3Upload.uploadRentImage(accountId, rentId, imageRequest.getCarLeft(), "left"), s3Upload.uploadRentImage(accountId, rentId, imageRequest.getCarRight(), "right"));
 
         rentService.updateRentStatus(accountId, rentId, RentUpdateRequest.builder()
                 .rentalDate(LocalDateTime.now())
@@ -319,18 +319,37 @@ public class RentController {
     /**
      * 차량 반납
      */
-    @GetMapping("/return/detail")
-    public String returnCarDetail(@RequestParam("id") Long rentId, Authentication authentication, Model model) {
+//    @GetMapping("/return/detail")
+//    public String returnCarDetail(@RequestParam("id") Long rentId, Authentication authentication, Model model) {
+//        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+//        Account account = accountContext.getAccount();
+//
+////        RentResponse rentResponse = rentService.findById(rentId);
+////        rentService.updateRentalReturnDate(account.getId(), rentId, new RentUpdateRequest(Status.WAITING_RETURN, rentResponse.getRentalDate(), LocalDateTime.now()));
+//
+//        model.addAttribute("rent", rentService.findById(rentId));
+//
+//        return "rent/returnDetail";
+//    }
+
+    /**
+     * 차량 반납
+     */
+    @PostMapping("/return")
+    public String returnCarDetail(@RequestParam("id") Long rentId, @ModelAttribute ImageRequest imageRequest, Authentication authentication) throws IOException {
         AccountContext accountContext = (AccountContext) authentication.getPrincipal();
         Account account = accountContext.getAccount();
+        Long accountId = account.getId();
 
         RentResponse rentResponse = rentService.findById(rentId);
         rentService.updateRentalReturnDate(account.getId(), rentId, new RentUpdateRequest(Status.WAITING_RETURN, rentResponse.getRentalDate(), LocalDateTime.now()));
 
-        model.addAttribute("rent", rentService.findById(rentId));
+        returnImageService.add(rentId, s3Upload.uploadReturnImage(accountId, rentId, imageRequest.getCarFront(), "front"), s3Upload.uploadReturnImage(accountId, rentId, imageRequest.getCarRear(), "rear"),
+                s3Upload.uploadReturnImage(accountId, rentId, imageRequest.getCarLeft(), "left"), s3Upload.uploadReturnImage(accountId, rentId, imageRequest.getCarRight(), "right"));
 
-        return "rent/returnDetail";
+        return "redirect:/rent/return";
     }
+
 
     /**
      * 반납 완료 처리
