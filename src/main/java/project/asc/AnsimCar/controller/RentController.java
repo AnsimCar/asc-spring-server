@@ -232,6 +232,25 @@ public class RentController {
     }
 
     /**
+     * 카셰어링 등록 상세 기록
+     */
+    @GetMapping("/return/check")
+    public String checkImages(@ModelAttribute("id") @RequestParam("id") Long id, Authentication authentication, Model model) {
+        RentResponse rentResponse = rentService.findInfoById(id);
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        if (!rentResponse.isOwner(account.getId()))
+            return "redirect:/rent/addhistory";
+
+        model.addAttribute("id", id);
+        model.addAttribute("rentImage", rentImageService.findByRentId(id));
+        model.addAttribute("returnImage", returnImageService.findByRentId(id));
+
+        return "rent/check";
+    }
+
+    /**
      * 카셰어링 등록 기록 삭제
      */
     @GetMapping("/addhistory/delete")

@@ -84,11 +84,13 @@
                     <tbody>
                     <tr>
                         <td th:text="'반납자 이름'"></td>
-                        <td th:if="${rent.getRentalAccountResponse() != null}" th:text="${rent.getRentalAccountResponse().getUsername()}"/>
+                        <td th:if="${rent.getRentalAccountResponse() != null}"
+                            th:text="${rent.getRentalAccountResponse().getUsername()}"/>
                     </tr>
                     <tr>
                         <td th:text="'반납자 번호'"></td>
-                        <td th:if="${rent.getRentalAccountResponse() != null}" th:text="${rent.getRentalAccountResponse().getPhoneNumber()}"/>
+                        <td th:if="${rent.getRentalAccountResponse() != null}"
+                            th:text="${rent.getRentalAccountResponse().getPhoneNumber()}"/>
                     </tr>
                     </tbody>
                 </table>
@@ -106,10 +108,8 @@
                 </div>
                 <div class="row" th:if="${rent.getStatus().toString()=='WAITING_RETURN'}">
                     <hr class="my-4">
-                    <a class="text-center m-3" th:href="@{/rent/check}">차량상태 확인</a>
-                    <a class="w-100 btn btn-danger btn-lg" th:href="@{/rent/return/complete(id=${rent.getId()})}">
-                        반납 완료
-                    </a>
+                    <a class="w-100 btn btn-primary btn-lg" th:href="@{/rent/return/check(id=${rent.getId()})}">차량 상태
+                        확인</a>
                 </div>
             </div>
         </div>

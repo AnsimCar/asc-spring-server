@@ -3,11 +3,12 @@ package project.asc.AnsimCar.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.asc.AnsimCar.domain.ReturnImage;
 import project.asc.AnsimCar.domain.Rent;
+import project.asc.AnsimCar.domain.ReturnImage;
+import project.asc.AnsimCar.dto.image.returnImage.response.ReturnImageResponse;
 import project.asc.AnsimCar.exception.rent.RentNotFoundException;
-import project.asc.AnsimCar.repository.ReturnImageRepository;
 import project.asc.AnsimCar.repository.RentRepository;
+import project.asc.AnsimCar.repository.ReturnImageRepository;
 
 @Service
 @Transactional
@@ -31,5 +32,12 @@ public class ReturnImageService {
                 .build();
 
         returnImageRepository.save(returnImage);
+    }
+
+    /**
+     * 렌트 아이디로 조회
+     */
+    public ReturnImageResponse findByRentId(final Long id) {
+        return ReturnImageResponse.from(returnImageRepository.findByRent_Id(id).orElseThrow());
     }
 }

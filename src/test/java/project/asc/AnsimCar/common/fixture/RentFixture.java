@@ -40,7 +40,7 @@ public class RentFixture {
     }
 
     public static RentCreateRequest createRentCreateRequest(Long userCarId, Address address) {
-        return new RentCreateRequest(userCarId, 시간_당_가격, address.getSido(), address.getSigungu(), address.getEupmyeondong());
+        return new RentCreateRequest(userCarId, 시간_당_가격, address.getSido(), address.getSigungu(), address.getEupmyeondong(), address.getDetailAddress());
     }
 
     public static RentUpdateRequest createRentUpdateRequest1() {

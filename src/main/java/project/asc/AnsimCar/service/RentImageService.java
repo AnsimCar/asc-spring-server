@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.asc.AnsimCar.domain.RentImage;
 import project.asc.AnsimCar.domain.Rent;
+import project.asc.AnsimCar.dto.image.rentImage.response.RentImageResponse;
 import project.asc.AnsimCar.exception.rent.RentNotFoundException;
 import project.asc.AnsimCar.repository.RentImageRepository;
 import project.asc.AnsimCar.repository.RentRepository;
@@ -31,5 +32,12 @@ public class RentImageService {
                 .build();
 
         rentImageRepository.save(rentImage);
+    }
+
+    /**
+     * 렌트 아이디로 조회
+     */
+    public RentImageResponse findByRentId(final Long id) {
+        return RentImageResponse.from(rentImageRepository.findByRent_Id(id).orElseThrow());
     }
 }

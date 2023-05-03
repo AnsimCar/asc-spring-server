@@ -27,7 +27,7 @@ public class RentImageResponse {
      */
     public static RentImageResponse from(RentImage entity) {
         return new RentImageResponse(
-                entity.getId(),
+                entity.getRent().getId(),
                 entity.getImageFront(),
                 entity.getImageRear(),
                 entity.getImageRight(),
