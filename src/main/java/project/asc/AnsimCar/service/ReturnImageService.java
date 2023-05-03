@@ -3,18 +3,17 @@ package project.asc.AnsimCar.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.asc.AnsimCar.domain.BeforeImage;
+import project.asc.AnsimCar.domain.AfterImage;
 import project.asc.AnsimCar.domain.Rent;
 import project.asc.AnsimCar.exception.rent.RentNotFoundException;
-import project.asc.AnsimCar.repository.AfterImageRepository;
-import project.asc.AnsimCar.repository.BeforeImageRepository;
+import project.asc.AnsimCar.repository.ReturnImageRepository;
 import project.asc.AnsimCar.repository.RentRepository;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class BeforeImageService {
-    private final BeforeImageRepository beforeImageRepository;
+public class ReturnImageService {
+    private final ReturnImageRepository returnImageRepository;
     private final RentRepository rentRepository;
 
     /**
@@ -23,7 +22,7 @@ public class BeforeImageService {
     public void add(Long rendId, String imageFront, String imageRear, String imageRight, String imageLeft) {
         Rent rent = rentRepository.findById(rendId).orElseThrow(RentNotFoundException::new);
 
-        BeforeImage beforeImage = BeforeImage.builder()
+        AfterImage afterImage = AfterImage.builder()
                 .rent(rent)
                 .imageFront(imageFront)
                 .imageRear(imageRear)
@@ -31,6 +30,6 @@ public class BeforeImageService {
                 .imageLeft(imageLeft)
                 .build();
 
-        beforeImageRepository.save(beforeImage);
+        returnImageRepository.save(afterImage);
     }
 }

@@ -1,11 +1,11 @@
-package project.asc.AnsimCar.dto.image.before.response;
+package project.asc.AnsimCar.dto.image.returnImage.response;
 
 import lombok.Builder;
 import lombok.Data;
-import project.asc.AnsimCar.domain.BeforeImage;
+import project.asc.AnsimCar.domain.AfterImage;
 
 @Data
-public class BeforeImageResponse {
+public class ReturnImageResponse {
     private Long id;
 
     private String imageFront;
@@ -14,7 +14,7 @@ public class BeforeImageResponse {
     private String imageLeft;
 
     @Builder
-    public BeforeImageResponse(Long id, String imageFront, String imageRear, String imageRight, String imageLeft) {
+    public ReturnImageResponse(Long id, String imageFront, String imageRear, String imageRight, String imageLeft) {
         this.id = id;
         this.imageFront = imageFront;
         this.imageRear = imageRear;
@@ -25,8 +25,8 @@ public class BeforeImageResponse {
     /**
      * 엔티티 -> RequestDto
      */
-    public static BeforeImageResponse from(BeforeImage entity) {
-        return new BeforeImageResponse(
+    public static ReturnImageResponse from(AfterImage entity) {
+        return new ReturnImageResponse(
                 entity.getId(),
                 entity.getImageFront(),
                 entity.getImageRear(),
@@ -38,8 +38,8 @@ public class BeforeImageResponse {
     /**
      * RequestDto -> 엔티티
      */
-    public BeforeImage toEntity() {
-        return BeforeImage.builder()
+    public AfterImage toEntity() {
+        return AfterImage.builder()
                 .imageFront(imageFront)
                 .imageRear(imageRear)
                 .imageRight(imageRight)

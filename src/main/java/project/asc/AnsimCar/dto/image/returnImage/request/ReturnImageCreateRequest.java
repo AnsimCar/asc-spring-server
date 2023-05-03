@@ -1,13 +1,12 @@
-package project.asc.AnsimCar.dto.image.after.request;
+package project.asc.AnsimCar.dto.image.returnImage.request;
 
 import lombok.Data;
 import project.asc.AnsimCar.domain.AfterImage;
-import project.asc.AnsimCar.domain.Rent;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class AfterImageCreateRequest {
+public class ReturnImageCreateRequest {
     @NotBlank(message = "이미지 주소를 입력하세요.")
     String imageFront;
     @NotBlank(message = "이미지 주소를 입력하세요.")
@@ -17,10 +16,10 @@ public class AfterImageCreateRequest {
     @NotBlank(message = "이미지 주소를 입력하세요.")
     String imageLeft;
 
-    private AfterImageCreateRequest() {
+    private ReturnImageCreateRequest() {
     }
 
-    public AfterImageCreateRequest(String imageFront, String imageRear, String imageRight, String imageLeft) {
+    public ReturnImageCreateRequest(String imageFront, String imageRear, String imageRight, String imageLeft) {
         this.imageFront = imageFront;
         this.imageRear = imageRear;
         this.imageRight = imageRight;
