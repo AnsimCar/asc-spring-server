@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class ReturnImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "after_image_id")
+    @Column(name = "return_image_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

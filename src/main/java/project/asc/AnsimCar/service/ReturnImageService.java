@@ -38,6 +38,6 @@ public class ReturnImageService {
      * 렌트 아이디로 조회
      */
     public ReturnImageResponse findByRentId(final Long id) {
-        return ReturnImageResponse.from(returnImageRepository.findByRent_Id(id).orElseThrow());
+        return ReturnImageResponse.from(returnImageRepository.findByRent_Id(id).get());
     }
 }

@@ -35,7 +35,8 @@ public class UserCarFixture {
                 차종1,
                 제조사1,
                 연료종류1,
-                차량번호1
+                차량번호1,
+                null
         );
     }
 
@@ -44,7 +45,8 @@ public class UserCarFixture {
                 "소나타",
                 CarCategory.MEDIUM,
                 "현대",
-                Fuel.GASOLINE
+                Fuel.GASOLINE,
+                null
         );
     }
 
@@ -74,7 +76,8 @@ public class UserCarFixture {
                 차종2,
                 제조사2,
                 연료종류2,
-                차량번호2
+                차량번호2,
+                null
         );
     }
 
@@ -83,7 +86,8 @@ public class UserCarFixture {
                 "소나타",
                 CarCategory.MEDIUM,
                 "현대",
-                Fuel.DIESEL
+                Fuel.DIESEL,
+                null
         );
     }
 

@@ -89,7 +89,11 @@ public class RentService {
      */
     public void updateRentStatus(Long accountId, Long rentId, RentUpdateRequest rentUpdateRequest) {
         Rent rent = rentRepository.findById(rentId).orElseThrow(RentNotFoundException::new);
-        validateOwner(accountId, rent);
+        try {
+            validateOwner(accountId, rent);
+        } catch (UserCarOwnerException e){
+            validateRentOwner(accountId, rent);
+        }
 
         rent.updateStatus(rentUpdateRequest);
     }

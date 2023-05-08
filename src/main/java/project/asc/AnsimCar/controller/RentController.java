@@ -17,6 +17,8 @@ import project.asc.AnsimCar.domain.Account;
 import project.asc.AnsimCar.domain.type.CarCategory;
 import project.asc.AnsimCar.domain.type.Fuel;
 import project.asc.AnsimCar.domain.type.Status;
+import project.asc.AnsimCar.dto.image.rentImage.response.RentImageResponse;
+import project.asc.AnsimCar.dto.image.returnImage.response.ReturnImageResponse;
 import project.asc.AnsimCar.dto.rent.request.ImageRequest;
 import project.asc.AnsimCar.dto.rent.request.RentCreateRequest;
 import project.asc.AnsimCar.dto.rent.request.RentSearchRequest;
@@ -281,7 +283,6 @@ public class RentController {
         return "rent/upload";
     }
 
-
     /**
      * 사진 등록
      */
@@ -303,6 +304,27 @@ public class RentController {
                 .build());
 
         return "redirect:/rent/renthistory";
+    }
+
+    /**
+     * 이미지 등록 확인
+     */
+    @GetMapping("/renthistory/uploadHistory")
+    public String uploadHistory(@RequestParam("id") Long rentId, Authentication authentication, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        RentImageResponse rentImageResponse = rentImageService.findByRentId(rentId);
+        try {
+            ReturnImageResponse returnImageResponse = returnImageService.findByRentId(rentId);
+            model.addAttribute("returnImageResponse", returnImageResponse);
+        } catch (Exception e) {
+            model.addAttribute("returnImageResponse", null);
+        }
+
+        model.addAttribute("rentImageResponse", rentImageResponse);
+
+        return "rent/uploadHistory";
     }
 
     /**

@@ -49,14 +49,25 @@
                         <td th:text="${rent.getAddressResponse().getSigungu()+ ' ' + rent.getAddressResponse().getEupmyeongdong()}"/>
                         <td th:text="${rent.getStatus().getDescription()}"/>
                         <div>
-                            <td th:if="${rent.getStatus().toString() != 'RETURN'}"><a
+                            <td th:if="${rent.getStatus().toString() == 'WAITING_RENT'}"><a
                                     class="w-80 h-25 btn btn-primary btn-sm"
                                     th:href="@{/rent/renthistory/upload(id=${rent.getId()})}">
                                 사진 등록
                             </a>
-                            <td th:if="${rent.getStatus().toString() == 'RETURN'}"><a
-                                    class="w-80 h-25 btn btn-secondary btn-sm">
+                            <td th:if="${rent.getStatus().toString() == 'RENTING'}"><a
+                                    class="w-80 h-25 btn btn-secondary btn-sm"
+                                    th:href="@{/rent/renthistory/uploadHistory(id=${rent.getId()})}">
                                 등록 완료
+                            </a>
+                            <td th:if="${rent.getStatus().toString() == 'WAITING_RETURN'}"><a
+                                    class="w-80 h-25 btn btn-warning btn-sm"
+                                    th:href="@{/rent/renthistory/uploadHistory(id=${rent.getId()})}">
+                                반납 대기
+                            </a>
+                            <td th:if="${rent.getStatus().toString() == 'RETURN'}"><a
+                                    class="w-80 h-25 btn btn-success btn-sm"
+                                    th:href="@{/rent/renthistory/uploadHistory(id=${rent.getId()})}">
+                                반납 완료
                             </a>
                         </div>
                         </td>
