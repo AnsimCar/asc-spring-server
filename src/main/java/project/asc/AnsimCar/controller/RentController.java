@@ -120,6 +120,20 @@ public class RentController {
         return "rent/addRent";
     }
 
+    @GetMapping("/cancel")
+    public String rentCancel(@RequestParam("id") Long rentId, Authentication authentication) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        RentResponse rentResponse = rentService.findById(rentId);
+        if (!rentResponse.isRentalOwner(account.getId()))
+            return "redirect:/rent/renthistory";
+
+        rentService.cancelRent(rentId, account.getId());
+
+        return "redirect:/rent/renthistory";
+    }
+
     @PostMapping("/add")
     public String addRent(@Validated @ModelAttribute("rent") RentCreateRequest rentCreateRequest, BindingResult bindingResult, Authentication authentication, Model model) {
         if (bindingResult.hasErrors()) {
@@ -180,6 +194,25 @@ public class RentController {
         model.addAttribute("endPage", Math.min(nowPage + 5, rentResponses.getTotalPages()));
 
         return "rent/rentHistory";
+    }
+
+    /**
+     * 대여 기록 상세
+     */
+    @GetMapping("/renthistory/")
+    public String rentHistory(@RequestParam("id") Long id, Authentication authentication, Model model) {
+        AccountContext accountContext = (AccountContext) authentication.getPrincipal();
+        Account account = accountContext.getAccount();
+
+        RentResponse rentResponse = rentService.findById(id);
+
+        if (!rentResponse.isRentalOwner(account.getId())) {
+            return "redirect:/rent/renthistory";
+        }
+
+        model.addAttribute("rent", rentResponse);
+
+        return "rent/rentDetailHistory";
     }
 
     /**

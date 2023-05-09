@@ -85,13 +85,21 @@ public class RentService {
     }
 
     /**
+     * 렌트 취소
+     */
+    public void cancelRent(Long id, Long accountId) {
+        Rent rent = rentRepository.findById(id).orElseThrow(RentNotFoundException::new);
+        rent.cancelRent();
+    }
+
+    /**
      * 카셰어링 상태 수정
      */
     public void updateRentStatus(Long accountId, Long rentId, RentUpdateRequest rentUpdateRequest) {
         Rent rent = rentRepository.findById(rentId).orElseThrow(RentNotFoundException::new);
         try {
             validateOwner(accountId, rent);
-        } catch (UserCarOwnerException e){
+        } catch (UserCarOwnerException e) {
             validateRentOwner(accountId, rent);
         }
 

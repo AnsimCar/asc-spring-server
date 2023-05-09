@@ -41,7 +41,7 @@ public class UserCar extends BaseEntity {
     @OneToMany(mappedBy = "userCar", cascade = CascadeType.REMOVE)
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "userCar")
+    @OneToMany(mappedBy = "userCar", cascade = CascadeType.REMOVE)
     private List<Rent> rents = new ArrayList<>();
 
     protected UserCar() {

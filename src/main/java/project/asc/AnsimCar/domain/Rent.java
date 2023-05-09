@@ -101,6 +101,10 @@ public class Rent {
         }
     }
 
+    public void cancelRent() {
+        rentAccount = null;
+        status = Status.AVAILABLE;
+    }
 
     public boolean isOwner(Long accountId) {
         if (accountId == null) {

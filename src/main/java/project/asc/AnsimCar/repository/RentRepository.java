@@ -23,6 +23,10 @@ public interface RentRepository extends JpaRepository<Rent, Long>, RentRepositor
     @EntityGraph(attributePaths = {"userCar", "account", "address"})
     Page<Rent> findByRentAccount_Id(Long rentAccountId, Pageable pageable);
 
+    @Override
+    @EntityGraph(attributePaths = {"userCar", "account", "address"})
+    Optional<Rent> findById(Long id);
+
 //    @EntityGraph(attributePaths = {"userCar", "account", "address"})
 //    Optional<Rent> findByRentAccountIdAndStatusOrStatus(Long rentAccountId, Status status1, Status status2);
 
