@@ -44,7 +44,6 @@ public class SecurityConfig {
     }
 
 
-
     /**
      * 시큐리티 인증 설정
      */
@@ -52,7 +51,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/register").permitAll()
+                .antMatchers("/", "/login", "/register", "/img/**").permitAll()
                 .antMatchers("/mypage/**").hasRole("USER")
                 .anyRequest().authenticated()
 
