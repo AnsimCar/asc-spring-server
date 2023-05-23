@@ -35,3 +35,6 @@
 </table>
 
 ## 프로젝트 기술스택 💡
+![image](https://github.com/AnsimCar/asc-spring-server/assets/106286686/9b9f877e-325a-48c2-b813-73b6d2efecce)
+
+## 프로젝트 아키텍쳐 🏛
