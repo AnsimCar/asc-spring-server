@@ -1,5 +1,5 @@
 <h1 align="middle">AnsimCar</h1>
-<p align="middle">🚗안심하고 차를 공유할 수 있는 카셰어링 서비스 "AnsimCar"</p>
+<p align="middle"><strong>🚗안심하고 차를 공유할 수 있는 카셰어링 서비스 "AnsimCar"</strong></p>
 
 ## 프로젝트 소개 📝
 
