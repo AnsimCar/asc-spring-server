@@ -38,3 +38,4 @@
 ![image](https://github.com/AnsimCar/asc-spring-server/assets/106286686/9b9f877e-325a-48c2-b813-73b6d2efecce)
 
 ## 프로젝트 아키텍쳐 🏛
+![image](https://github.com/AnsimCar/asc-spring-server/assets/90389323/24529153-2b00-42fe-b012-aafddb77ad5e)
